@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#111827" />
+<meta name="theme-color" content="#1d4ed8" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="INVOTATION" />
@@ -11,214 +11,521 @@
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
 <link rel="apple-touch-icon" href="./icons/icon-192.png" />
 <title>INVOTATION — Penawaran & Invoice</title>
+<script>
+(function(){
+  const key='invotation_display_mode_v1';
+  let mode='auto';
+  try{mode=localStorage.getItem(key)||'auto'}catch(e){}
+  if(!['auto','mobile','desktop'].includes(mode)) mode='auto';
+  const width=window.innerWidth||document.documentElement.clientWidth||1024;
+  const profile=mode==='mobile'?'mobile':mode==='desktop'?'desktop':(width<640?'mobile':width<=1024?'tablet':'desktop');
+  document.documentElement.dataset.uiMode=mode;
+  document.documentElement.dataset.uiProfile=profile;
+})();
+</script>
+
 <style>
   :root{
-    --bg:#f4f6f8; --card:#ffffff; --ink:#111827; --muted:#6b7280;
-    --line:#d1d5db; --accent:#111827; --soft:#eef2f7; --danger:#b91c1c;
+    --bg:#f5f7fb; --surface:#ffffff; --surface-soft:#f8fafc; --surface-hover:#f1f5f9;
+    --text:#0f172a; --text-soft:#334155; --muted:#64748b;
+    --border:#e2e8f0; --border-strong:#cbd5e1;
+    --primary:#1d4ed8; --primary-hover:#1e40af; --primary-soft:#eff6ff;
+    --danger:#b91c1c; --danger-soft:#fef2f2; --success:#15803d;
+    --shadow-sm:0 1px 2px rgba(15,23,42,.04);
+    --shadow:0 8px 24px rgba(15,23,42,.06);
+    --shadow-lg:0 18px 44px rgba(15,23,42,.14);
+    --radius-sm:10px; --radius:14px; --radius-lg:18px; --control-h:44px;
   }
   *{box-sizing:border-box}
-  html,body,.app,.app *{
-    -webkit-user-select:none;
-    user-select:none;
+  html{font-size:16px}
+  html,body,.app,.app *{-webkit-user-select:none;user-select:none}
+  input,textarea,[contenteditable="true"]{-webkit-user-select:text!important;user-select:text!important}
+  body{
+    margin:0;min-width:320px;
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility
   }
-  input,textarea,[contenteditable="true"]{
-    -webkit-user-select:text!important;
-    user-select:text!important;
-  }
-  body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
   button,input,textarea,select{font:inherit}
-  input,textarea,select{outline:none}
-  select{
-    appearance:none;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    background-image:none!important;
-    padding-right:12px!important;
-    cursor:pointer;
-  }
-  select::-ms-expand{display:none}
-  select option{
-    background:#fff;
-    color:#111827;
-    font-weight:600;
-  }
   button{cursor:pointer}
-  .app{min-height:100vh}
-  .topbar{height:64px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:20}
-  .brand{display:flex;align-items:center;gap:12px;font-weight:800}
-  .brand-mark{width:34px;height:34px;border-radius:10px;background:#111827;color:#fff;display:grid;place-items:center;font-weight:900}
-  .nav{display:flex;gap:8px}
-  .nav button{border:0;background:transparent;padding:10px 14px;border-radius:10px;color:#4b5563;font-weight:700}
-  .nav button.active{background:#111827;color:#fff}
-  .container{max-width:1180px;margin:0 auto;padding:28px 20px 64px}
-  .hero{display:flex;gap:20px;justify-content:space-between;align-items:flex-start;margin-bottom:26px}
-  h1,h2,h3,p{margin-top:0}
-  h1{font-size:28px;margin-bottom:6px}
-  h2{font-size:22px}
-  .muted{color:var(--muted)}
-  .actions{display:flex;gap:10px;flex-wrap:wrap}
-  .btn{border:1px solid #d1d5db;background:#fff;color:#111827;padding:11px 15px;border-radius:10px;font-weight:800}
-  .btn.primary{background:#111827;color:#fff;border-color:#111827}
-  .btn.soft{background:#f9fafb}
-  .btn.danger{color:var(--danger);border-color:#fecaca;background:#fff}
-  .btn.small{padding:7px 10px;font-size:13px}
-  .panel{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:20px;box-shadow:0 6px 20px rgba(17,24,39,.04)}
-  .toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}
-  .search{width:min(420px,100%);padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;background:#fff}
-  .table-wrap{overflow:auto}
-  table{width:100%;border-collapse:collapse}
-  th,td{padding:13px 12px;text-align:left;border-bottom:1px solid #e5e7eb;white-space:nowrap}
-  th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#6b7280}
-  td{font-size:14px}
-  .badge{display:inline-block;padding:5px 8px;border-radius:999px;font-size:12px;font-weight:800;background:#eef2ff}
-  .empty{text-align:center;padding:50px 20px;color:#6b7280}
-  .hidden{display:none!important}
+  button:focus-visible,input:focus-visible,textarea:focus-visible,.app-select-trigger:focus-visible{
+    outline:3px solid rgba(29,78,216,.16);outline-offset:1px
+  }
+  input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+  input[type="number"]{-moz-appearance:textfield}
+  .app{min-height:100vh}.hidden{display:none!important}.muted{color:var(--muted)}
 
-  .wizard-shell{display:grid;grid-template-columns:280px 1fr;gap:22px}
-  .steps{position:sticky;top:86px;height:max-content}
-  .step-row{display:flex;gap:11px;align-items:flex-start;padding:11px;border-radius:12px;margin-bottom:6px}
-  .step-row.active{background:#f3f4f6}
-  .step-num{width:28px;height:28px;border-radius:999px;border:1px solid #cbd5e1;display:grid;place-items:center;font-size:13px;font-weight:800;background:#fff}
-  .step-row.active .step-num{background:#111827;color:#fff;border-color:#111827}
-  .step-title{font-weight:800;font-size:14px}
-  .step-note{font-size:12px;color:#6b7280;margin-top:2px}
-  .form-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:24px}
-  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-  .grid-3{display:grid;grid-template-columns:2fr .7fr .9fr;gap:12px}
-  label{display:block;font-size:13px;font-weight:800;margin-bottom:7px}
-  input,textarea,select{width:100%;padding:11px 12px;border:1px solid #cfd4dc;border-radius:10px;background:#fff;color:#111827}
-  textarea{min-height:92px;resize:vertical}
-  .field{margin-bottom:16px}
-  .field-error{display:none;color:#b91c1c;font-size:12px;font-weight:700;margin-top:6px}
+  .topbar{
+    height:70px;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;
+    padding:0 28px;position:sticky;top:0;z-index:50
+  }
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.02em}
+  .brand-mark{
+    width:36px;height:36px;border-radius:11px;background:var(--primary);color:#fff;display:grid;place-items:center;
+    font-size:16px;font-weight:900;box-shadow:0 5px 14px rgba(29,78,216,.24)
+  }
+  .brand span{font-size:16px;letter-spacing:.025em}
+  .nav{display:flex;gap:4px;padding:4px;background:var(--surface-soft);border:1px solid var(--border);border-radius:12px}
+  .nav button{
+    height:36px;border:0;background:transparent;padding:0 14px;border-radius:9px;color:var(--muted);
+    font-size:13px;font-weight:700;transition:.16s ease
+  }
+  .nav button:hover{color:var(--text);background:#fff}
+  .nav button.active{background:#fff;color:var(--primary);box-shadow:var(--shadow-sm)}
+
+  .container{max-width:1180px;margin:0 auto;padding:34px 24px 72px}
+  .hero{display:flex;gap:24px;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+  h1,h2,h3,p{margin-top:0}
+  h1{font-size:30px;line-height:1.15;letter-spacing:-.035em;margin-bottom:8px}
+  h2{font-size:21px;line-height:1.25;letter-spacing:-.025em;margin-bottom:16px}
+  h3{font-size:15px;line-height:1.3;letter-spacing:-.01em;margin-bottom:16px}
+  .hero p{font-size:14px;line-height:1.55;margin-bottom:0}
+
+  .actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+  .btn{
+    min-height:40px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);
+    padding:9px 14px;border-radius:11px;font-size:13px;font-weight:750;line-height:1.2;
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;box-shadow:var(--shadow-sm);
+    transition:background .15s,border-color .15s,color .15s,transform .06s,box-shadow .15s
+  }
+  .btn:hover{background:var(--surface-hover);border-color:#b8c4d3}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{color:#fff;background:var(--primary);border-color:var(--primary);box-shadow:0 5px 14px rgba(29,78,216,.18)}
+  .btn.primary:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
+  .btn.soft{background:var(--primary-soft);border-color:#dbeafe;color:var(--primary);box-shadow:none}
+  .btn.soft:hover{background:#dbeafe}
+  .btn.danger{color:var(--danger);background:#fff;border-color:#fecaca;box-shadow:none}
+  .btn.danger:hover{background:var(--danger-soft);border-color:#fca5a5}
+  .btn.small{min-height:32px;padding:6px 10px;border-radius:9px;font-size:12px}
+
+  .panel,.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow)}
+  .panel{padding:22px}.form-card{padding:26px}
+  .toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:16px}
+  .toolbar strong{font-size:14px}
+
+  .search{
+    width:min(390px,100%);height:42px;padding:0 13px 0 38px;border:1px solid var(--border);
+    border-radius:11px;background-color:var(--surface-soft);color:var(--text);outline:0;
+    background-repeat:no-repeat;background-position:13px center;background-size:16px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+    transition:.15s
+  }
+  .search:focus{background-color:#fff;border-color:#93b4f4;box-shadow:0 0 0 3px rgba(29,78,216,.09)}
+  .search::placeholder,input::placeholder,textarea::placeholder{color:#94a3b8}
+
+  .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:13px}
+  table{width:100%;border-collapse:separate;border-spacing:0}
+  th,td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+  th{background:var(--surface-soft);font-size:11px;text-transform:uppercase;letter-spacing:.065em;color:var(--muted);font-weight:800}
+  td{font-size:13px;color:var(--text-soft)}
+  tbody tr{transition:background .12s}tbody tr:hover{background:#fbfdff}tbody tr:last-child td{border-bottom:0}
+  td strong{color:var(--text)}
+  .badge{
+    display:inline-flex;align-items:center;min-height:25px;padding:4px 8px;border-radius:999px;
+    font-size:10.5px;font-weight:800;letter-spacing:.035em;background:var(--primary-soft);color:var(--primary)
+  }
+  .badge.invoice{background:#f0fdf4;color:#166534}.badge.quote{background:var(--primary-soft);color:var(--primary)}
+  .empty{text-align:center;padding:58px 20px;color:var(--muted);font-size:13px;line-height:1.6}
+  .empty strong{display:block;color:var(--text);font-size:14px;margin-bottom:4px}
+
+  .wizard-shell{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px}
+  .steps{position:sticky;top:92px;height:max-content;padding:12px}
+  .step-list{display:flex;flex-direction:column;gap:3px}
+  .step-row{display:flex;gap:11px;align-items:flex-start;padding:11px 10px;border-radius:11px;border:1px solid transparent;transition:.15s}
+  .step-row.active{background:var(--primary-soft);border-color:#dbeafe}
+  .step-num{
+    flex:0 0 auto;width:28px;height:28px;border-radius:9px;border:1px solid var(--border-strong);
+    display:grid;place-items:center;font-size:12px;font-weight:800;background:#fff;color:var(--muted)
+  }
+  .step-row.active .step-num{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .step-title{font-weight:800;font-size:13px;color:var(--text-soft);padding-top:1px}
+  .step-row.active .step-title{color:var(--primary)}
+  .step-note{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 18px}
+  .field{margin-bottom:17px}
+  label{display:block;font-size:12px;font-weight:750;color:var(--text-soft);margin-bottom:7px}
+  input,textarea,select{
+    width:100%;height:var(--control-h);padding:0 12px;border:1px solid var(--border-strong);
+    border-radius:11px;background:#fff;color:var(--text);outline:0;transition:.15s;font-size:13.5px
+  }
+  textarea{height:auto;min-height:98px;padding:11px 12px;resize:vertical;line-height:1.5}
+  input:hover,textarea:hover,select:hover{border-color:#aebdce}
+  input:focus,textarea:focus,select:focus{border-color:#7da3ef;box-shadow:0 0 0 3px rgba(29,78,216,.09)}
+  .field-error{display:none;color:var(--danger);font-size:11.5px;font-weight:700;margin-top:6px}
   .invalid{border-color:#ef4444!important;box-shadow:0 0 0 3px rgba(239,68,68,.08)!important}
   .form-alert{
-    display:none;margin:0 0 16px;padding:11px 13px;border:1px solid #fecaca;
-    background:#fff7f7;color:#991b1b;border-radius:10px;font-size:13px;font-weight:700
+    display:none;margin:-2px 0 18px;padding:11px 13px;border:1px solid #fecaca;background:var(--danger-soft);
+    color:#991b1b;border-radius:11px;font-size:12px;font-weight:700
   }
   .form-alert.show{display:block}
-  .wizard-actions{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
-  .item-row{display:grid;grid-template-columns:40px 2fr .6fr .8fr 1fr 1fr 44px;gap:8px;align-items:center;margin-bottom:8px}
-  .unit-field{position:relative}
-  .unit-menu{
-    position:absolute;
-    left:0;
-    right:0;
-    top:calc(100% + 6px);
-    max-height:220px;
-    overflow:auto;
-    background:#fff;
-    border:1px solid #d1d5db;
-    border-radius:11px;
-    box-shadow:0 14px 34px rgba(17,24,39,.14);
-    padding:6px;
-    z-index:35;
-  }
-  .unit-menu.hidden{display:none}
-  .unit-option{
-    padding:9px 10px;
-    border-radius:8px;
-    font-size:13px;
-    font-weight:700;
-    color:#111827;
-    cursor:pointer;
-  }
-  .unit-option:hover,.unit-option.active{background:#f3f4f6}
-  .item-row input,.item-row select{padding:9px 9px}
-  .item-head{font-size:11px;font-weight:800;color:#6b7280;text-transform:uppercase}
-  .total-box{margin-left:auto;width:min(380px,100%);padding:16px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px}
-  .total-line{display:flex;justify-content:space-between;padding:6px 0}
-  .total-line.grand{font-size:18px;font-weight:900;border-top:1px solid #d1d5db;margin-top:6px;padding-top:12px}
-  .switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eee}
-  .switch{width:auto}
 
-  .preview-wrap{background:#dfe4ea;padding:22px;border-radius:14px;overflow:auto}
-  .paper{width:794px;min-height:1123px;margin:0 auto;background:#fff;padding:54px 58px;color:#161616;box-shadow:0 12px 30px rgba(0,0,0,.12);font-family:"Calibri","Aptos","Segoe UI",Arial,sans-serif;font-size:10.5pt;line-height:1.15;transition:width .2s,min-height .2s}
-  .paper-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .paper-controls label{margin:0;font-size:12px;color:#6b7280}
-  .paper-controls select{width:auto;min-width:120px;padding:8px 10px}
-  .export-wrap{position:relative}
-  .export-menu{
-    position:absolute;right:0;top:calc(100% + 8px);min-width:170px;
-    background:#fff;border:1px solid #d1d5db;border-radius:12px;
-    box-shadow:0 12px 30px rgba(17,24,39,.14);padding:6px;z-index:40
+  input[type="checkbox"]{
+    appearance:none;-webkit-appearance:none;width:19px!important;height:19px!important;min-width:19px;padding:0!important;
+    border:1.5px solid var(--border-strong);border-radius:6px;background:#fff;display:inline-grid;place-content:center;
+    cursor:pointer;box-shadow:none!important
   }
-  .export-menu button{
-    display:block;width:100%;border:0;background:transparent;text-align:left;
-    padding:10px 11px;border-radius:8px;font-weight:700;color:#111827
+  input[type="checkbox"]:checked{background:var(--primary);border-color:var(--primary)}
+  input[type="checkbox"]:checked::after{
+    content:"";width:8px;height:4px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px)
   }
-  .export-menu button:hover{background:#f3f4f6}
-  .doc-header{display:grid;grid-template-columns:90px 1fr 90px;align-items:center;gap:18px;border-bottom:2px solid #111;padding-bottom:16px;margin-bottom:26px}
-  .logo-box{width:72px;height:72px;border:1px dashed #bbb;display:grid;place-items:center;font-size:11px;color:#777;text-align:center;padding:4px;justify-self:start}
+
+  .wizard-actions{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px;padding-top:18px;border-top:1px solid var(--border)
+  }
+
+  .item-head{
+    display:grid;grid-template-columns:34px 2fr .65fr .8fr 1fr 1fr 38px;gap:8px;padding:0 4px 7px;
+    font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.055em
+  }
+  .item-row:not(.item-head){
+    display:grid;grid-template-columns:34px 2fr .65fr .8fr 1fr 1fr 38px;gap:8px;align-items:center;margin-bottom:8px
+  }
+  .item-row:not(.item-head)>.item-index{
+    width:28px;height:28px;border-radius:8px;background:var(--surface-soft);border:1px solid var(--border);
+    display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--muted)
+  }
+  .item-cell{min-width:0}.mobile-label{display:none}
+  .item-row input{height:40px;padding:0 10px;border-radius:9px;font-size:13px}
+  .subtotal{
+    min-height:40px;padding:0 8px;display:flex;align-items:center;justify-content:flex-end;
+    font-size:12.5px;font-weight:750;color:var(--text);white-space:nowrap
+  }
+  .unit-field{position:relative}
+  .unit-menu,.app-select-menu,.export-menu{
+    position:absolute;background:#fff;border:1px solid var(--border);border-radius:12px;
+    box-shadow:var(--shadow-lg);padding:6px;z-index:60
+  }
+  .unit-menu{left:0;right:0;top:calc(100% + 6px);max-height:230px;overflow:auto}
+  .unit-option,.app-select-option,.export-menu button{
+    width:100%;display:flex;align-items:center;border:0;background:transparent;color:var(--text-soft);
+    padding:9px 10px;border-radius:8px;font-size:12.5px;font-weight:700;text-align:left;cursor:pointer
+  }
+  .unit-option:hover,.unit-option.active,.app-select-option:hover,.app-select-option.selected,.export-menu button:hover{
+    background:var(--primary-soft);color:var(--primary)
+  }
+
+  .total-box{
+    margin-left:auto;width:min(390px,100%);padding:17px;background:var(--surface-soft);
+    border:1px solid var(--border);border-radius:13px
+  }
+  .total-line{display:flex;justify-content:space-between;gap:16px;padding:5px 0;font-size:12.5px;color:var(--text-soft)}
+  .total-line.grand{
+    font-size:17px;font-weight:900;color:var(--text);border-top:1px solid var(--border-strong);
+    margin-top:7px;padding-top:12px
+  }
+  .switch-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--border)}
+  .switch-row strong{font-size:13px}.switch-row .muted{margin-top:3px;line-height:1.4}
+
+  .paper-controls{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-top:13px}
+  .control-group{display:flex;flex-direction:column;gap:6px}
+  .control-label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.055em;color:var(--muted)}
+  .app-select{position:relative;min-width:118px}
+  .app-select-trigger{
+    width:100%;height:38px;border:1px solid var(--border-strong);border-radius:10px;background:#fff;
+    padding:0 11px;text-align:left;font-size:12.5px;font-weight:750;color:var(--text);box-shadow:var(--shadow-sm)
+  }
+  .app-select-trigger:hover{border-color:#aebdce;background:var(--surface-soft)}
+  .app-select-menu{left:0;right:0;top:calc(100% + 6px);min-width:135px}
+  .export-wrap{position:relative}.export-menu{right:0;top:calc(100% + 8px);min-width:170px}.export-menu button{min-height:38px}
+
+  .preview-wrap{background:#e8edf4;padding:24px;border-radius:15px;overflow:auto;border:1px solid #dde4ed}
+
+  .paper{
+    width:794px;min-height:1123px;margin:0 auto;background:#fff;padding:54px 58px;color:#161616;
+    box-shadow:0 14px 34px rgba(15,23,42,.14);font-family:"Calibri","Aptos","Segoe UI",Arial,sans-serif;
+    font-size:10.5pt;line-height:1.15;transition:width .2s,min-height .2s
+  }
+  .doc-header{
+    display:grid;grid-template-columns:90px 1fr 90px;align-items:center;gap:18px;border-bottom:2px solid #111;
+    padding-bottom:16px;margin-bottom:26px
+  }
+  .logo-box{
+    width:72px;height:72px;border:1px dashed #bbb;display:grid;place-items:center;font-size:11px;color:#777;
+    text-align:center;padding:4px;justify-self:start
+  }
   .company{text-align:center;font-size:9pt;line-height:1.15;min-width:0}
   .company strong{font-size:16pt;display:block;letter-spacing:.015em;font-weight:700;margin-bottom:3px;text-transform:uppercase}
   .doc-header-spacer{width:72px;height:72px;justify-self:end}
   .doc-title{text-align:center;font-size:15pt;font-weight:700;letter-spacing:.035em;margin-bottom:20px}
   .doc-number-line{font-size:10.5pt;line-height:1.1;margin-bottom:3px;font-weight:400}
   .meta{display:grid;grid-template-columns:1fr 1fr;gap:24px;font-size:10.5pt;margin-bottom:20px}
-  .meta .box{line-height:1.1}
-  .meta .box:last-child{text-align:right}
+  .meta .box{line-height:1.1}.meta .box:last-child{text-align:right}
   .doc-table{width:100%;border-collapse:collapse;font-size:9.5pt;margin-top:14px}
-  .doc-table th,.doc-table td{border:1px solid #333;padding:6px 6px;white-space:normal;vertical-align:middle}
+  .doc-table th,.doc-table td{border:1px solid #333;padding:6px;white-space:normal;vertical-align:middle}
   .doc-table th{background:#eceff2;color:#111;text-transform:none;letter-spacing:0;font-size:10pt;font-weight:700}
   .doc-table td:nth-child(1),.doc-table td:nth-child(3),.doc-table td:nth-child(4){text-align:center}
   .doc-table .num{text-align:right}
   .summary{width:44%;margin-left:auto;margin-top:10px;font-size:10pt}
   .summary div{display:flex;justify-content:space-between;padding:3px 0}
   .summary .grand{font-weight:700;border-top:1px solid #333;padding-top:6px;font-size:12pt}
-  .notes{font-size:8.5pt;line-height:1.15;margin-top:20px}
-  .notes.terms{font-style:italic}
+  .notes{font-size:8.5pt;line-height:1.15;margin-top:20px}.notes.terms{font-style:italic}
   .signatures{display:flex;justify-content:flex-end;margin-top:38px;font-size:10pt;page-break-inside:avoid;break-inside:avoid}
-  .sig{width:42%;text-align:center}
-  .sig-space{height:3cm;display:grid;place-items:center}
-  .sig-img{max-height:2.7cm;max-width:150px}
-  .line{border-top:0;padding-top:0}
-  .signer-name{font-weight:700}
-  .signer-role{font-weight:400}
+  .sig{width:42%;text-align:center}.sig-space{height:3cm;display:grid;place-items:center}
+  .sig-img{max-height:2.7cm;max-width:150px}.line{border-top:0;padding-top:0}.signer-name{font-weight:700}.signer-role{font-weight:400}
 
-  .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .logo-preview{width:110px;height:110px;border:1px dashed #aaa;border-radius:10px;display:grid;place-items:center;overflow:hidden;background:#fafafa}
+  .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .settings-grid>div{min-width:0;padding:18px;border:1px solid var(--border);border-radius:14px;background:#fbfcfe}
+  .upload-control{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .upload-help{font-size:11.5px;color:var(--muted)}
+  .logo-preview{
+    width:116px;height:116px;margin-top:10px;border:1px dashed var(--border-strong);border-radius:13px;
+    display:grid;place-items:center;overflow:hidden;background:#fff;color:var(--muted);font-size:11px;font-weight:750
+  }
   .logo-preview img{width:100%;height:100%;object-fit:contain}
-  .backup-box{
-    margin-top:22px;padding-top:18px;border-top:1px solid #e5e7eb
-  }
-  .backup-box p{font-size:13px;line-height:1.5}
+  .backup-box{margin-top:24px;padding-top:22px;border-top:1px solid var(--border)}
+  .backup-box p{font-size:13px;line-height:1.55}
   .backup-note{
-    margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;
-    border:1px solid #e5e7eb;font-size:12px;color:#6b7280;line-height:1.45
+    margin-top:12px;padding:11px 12px;border-radius:11px;background:var(--surface-soft);
+    border:1px solid var(--border);font-size:11.5px;color:var(--muted);line-height:1.5
   }
-  .toast{position:fixed;right:20px;bottom:20px;background:#111827;color:#fff;padding:12px 14px;border-radius:10px;font-weight:700;z-index:50;opacity:0;transform:translateY(10px);transition:.2s}
-  .toast.show{opacity:1;transform:translateY(0)}
-  #printRoot{display:none}
+
+  .toast{
+    position:fixed;right:22px;bottom:22px;background:#0f172a;color:#fff;padding:11px 14px;border-radius:11px;
+    font-size:12.5px;font-weight:750;z-index:100;opacity:0;transform:translateY(10px);transition:.2s;box-shadow:var(--shadow-lg)
+  }
+  .toast.show{opacity:1;transform:translateY(0)}#printRoot{display:none}
 
   @media(max-width:900px){
-    .wizard-shell{grid-template-columns:1fr}.steps{position:static}.step-list{display:flex;overflow:auto}.step-row{min-width:180px}
-    .grid,.settings-grid{grid-template-columns:1fr}
-    .item-row{grid-template-columns:32px 1fr 70px 90px;gap:6px}
-    .item-row .price,.item-row .subtotal,.item-row .del{grid-column:auto}
-    .hero{flex-direction:column}
+    .container{padding:28px 18px 60px}.wizard-shell{grid-template-columns:1fr}.steps{position:static;padding:8px;overflow:auto}
+    .step-list{flex-direction:row;min-width:max-content}.step-row{min-width:175px}
+    .grid,.settings-grid{grid-template-columns:1fr}.settings-grid{gap:14px}.hero{align-items:flex-start}
   }
-  @media(max-width:600px){
-    .topbar{padding:0 14px}.nav{display:none}.container{padding:20px 12px 50px}.form-card{padding:16px}
+  @media(max-width:700px){
+    .topbar{height:62px;padding:0 13px}.brand{gap:8px}.brand-mark{width:32px;height:32px;border-radius:10px}.brand span{font-size:14px}
+    .nav{padding:3px;border-radius:10px}.nav button{height:32px;padding:0 9px;font-size:11.5px}
+    .container{padding:22px 12px 48px}.hero{flex-direction:column;gap:15px;margin-bottom:18px}.hero .actions{width:100%}
+    .hero .actions>.btn{flex:1}h1{font-size:25px}.panel,.form-card{border-radius:15px}.panel{padding:15px}.form-card{padding:17px}
+    .toolbar{align-items:stretch!important;flex-direction:column}.search{width:100%}
+    .item-head{display:none}
+    .item-row:not(.item-head){
+      grid-template-columns:1fr 1fr;padding:13px;margin-bottom:10px;border:1px solid var(--border);
+      border-radius:13px;background:var(--surface-soft)
+    }
+    .item-row:not(.item-head)>.item-index{grid-column:1/2}.item-row .desc-cell{grid-column:1/-1}
+    .item-row .qty-cell{grid-column:1/2}.item-row .unit-cell{grid-column:2/3}
+    .item-row .price-cell{grid-column:1/2}.item-row .subtotal-cell{grid-column:2/3}
+    .item-row .del{grid-column:2/3;justify-self:end;grid-row:1}.mobile-label{
+      display:block;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 5px 2px
+    }
+    .subtotal{height:40px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 10px;justify-content:flex-end}
+    .wizard-actions{gap:8px}.wizard-actions .btn{min-width:0}.preview-wrap{padding:12px;height:650px}
     .paper{transform:scale(.56);transform-origin:top left;margin-bottom:-480px}
-    .preview-wrap{padding:10px;height:640px}
+    .paper-controls{width:100%}.control-group{flex:1}.app-select{min-width:0;width:100%}.actions{gap:7px}
+  }
+  @media(max-width:430px){
+    .brand span{display:none}.nav button{padding:0 10px}.wizard-actions{flex-wrap:wrap}.wizard-actions .btn{flex:1}
+    .paper{transform:scale(.50);margin-bottom:-555px}.preview-wrap{height:600px}
+  }
+
+
+  /* === V14 responsive layout engine === */
+  .display-mode-box{
+    display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+    padding:17px 18px;margin-bottom:18px;border:1px solid var(--border);border-radius:14px;background:var(--surface-soft)
+  }
+  .display-mode-box h3{margin-bottom:4px}
+  .display-mode-box p{margin:0;max-width:650px;font-size:12.5px;line-height:1.5}
+  .display-mode-control{
+    display:inline-flex;gap:3px;padding:4px;border:1px solid var(--border);border-radius:12px;background:#fff;box-shadow:var(--shadow-sm)
+  }
+  .display-mode-btn{
+    min-height:35px;padding:0 12px;border:0;border-radius:9px;background:transparent;color:var(--muted);
+    font-size:12px;font-weight:800;transition:.15s ease
+  }
+  .display-mode-btn:hover{background:var(--surface-hover);color:var(--text)}
+  .display-mode-btn.active{background:var(--primary);color:#fff;box-shadow:0 4px 10px rgba(29,78,216,.18)}
+  .display-mode-hint{width:100%;font-size:11.5px;color:var(--muted);margin-top:-7px}
+  .preview-stage{position:relative;margin:0 auto;transform:none}
+  .preview-stage>.paper{margin:0;transform-origin:top left}
+
+  /* Tablet profile: one-column wizard, efficient multi-column forms. */
+  html[data-ui-profile="tablet"] .container{padding:28px 18px 60px}
+  html[data-ui-profile="tablet"] .wizard-shell{grid-template-columns:1fr}
+  html[data-ui-profile="tablet"] .steps{position:static;padding:8px;overflow:auto}
+  html[data-ui-profile="tablet"] .step-list{flex-direction:row;min-width:max-content}
+  html[data-ui-profile="tablet"] .step-row{min-width:170px}
+  html[data-ui-profile="tablet"] .settings-grid{grid-template-columns:1fr 1fr;gap:14px}
+  html[data-ui-profile="tablet"] .form-card{padding:22px}
+  html[data-ui-profile="tablet"] .item-head{display:none}
+  html[data-ui-profile="tablet"] .item-row:not(.item-head){
+    grid-template-columns:1fr 1fr 1fr;padding:14px;margin-bottom:10px;border:1px solid var(--border);
+    border-radius:13px;background:var(--surface-soft)
+  }
+  html[data-ui-profile="tablet"] .item-row:not(.item-head)>.item-index{grid-column:1/2}
+  html[data-ui-profile="tablet"] .item-row .desc-cell{grid-column:1/-1}
+  html[data-ui-profile="tablet"] .item-row .qty-cell{grid-column:1/2}
+  html[data-ui-profile="tablet"] .item-row .unit-cell{grid-column:2/3}
+  html[data-ui-profile="tablet"] .item-row .price-cell{grid-column:3/4}
+  html[data-ui-profile="tablet"] .item-row .subtotal-cell{grid-column:2/4}
+  html[data-ui-profile="tablet"] .item-row .del{grid-column:3/4;justify-self:end;grid-row:1}
+  html[data-ui-profile="tablet"] .mobile-label{
+    display:block;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 5px 2px
+  }
+  html[data-ui-profile="tablet"] .subtotal{
+    height:40px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 10px;justify-content:flex-end
+  }
+
+  /* Mobile profile. Used automatically <640px or manually via Settings. */
+  html[data-ui-profile="mobile"] .topbar{height:62px;padding:0 13px}
+  html[data-ui-profile="mobile"] .brand{gap:8px}
+  html[data-ui-profile="mobile"] .brand-mark{width:32px;height:32px;border-radius:10px}
+  html[data-ui-profile="mobile"] .brand span{font-size:14px}
+  html[data-ui-profile="mobile"] .nav{padding:3px;border-radius:10px}
+  html[data-ui-profile="mobile"] .nav button{height:32px;padding:0 9px;font-size:11.5px}
+  html[data-ui-profile="mobile"] .container{padding:22px 12px 48px}
+  html[data-ui-profile="mobile"] .hero{flex-direction:column;gap:15px;margin-bottom:18px}
+  html[data-ui-profile="mobile"] .hero .actions{width:100%}
+  html[data-ui-profile="mobile"] .hero .actions>.btn{flex:1}
+  html[data-ui-profile="mobile"] h1{font-size:25px}
+  html[data-ui-profile="mobile"] .panel,
+  html[data-ui-profile="mobile"] .form-card{border-radius:15px}
+  html[data-ui-profile="mobile"] .panel{padding:15px}
+  html[data-ui-profile="mobile"] .form-card{padding:17px}
+  html[data-ui-profile="mobile"] .toolbar{align-items:stretch!important;flex-direction:column}
+  html[data-ui-profile="mobile"] .search{width:100%}
+  html[data-ui-profile="mobile"] .wizard-shell{grid-template-columns:1fr}
+  html[data-ui-profile="mobile"] .steps{position:static;padding:7px;overflow:auto}
+  html[data-ui-profile="mobile"] .step-list{flex-direction:row;min-width:max-content}
+  html[data-ui-profile="mobile"] .step-row{min-width:142px;padding:9px 8px}
+  html[data-ui-profile="mobile"] .step-note{display:none}
+  html[data-ui-profile="mobile"] .grid,
+  html[data-ui-profile="mobile"] .settings-grid{grid-template-columns:1fr;gap:14px}
+  html[data-ui-profile="mobile"] .settings-grid>div{padding:14px}
+  html[data-ui-profile="mobile"] .display-mode-box{align-items:stretch;padding:14px}
+  html[data-ui-profile="mobile"] .display-mode-control{display:grid;grid-template-columns:repeat(3,1fr);width:100%}
+  html[data-ui-profile="mobile"] .display-mode-btn{padding:0 7px}
+  html[data-ui-profile="mobile"] .item-head{display:none}
+  html[data-ui-profile="mobile"] .item-row:not(.item-head){
+    grid-template-columns:1fr 1fr;padding:13px;margin-bottom:10px;border:1px solid var(--border);
+    border-radius:13px;background:var(--surface-soft)
+  }
+  html[data-ui-profile="mobile"] .item-row:not(.item-head)>.item-index{grid-column:1/2}
+  html[data-ui-profile="mobile"] .item-row .desc-cell{grid-column:1/-1}
+  html[data-ui-profile="mobile"] .item-row .qty-cell{grid-column:1/2}
+  html[data-ui-profile="mobile"] .item-row .unit-cell{grid-column:2/3}
+  html[data-ui-profile="mobile"] .item-row .price-cell{grid-column:1/2}
+  html[data-ui-profile="mobile"] .item-row .subtotal-cell{grid-column:2/3}
+  html[data-ui-profile="mobile"] .item-row .del{grid-column:2/3;justify-self:end;grid-row:1}
+  html[data-ui-profile="mobile"] .mobile-label{
+    display:block;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 5px 2px
+  }
+  html[data-ui-profile="mobile"] .subtotal{
+    height:40px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 10px;justify-content:flex-end
+  }
+  html[data-ui-profile="mobile"] .wizard-actions{gap:8px;flex-wrap:wrap}
+  html[data-ui-profile="mobile"] .wizard-actions .btn{flex:1;min-width:118px}
+  html[data-ui-profile="mobile"] .paper-controls{width:100%}
+  html[data-ui-profile="mobile"] .control-group{flex:1}
+  html[data-ui-profile="mobile"] .app-select{min-width:0;width:100%}
+  html[data-ui-profile="mobile"] .preview-wrap{padding:10px;max-height:none;height:auto;overflow:auto}
+  html[data-ui-profile="mobile"] .paper{transform:none;margin:0}
+  html[data-ui-profile="mobile"] .actions{gap:7px}
+  html[data-ui-profile="mobile"] .toast{left:12px;right:12px;bottom:14px;text-align:center}
+
+  /* History becomes readable cards on mobile instead of a squeezed table. */
+  html[data-ui-profile="mobile"] #docsTable .table-wrap{border:0;overflow:visible}
+  html[data-ui-profile="mobile"] #docsTable table,
+  html[data-ui-profile="mobile"] #docsTable tbody{display:block;width:100%}
+  html[data-ui-profile="mobile"] #docsTable thead{display:none}
+  html[data-ui-profile="mobile"] #docsTable tr{
+    display:block;margin-bottom:10px;padding:12px 13px;background:#fff;border:1px solid var(--border);
+    border-radius:13px;box-shadow:var(--shadow-sm)
+  }
+  html[data-ui-profile="mobile"] #docsTable td{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 0;
+    border:0!important;white-space:normal;text-align:right
+  }
+  html[data-ui-profile="mobile"] #docsTable td::before{
+    content:attr(data-label);font-size:10px;line-height:1.2;font-weight:800;text-transform:uppercase;
+    letter-spacing:.055em;color:var(--muted);text-align:left
+  }
+  html[data-ui-profile="mobile"] #docsTable td:first-child{padding-top:0}
+  html[data-ui-profile="mobile"] #docsTable td:last-child{
+    display:block;padding:9px 0 0;margin-top:4px;border-top:1px solid var(--border)!important
+  }
+  html[data-ui-profile="mobile"] #docsTable td:last-child::before{display:none}
+  html[data-ui-profile="mobile"] #docsTable td:last-child .actions{display:grid;grid-template-columns:1fr 1fr 1fr}
+  html[data-ui-profile="mobile"] #docsTable td:last-child .btn{width:100%}
+
+  /* When Mobile is selected manually on a large monitor, show a realistic compact app width. */
+  html[data-ui-mode="mobile"] body{background:#e9eef5}
+  html[data-ui-mode="mobile"] .app{max-width:560px;margin:0 auto;background:var(--bg);box-shadow:0 0 0 1px rgba(15,23,42,.04)}
+
+  /* Explicit Desktop mode must override the old viewport media rules even on a narrow screen. */
+  html[data-ui-profile="desktop"] .app{max-width:none}
+  html[data-ui-mode="desktop"][data-ui-profile="desktop"] .app{min-width:980px}
+  html[data-ui-profile="desktop"] .topbar{height:70px;padding:0 28px}
+  html[data-ui-profile="desktop"] .brand{gap:11px}
+  html[data-ui-profile="desktop"] .brand-mark{width:36px;height:36px;border-radius:11px}
+  html[data-ui-profile="desktop"] .brand span{display:inline;font-size:16px}
+  html[data-ui-profile="desktop"] .nav{padding:4px;border-radius:12px}
+  html[data-ui-profile="desktop"] .nav button{height:36px;padding:0 14px;font-size:13px}
+  html[data-ui-profile="desktop"] .container{max-width:1180px;padding:34px 24px 72px}
+  html[data-ui-profile="desktop"] .hero{flex-direction:row;gap:24px;margin-bottom:24px}
+  html[data-ui-profile="desktop"] .hero .actions{width:auto}
+  html[data-ui-profile="desktop"] .hero .actions>.btn{flex:0 0 auto}
+  html[data-ui-profile="desktop"] h1{font-size:30px}
+  html[data-ui-profile="desktop"] .panel{padding:22px;border-radius:var(--radius-lg)}
+  html[data-ui-profile="desktop"] .form-card{padding:26px;border-radius:var(--radius-lg)}
+  html[data-ui-profile="desktop"] .toolbar{flex-direction:row;align-items:center}
+  html[data-ui-profile="desktop"] .wizard-shell{grid-template-columns:260px minmax(0,1fr)}
+  html[data-ui-profile="desktop"] .steps{position:sticky;top:92px;padding:12px;overflow:visible}
+  html[data-ui-profile="desktop"] .step-list{flex-direction:column;min-width:0}
+  html[data-ui-profile="desktop"] .step-row{min-width:0;padding:11px 10px}
+  html[data-ui-profile="desktop"] .step-note{display:block}
+  html[data-ui-profile="desktop"] .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  html[data-ui-profile="desktop"] .settings-grid{grid-template-columns:1fr 1fr;gap:26px}
+  html[data-ui-profile="desktop"] .settings-grid>div{padding:18px}
+  html[data-ui-profile="desktop"] .item-head{
+    display:grid;grid-template-columns:34px 2fr .65fr .8fr 1fr 1fr 38px
+  }
+  html[data-ui-profile="desktop"] .item-row:not(.item-head){
+    display:grid;grid-template-columns:34px 2fr .65fr .8fr 1fr 1fr 38px;
+    padding:0;margin-bottom:8px;border:0;border-radius:0;background:transparent
+  }
+  html[data-ui-profile="desktop"] .item-row:not(.item-head)>.item-index{grid-column:auto}
+  html[data-ui-profile="desktop"] .item-row .desc-cell,
+  html[data-ui-profile="desktop"] .item-row .qty-cell,
+  html[data-ui-profile="desktop"] .item-row .unit-cell,
+  html[data-ui-profile="desktop"] .item-row .price-cell,
+  html[data-ui-profile="desktop"] .item-row .subtotal-cell,
+  html[data-ui-profile="desktop"] .item-row .del{grid-column:auto;grid-row:auto}
+  html[data-ui-profile="desktop"] .item-row .del{justify-self:stretch}
+  html[data-ui-profile="desktop"] .mobile-label{display:none}
+  html[data-ui-profile="desktop"] .subtotal{
+    min-height:40px;height:auto;padding:0 8px;border:0;background:transparent;border-radius:0
+  }
+  html[data-ui-profile="desktop"] .wizard-actions{flex-wrap:nowrap}
+  html[data-ui-profile="desktop"] .wizard-actions .btn{flex:0 0 auto}
+  html[data-ui-profile="desktop"] .preview-wrap{padding:24px;height:auto;max-height:none}
+  html[data-ui-profile="desktop"] .paper{transform:none;margin:0}
+  html[data-ui-profile="desktop"] #docsTable table{display:table}
+  html[data-ui-profile="desktop"] #docsTable thead{display:table-header-group}
+  html[data-ui-profile="desktop"] #docsTable tbody{display:table-row-group}
+  html[data-ui-profile="desktop"] #docsTable tr{display:table-row;padding:0;margin:0;border:0;box-shadow:none}
+  html[data-ui-profile="desktop"] #docsTable td{display:table-cell;padding:13px 14px;text-align:left}
+  html[data-ui-profile="desktop"] #docsTable td::before{display:none}
+
+  @media(max-width:380px){
+    html[data-ui-profile="mobile"] .brand span{display:none}
+    html[data-ui-profile="mobile"] .nav button{padding:0 8px}
+    html[data-ui-profile="mobile"] .item-row:not(.item-head){grid-template-columns:1fr}
+    html[data-ui-profile="mobile"] .item-row .desc-cell,
+    html[data-ui-profile="mobile"] .item-row .qty-cell,
+    html[data-ui-profile="mobile"] .item-row .unit-cell,
+    html[data-ui-profile="mobile"] .item-row .price-cell,
+    html[data-ui-profile="mobile"] .item-row .subtotal-cell{grid-column:1}
+    html[data-ui-profile="mobile"] .item-row .del{grid-column:1;justify-self:end}
   }
 
   @media print{
     html,body{background:#fff!important;margin:0!important;padding:0!important;width:100%!important;height:auto!important}
-    body > .app, body > #toast{display:none!important}
+    body > .app,body > #toast{display:none!important}
     #printRoot{display:block!important;margin:0!important;padding:0!important;background:#fff!important;width:100%!important}
     #printRoot .paper{
-      display:block!important;
-      box-shadow:none!important;
-      margin:0!important;
-      padding:14mm 15mm!important;
-      transform:none!important;
-      height:auto!important;
-      min-height:0!important;
-      max-height:none!important;
-      overflow:visible!important;
-      break-after:auto!important;
-      page-break-after:auto!important;
+      display:block!important;box-shadow:none!important;margin:0!important;padding:14mm 15mm!important;transform:none!important;
+      height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;break-after:auto!important;page-break-after:auto!important
     }
     #printRoot .doc-table thead{display:table-header-group}
     #printRoot .summary,#printRoot .notes,#printRoot .signatures{break-inside:avoid;page-break-inside:avoid}
@@ -228,7 +535,7 @@
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="brand"><div class="brand-mark">P</div><span>INVOTATION</span></div>
+    <div class="brand"><div class="brand-mark">I</div><span>INVOTATION</span></div>
     <div class="nav">
       <button id="navDocs" class="active" onclick="showView('docs')">Dokumen</button>
       <button id="navSettings" onclick="showView('settings')">Pengaturan</button>
@@ -250,7 +557,7 @@
 
       <div class="panel">
         <div class="toolbar">
-          <div><strong>Dokumen sebelumnya</strong><div class="muted" style="font-size:13px;margin-top:4px">Tersimpan otomatis di perangkat ini.</div></div>
+          <div><strong>Dokumen sebelumnya</strong><div class="muted" style="font-size:13px;margin-top:4px">Tersimpan di perangkat ini.</div></div>
           <input autocomplete="off" id="searchInput" class="search" placeholder="Cari nomor, customer, atau jenis..." oninput="renderDocs()"/>
         </div>
         <div id="docsTable"></div>
@@ -271,8 +578,8 @@
           <div class="step-list">
             <div class="step-row active" data-step="1"><div class="step-num">1</div><div><div class="step-title">Data tujuan</div><div class="step-note">Customer & tanggal</div></div></div>
             <div class="step-row" data-step="2"><div class="step-num">2</div><div><div class="step-title">Item</div><div class="step-note">Barang / pekerjaan</div></div></div>
-            <div class="step-row" data-step="3"><div class="step-num">3</div><div><div class="step-title">Harga & catatan</div><div class="step-note">PPN, diskon, terms</div></div></div>
-            <div class="step-row" data-step="4"><div class="step-num">4</div><div><div class="step-title">Preview</div><div class="step-note">PDF / DOCX / simpan</div></div></div>
+            <div class="step-row" data-step="3"><div class="step-num">3</div><div><div class="step-title">Harga & catatan</div><div class="step-note">Diskon, PPN & catatan</div></div></div>
+            <div class="step-row" data-step="4"><div class="step-num">4</div><div><div class="step-title">Preview</div><div class="step-note">Cek, export & simpan</div></div></div>
           </div>
         </aside>
 
@@ -293,8 +600,8 @@
 
           <div id="step2" class="form-card hidden">
             <h2>Barang / pekerjaan</h2>
-            <div id="step2Alert" class="form-alert">Lengkapi semua kolom item sebelum lanjut. Qty boleh desimal, misalnya 1.2.</div>
-            <p class="muted">Tambah sebanyak yang dibutuhkan. Total dihitung otomatis.</p>
+            <div id="step2Alert" class="form-alert">Lengkapi semua kolom item. Qty boleh desimal, misalnya 1.2.</div>
+            <p class="muted">Tambah item sesuai kebutuhan. Jumlah dan total dihitung dari data yang kamu isi.</p>
             <div class="item-row item-head">
               <div>No</div><div>Deskripsi</div><div>Qty</div><div>Satuan</div><div>Harga</div><div>Jumlah</div><div></div>
             </div>
@@ -322,8 +629,8 @@
               <label>Catatan / ketentuan</label>
               <textarea autocomplete="off" id="notes" placeholder="Tulis catatan yang ingin ditampilkan pada dokumen"></textarea>
               <div id="notesTypeHint" class="muted" style="font-size:12px;line-height:1.45;margin-top:7px"></div>
-              <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-weight:700;cursor:pointer">
-                <input autocomplete="off" id="saveNoteAsDefault" type="checkbox" checked style="width:auto">
+              <label style="display:flex;align-items:center;gap:9px;margin-top:11px;font-weight:700;cursor:pointer;color:var(--text-soft)">
+                <input autocomplete="off" id="saveNoteAsDefault" type="checkbox" checked>
                 <span id="saveNoteLabel">Simpan catatan ini untuk dokumen berikutnya</span>
               </label>
             </div>
@@ -335,19 +642,31 @@
               <div>
                 <h2 style="margin-bottom:4px">Preview dokumen</h2>
                 <div class="muted">Ukuran kertas dan orientasi bisa diubah sebelum export atau print.</div>
-                <div class="paper-controls" style="margin-top:12px">
-                  <label>Ukuran Kertas</label>
-                  <select autocomplete="off" id="paperSize" onchange="applyPaperFormat()">
-                    <option value="A4" selected>A4</option>
-                    <option value="A5">A5</option>
-                    <option value="LETTER">Letter</option>
-                    <option value="LEGAL">Legal</option>
-                  </select>
-                  <label>Orientasi</label>
-                  <select autocomplete="off" id="paperOrientation" onchange="applyPaperFormat()">
-                    <option value="portrait" selected>Portrait</option>
-                    <option value="landscape">Landscape</option>
-                  </select>
+                <div class="paper-controls">
+                  <div class="control-group">
+                    <span class="control-label">Ukuran kertas</span>
+                    <div class="app-select">
+                      <input id="paperSize" type="hidden" value="A4">
+                      <button type="button" class="app-select-trigger" onclick="toggleAppSelect(event,'paperSizeMenu')"><span id="paperSizeLabel">A4</span></button>
+                      <div id="paperSizeMenu" class="app-select-menu hidden">
+                        <button type="button" class="app-select-option selected" data-value="A4" onclick="chooseAppSelect('paperSize','paperSizeLabel','paperSizeMenu','A4','A4')">A4</button>
+                        <button type="button" class="app-select-option" data-value="A5" onclick="chooseAppSelect('paperSize','paperSizeLabel','paperSizeMenu','A5','A5')">A5</button>
+                        <button type="button" class="app-select-option" data-value="LETTER" onclick="chooseAppSelect('paperSize','paperSizeLabel','paperSizeMenu','LETTER','Letter')">Letter</button>
+                        <button type="button" class="app-select-option" data-value="LEGAL" onclick="chooseAppSelect('paperSize','paperSizeLabel','paperSizeMenu','LEGAL','Legal')">Legal</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <span class="control-label">Orientasi</span>
+                    <div class="app-select">
+                      <input id="paperOrientation" type="hidden" value="portrait">
+                      <button type="button" class="app-select-trigger" onclick="toggleAppSelect(event,'paperOrientationMenu')"><span id="paperOrientationLabel">Portrait</span></button>
+                      <div id="paperOrientationMenu" class="app-select-menu hidden">
+                        <button type="button" class="app-select-option selected" data-value="portrait" onclick="chooseAppSelect('paperOrientation','paperOrientationLabel','paperOrientationMenu','portrait','Portrait')">Portrait</button>
+                        <button type="button" class="app-select-option" data-value="landscape" onclick="chooseAppSelect('paperOrientation','paperOrientationLabel','paperOrientationMenu','landscape','Landscape')">Landscape</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="actions">
@@ -362,7 +681,9 @@
               </div>
             </div>
             <div id="printArea" class="preview-wrap">
-              <div class="paper" id="paper"></div>
+              <div id="previewStage" class="preview-stage">
+                <div class="paper" id="paper"></div>
+              </div>
             </div>
             <div class="wizard-actions no-print"><button class="btn" onclick="goStep(3)">← Edit</button><button class="btn primary" onclick="saveDocument(true)">Simpan & Selesai</button></div>
           </div>
@@ -376,6 +697,18 @@
         <button class="btn primary" onclick="saveSettings()">Simpan Pengaturan</button>
       </div>
       <div class="panel">
+        <div class="display-mode-box">
+          <div>
+            <h3>Tampilan aplikasi</h3>
+            <p class="muted">Otomatis menyesuaikan ukuran layar secara realtime. Pilihan manual hanya mengubah layout aplikasi, bukan format dokumen.</p>
+          </div>
+          <div class="display-mode-control" role="group" aria-label="Tampilan aplikasi">
+            <button type="button" id="displayModeAuto" class="display-mode-btn" onclick="setDisplayMode('auto')">Otomatis</button>
+            <button type="button" id="displayModeMobile" class="display-mode-btn" onclick="setDisplayMode('mobile')">HP</button>
+            <button type="button" id="displayModeDesktop" class="display-mode-btn" onclick="setDisplayMode('desktop')">Desktop</button>
+          </div>
+          <div id="displayModeHint" class="display-mode-hint"></div>
+        </div>
         <div class="settings-grid">
           <div>
             <h3>Identitas Perusahaan</h3>
@@ -386,8 +719,14 @@
             <div class="field"><label>Email</label><input autocomplete="off" id="sEmail" value="admin@perusahaan.com"></div>
             <div class="field"><label>Website</label><input autocomplete="off" id="sWebsite" placeholder="Contoh: www.perusahaan.com"></div>
             <div class="field"><label>NPWP</label><input autocomplete="off" id="sNpwp" placeholder="Opsional"></div>
-            <div class="field"><label>Logo</label><input autocomplete="off" id="sLogo" type="file" accept="image/*" onchange="loadImageFile(event,'logo')"></div>
-            <div class="logo-preview" id="logoPreview">LOGO</div>
+            <div class="field"><label>Logo perusahaan</label>
+              <div class="upload-control">
+                <input autocomplete="off" id="sLogo" type="file" accept="image/*" class="hidden" onchange="loadImageFile(event,'logo')">
+                <button type="button" class="btn" onclick="document.getElementById('sLogo').click()">Pilih Logo</button>
+                <span class="upload-help">PNG/JPG, disarankan background transparan.</span>
+              </div>
+              <div class="logo-preview" id="logoPreview">Belum ada logo</div>
+            </div>
           </div>
           <div>
             <h3>Pembayaran & Tanda Tangan</h3>
@@ -396,21 +735,27 @@
             <div class="field"><label>Atas nama</label><input autocomplete="off" id="sAccountName" value="CV CONTOH PERUSAHAAN"></div>
             <div class="field"><label>Nama penandatangan</label><input autocomplete="off" id="sSigner" value="Nama Penanggung Jawab"></div>
             <div class="field"><label>Jabatan</label><input autocomplete="off" id="sRole" value="Manager"></div>
-            <div class="field"><label>Tanda tangan / stempel PNG</label><input autocomplete="off" id="sSignature" type="file" accept="image/*" onchange="loadImageFile(event,'signature')"></div>
-            <div class="logo-preview" id="signaturePreview">TTD / STEMPEL</div>
+            <div class="field"><label>Tanda tangan / stempel</label>
+              <div class="upload-control">
+                <input autocomplete="off" id="sSignature" type="file" accept="image/*" class="hidden" onchange="loadImageFile(event,'signature')">
+                <button type="button" class="btn" onclick="document.getElementById('sSignature').click()">Pilih TTD / Stempel</button>
+                <span class="upload-help">PNG transparan memberi hasil paling rapi.</span>
+              </div>
+              <div class="logo-preview" id="signaturePreview">Belum ada TTD</div>
+            </div>
           </div>
         </div>
 
         <div class="backup-box">
           <h3>Backup Data</h3>
-          <p class="muted">Simpan salinan seluruh dokumen, pengaturan perusahaan, dan catatan default PROTO ke satu file backup.</p>
+          <p class="muted">Simpan salinan seluruh dokumen, pengaturan perusahaan, dan catatan default INVOTATION ke satu file backup.</p>
           <div class="actions">
             <button class="btn" onclick="exportBackup()">Export Backup</button>
             <button class="btn" onclick="document.getElementById('backupFileInput').click()">Import Backup</button>
             <input autocomplete="off" id="backupFileInput" type="file" accept=".json,application/json" class="hidden" onchange="importBackup(event)">
           </div>
           <div class="backup-note">
-            Import backup akan mengganti data INVOTATION yang tersimpan di perangkat ini. PROTO akan meminta konfirmasi terlebih dahulu.
+            Import backup akan mengganti data INVOTATION yang tersimpan di perangkat ini. INVOTATION akan meminta konfirmasi terlebih dahulu.
           </div>
         </div>
       </div>
@@ -421,8 +766,60 @@
 <div id="printRoot" aria-hidden="true"></div>
 
 <script>
-const STORE_DOCS='protodoc_docs_v1', STORE_SETTINGS='protodoc_settings_v1', STORE_NOTES='proto_default_notes_v1';
+const STORE_DOCS='protodoc_docs_v1', STORE_SETTINGS='protodoc_settings_v1', STORE_NOTES='proto_default_notes_v1', STORE_DISPLAY='invotation_display_mode_v1';
 let currentStep=1, editingId=null, docType='PENAWARAN', isDirty=false;
+let displayMode=(()=>{try{return localStorage.getItem(STORE_DISPLAY)||'auto'}catch(e){return 'auto'}})();
+if(!['auto','mobile','desktop'].includes(displayMode)) displayMode='auto';
+
+function resolveUIProfile(){
+  if(displayMode==='mobile') return 'mobile';
+  if(displayMode==='desktop') return 'desktop';
+  const w=window.innerWidth||document.documentElement.clientWidth||1024;
+  if(w<640) return 'mobile';
+  if(w<=1024) return 'tablet';
+  return 'desktop';
+}
+function updateDisplayModeUI(){
+  const labels={auto:'Otomatis',mobile:'HP',desktop:'Desktop'};
+  ['auto','mobile','desktop'].forEach(mode=>{
+    const id='displayMode'+mode.charAt(0).toUpperCase()+mode.slice(1);
+    const btn=document.getElementById(id);
+    if(btn){
+      btn.classList.toggle('active',displayMode===mode);
+      btn.setAttribute('aria-pressed',displayMode===mode?'true':'false');
+    }
+  });
+  const hint=document.getElementById('displayModeHint');
+  if(hint){
+    const profile=resolveUIProfile();
+    const profileLabel={mobile:'layout HP',tablet:'layout Tablet',desktop:'layout Desktop'}[profile];
+    hint.textContent=displayMode==='auto'
+      ? `Aktif: Otomatis · ${profileLabel}`
+      : `Aktif: ${labels[displayMode]} · mode manual`;
+  }
+}
+function applyDisplayMode(){
+  const profile=resolveUIProfile();
+  document.documentElement.dataset.uiMode=displayMode;
+  document.documentElement.dataset.uiProfile=profile;
+  updateDisplayModeUI();
+  requestAnimationFrame(()=>fitPreview());
+}
+function setDisplayMode(mode){
+  if(!['auto','mobile','desktop'].includes(mode)) return;
+  displayMode=mode;
+  try{localStorage.setItem(STORE_DISPLAY,mode)}catch(e){}
+  applyDisplayMode();
+  showToast(mode==='auto'?'Tampilan otomatis aktif':`Tampilan ${mode==='mobile'?'HP':'Desktop'} aktif`);
+}
+let responsiveRaf=0;
+window.addEventListener('resize',()=>{
+  cancelAnimationFrame(responsiveRaf);
+  responsiveRaf=requestAnimationFrame(()=>{
+    applyDisplayMode();
+    fitPreview();
+  });
+});
 let items=[{description:'',qty:'',unit:'',price:''}];
 const UNIT_OPTIONS=['Pcs','Unit','Job','Lot','Set','Paket','m','m²','m³','cm','mm','kg','gram','Liter','ml','Roll','Box','Lembar','Batang','Titik','Hari','Jam'];
 let settings={
@@ -455,6 +852,31 @@ function applyPaperFormat(){
     paper.style.width=f.widthPx+'px';
     paper.style.minHeight=f.heightPx+'px';
   }
+  requestAnimationFrame(()=>fitPreview());
+}
+function fitPreview(){
+  const wrap=document.getElementById('printArea');
+  const stage=document.getElementById('previewStage');
+  const paper=document.getElementById('paper');
+  if(!wrap||!stage||!paper||paper.closest('.hidden')) return;
+
+  const f=getPaperFormat();
+  const profile=document.documentElement.dataset.uiProfile||resolveUIProfile();
+  const horizontalPadding=profile==='desktop'?48:20;
+  const available=Math.max(240,wrap.clientWidth-horizontalPadding);
+  const scale=profile==='desktop'?1:Math.min(1,available/f.widthPx);
+
+  paper.style.transform=`scale(${scale})`;
+  paper.style.transformOrigin='top left';
+  paper.style.margin='0';
+
+  const updateStage=()=>{
+    const actualHeight=Math.max(paper.offsetHeight,f.heightPx);
+    stage.style.width=Math.ceil(f.widthPx*scale)+'px';
+    stage.style.height=Math.ceil(actualHeight*scale)+'px';
+  };
+  updateStage();
+  requestAnimationFrame(updateStage);
 }
 function setPrintPageStyle(){
   let style=document.getElementById('dynamicPrintPage');
@@ -522,7 +944,7 @@ function showView(view){
   document.getElementById('navDocs').classList.remove('active'); document.getElementById('navSettings').classList.remove('active');
   if(view==='docs'){document.getElementById('docsView').classList.remove('hidden');document.getElementById('navDocs').classList.add('active');renderDocs()}
   if(view==='wizard'){document.getElementById('wizardView').classList.remove('hidden')}
-  if(view==='settings'){document.getElementById('settingsView').classList.remove('hidden');document.getElementById('navSettings').classList.add('active');loadSettingsForm()}
+  if(view==='settings'){document.getElementById('settingsView').classList.remove('hidden');document.getElementById('navSettings').classList.add('active');loadSettingsForm();updateDisplayModeUI()}
   window.scrollTo({top:0,behavior:'smooth'})
 }
 function startNew(type){
@@ -690,19 +1112,19 @@ function renderItems(){
   const c=document.getElementById('itemsContainer');
   c.innerHTML=items.map((it,i)=>`
     <div class="item-row">
-      <div>${i+1}</div>
-      <input autocomplete="off" value="${escapeHtml(it.description||'')}" placeholder="Deskripsi barang / pekerjaan" oninput="items[${i}].description=this.value">
-      <input autocomplete="off" type="text" inputmode="decimal" value="${it.qty ?? ''}" placeholder="Qty" oninput="handleQtyInput(this,${i})" />
-      <div class="unit-field">
+      <div class="item-index">${i+1}</div>
+      <div class="item-cell desc-cell"><span class="mobile-label">Deskripsi</span><input autocomplete="off" value="${escapeHtml(it.description||'')}" placeholder="Barang / pekerjaan" oninput="items[${i}].description=this.value"></div>
+      <div class="item-cell qty-cell"><span class="mobile-label">Qty</span><input autocomplete="off" type="text" inputmode="decimal" value="${it.qty ?? ''}" placeholder="Qty" oninput="handleQtyInput(this,${i})" /></div>
+      <div class="item-cell unit-cell"><span class="mobile-label">Satuan</span><div class="unit-field">
         <input autocomplete="off" value="${escapeHtml(it.unit||'')}" placeholder="Pilih / ketik"
           onfocus="openUnitMenu(${i})"
           onclick="openUnitMenu(${i})"
           oninput="handleUnitInput(this,${i})" />
         <div id="unitMenu${i}" class="unit-menu hidden"></div>
-      </div>
-      <input class="price" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(it.price)}" placeholder="0" oninput="handlePriceInput(this,${i})" />
-      <div class="subtotal">${rupiah((parseQty(it.qty)||0)*(Number(it.price)||0))}</div>
-      <button class="btn small danger del" onclick="removeItem(${i})">×</button>
+      </div></div>
+      <div class="item-cell price-cell"><span class="mobile-label">Harga</span><input class="price" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(it.price)}" placeholder="0" oninput="handlePriceInput(this,${i})" /></div>
+      <div class="item-cell subtotal-cell"><span class="mobile-label">Jumlah</span><div class="subtotal">${rupiah((parseQty(it.qty)||0)*(Number(it.price)||0))}</div></div>
+      <button class="btn small danger del" title="Hapus item" aria-label="Hapus item" onclick="removeItem(${i})">×</button>
     </div>`).join('');
   recalc()
 }
@@ -781,6 +1203,7 @@ function renderPreview(){
     <div class="signatures">
       <div class="sig"><div>Hormat Kami,<br><strong>${escapeHtml(s.company)}</strong></div><div class="sig-space">${sig}</div><div class="line">${escapeHtml(s.signer)}<br><span style="font-weight:400">${escapeHtml(s.role)}</span></div></div>
     </div>`;
+  requestAnimationFrame(()=>fitPreview());
 }
 function getDocs(){try{return JSON.parse(localStorage.getItem(STORE_DOCS)||'[]')}catch(e){return[]}}
 function saveDocument(done=false){
@@ -804,7 +1227,7 @@ function renderDocs(){
   const el=document.getElementById('docsTable');
   if(!docs.length){el.innerHTML='<div class="empty"><strong>Belum ada dokumen.</strong><br><span>Buat Penawaran atau Invoice pertama dari tombol di atas.</span></div>';return}
   el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>No. Dokumen</th><th>Jenis</th><th>Customer</th><th>Tanggal</th><th>Total</th><th>Aksi</th></tr></thead><tbody>
-    ${docs.map(d=>`<tr><td><strong>${escapeHtml(d.number)}</strong></td><td><span class="badge">${d.type}</span></td><td>${escapeHtml(d.customer)}</td><td>${formatDate(d.date)}</td><td>${rupiah(d.totals?.grand||0)}</td><td><div class="actions"><button class="btn small" onclick="openDoc('${d.id}')">Buka</button><button class="btn small" onclick="duplicateDoc('${d.id}')">Duplikat</button><button class="btn small danger" onclick="deleteDoc('${d.id}')">Hapus</button></div></td></tr>`).join('')}
+    ${docs.map(d=>`<tr><td data-label="No. Dokumen"><strong>${escapeHtml(d.number)}</strong></td><td data-label="Jenis"><span class="badge ${d.type==='INVOICE'?'invoice':'quote'}">${d.type}</span></td><td data-label="Customer">${escapeHtml(d.customer)}</td><td data-label="Tanggal">${formatDate(d.date)}</td><td data-label="Total">${rupiah(d.totals?.grand||0)}</td><td data-label="Aksi"><div class="actions"><button class="btn small" onclick="openDoc('${d.id}')">Buka</button><button class="btn small" onclick="duplicateDoc('${d.id}')">Duplikat</button><button class="btn small danger" onclick="deleteDoc('${d.id}')">Hapus</button></div></td></tr>`).join('')}
   </tbody></table></div>`
 }
 function openDoc(id){
@@ -885,7 +1308,7 @@ function importBackup(event){
       }
 
       const count=payload.data.documents.length;
-      const ok=confirm(`Import backup ini?\n\n${count} dokumen akan dimuat.\nData PROTO di perangkat ini akan diganti.`);
+      const ok=confirm(`Import backup ini?\n\n${count} dokumen akan dimuat.\nData INVOTATION di perangkat ini akan diganti.`);
       if(!ok){
         input.value='';
         return;
@@ -915,7 +1338,7 @@ function saveSettings(){
 }
 function loadSettingsForm(){
   sCompany.value=settings.company;sCity.value=settings.city||'Batam';sAddress.value=settings.address;sPhone.value=settings.phone;sEmail.value=settings.email;sWebsite.value=settings.website||'';sNpwp.value=settings.npwp;sBank.value=settings.bank;sAccount.value=settings.account;sAccountName.value=settings.accountName;sSigner.value=settings.signer;sRole.value=settings.role;
-  logoPreview.innerHTML=settings.logo?`<img src="${settings.logo}">`:'LOGO';signaturePreview.innerHTML=settings.signature?`<img src="${settings.signature}">`:'TTD / STEMPEL'
+  logoPreview.innerHTML=settings.logo?`<img src="${settings.logo}">`:'Belum ada logo';signaturePreview.innerHTML=settings.signature?`<img src="${settings.signature}">`:'Belum ada TTD'
 }
 function loadImageFile(e,type){
   const file=e.target.files[0]; if(!file)return; const r=new FileReader(); r.onload=ev=>{settings[type]=ev.target.result;loadSettingsForm()};r.readAsDataURL(file)
@@ -953,6 +1376,37 @@ function closeExportMenu(){
 document.addEventListener('click',e=>{
   const wrap=e.target.closest?.('.export-wrap');
   if(!wrap) closeExportMenu();
+});
+
+function closeAppSelects(exceptId=null){
+  document.querySelectorAll('.app-select-menu').forEach(menu=>{
+    if(menu.id!==exceptId) menu.classList.add('hidden');
+  });
+}
+function toggleAppSelect(e,menuId){
+  if(e) e.stopPropagation();
+  const menu=document.getElementById(menuId);
+  if(!menu) return;
+  const willOpen=menu.classList.contains('hidden');
+  closeAppSelects(menuId);
+  if(willOpen) menu.classList.remove('hidden'); else menu.classList.add('hidden');
+}
+function chooseAppSelect(inputId,labelId,menuId,value,label){
+  const input=document.getElementById(inputId);
+  const labelEl=document.getElementById(labelId);
+  const menu=document.getElementById(menuId);
+  if(input) input.value=value;
+  if(labelEl) labelEl.textContent=label;
+  if(menu){
+    menu.querySelectorAll('.app-select-option').forEach(btn=>{
+      btn.classList.toggle('selected',btn.dataset.value===value);
+    });
+    menu.classList.add('hidden');
+  }
+  applyPaperFormat();
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest?.('.app-select')) closeAppSelects();
 });
 
 function printDocument(){
@@ -1091,16 +1545,26 @@ window.addEventListener('beforeunload',e=>{
   }
 });
 
+function syncPaperControlLabels(){
+  const size=document.getElementById('paperSize')?.value||'A4';
+  const ori=document.getElementById('paperOrientation')?.value||'portrait';
+  const sizeMap={A4:'A4',A5:'A5',LETTER:'Letter',LEGAL:'Legal'};
+  const oriMap={portrait:'Portrait',landscape:'Landscape'};
+  const a=document.getElementById('paperSizeLabel'); if(a) a.textContent=sizeMap[size]||size;
+  const b=document.getElementById('paperOrientationLabel'); if(b) b.textContent=oriMap[ori]||ori;
+}
+
 (function init(){
   try{const s=JSON.parse(localStorage.getItem(STORE_SETTINGS)||'null');if(s)settings={...settings,...s}}catch(e){}
-  document.getElementById('docDate').value=today();renderItems();renderDocs();applyPaperFormat();
+  document.getElementById('docDate').value=today();renderItems();renderDocs();syncPaperControlLabels();applyPaperFormat();
 })();
+applyDisplayMode();
 </script>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
   });
 }
 </script>

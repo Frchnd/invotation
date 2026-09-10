@@ -1,3 +1,8 @@
-# INVOTATION
+# INVOTATION v14 — Responsive UI
 
-Aplikasi PWA untuk membuat Penawaran dan Invoice.
+Responsive modes:
+- Otomatis: HP / Tablet / Desktop berdasarkan ukuran layar
+- HP: paksa layout mobile
+- Desktop: paksa layout desktop
+
+Aplikasi tetap static. Entry point: `index.html`.
