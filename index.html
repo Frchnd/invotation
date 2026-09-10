@@ -280,6 +280,20 @@
     border:1px solid var(--border);font-size:11.5px;color:var(--muted);line-height:1.5
   }
 
+  .backup-hero{margin-bottom:20px}
+  .backup-page-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .backup-page-card{display:flex;align-items:flex-start;gap:16px;min-height:210px;padding:22px}
+  .backup-page-icon{flex:0 0 auto;display:grid;place-items:center;width:46px;height:46px;border-radius:13px;background:var(--primary-soft);color:var(--primary);border:1px solid #dbeafe}
+  .backup-page-icon svg{width:22px;height:22px}
+  .backup-page-content{display:flex;flex-direction:column;align-items:flex-start;min-height:164px;flex:1}
+  .backup-page-content h2{margin:1px 0 8px;font-size:17px}
+  .backup-page-content p{margin:0 0 20px;font-size:12.5px;line-height:1.55}
+  .backup-page-action{margin-top:auto}
+  .backup-warning{display:flex;align-items:flex-start;gap:13px;margin-top:16px;padding:16px 18px;background:#fffbeb;border-color:#fde68a}
+  .backup-warning-icon{flex:0 0 auto;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fef3c7;color:#92400e;font-weight:900}
+  .backup-warning strong{font-size:13px;color:#78350f}
+  .backup-warning p{margin:4px 0 0;font-size:12px;line-height:1.5;color:#92400e}
+
   .toast{
     position:fixed;right:22px;bottom:22px;background:#0f172a;color:#fff;padding:11px 14px;border-radius:11px;
     font-size:12.5px;font-weight:750;z-index:100;opacity:0;transform:translateY(10px);transition:.2s;box-shadow:var(--shadow-lg)
@@ -496,6 +510,13 @@
   html[data-ui-profile="mobile"] .settings-panel{padding:12px}
   html[data-ui-profile="mobile"] .settings-section{padding:14px}
   html[data-ui-profile="mobile"] .settings-save-footer{align-items:stretch;flex-direction:column;padding:14px}
+  html[data-ui-profile="mobile"] .backup-page-grid{grid-template-columns:1fr;gap:12px}
+  html[data-ui-profile="mobile"] .backup-page-card{min-height:0;padding:16px;gap:13px}
+  html[data-ui-profile="mobile"] .backup-page-icon{width:40px;height:40px;border-radius:11px}
+  html[data-ui-profile="mobile"] .backup-page-content{min-height:0}
+  html[data-ui-profile="mobile"] .backup-page-content p{margin-bottom:16px}
+  html[data-ui-profile="mobile"] .backup-page-action{width:100%}
+  html[data-ui-profile="mobile"] .backup-warning{padding:14px}
   html[data-ui-profile="mobile"] .settings-save-btn{width:100%;min-width:0}
   html[data-ui-profile="mobile"] .bank-menu{max-height:260px}
   html[data-ui-profile="mobile"] .date-picker-menu{left:0;right:auto;width:min(310px,calc(100vw - 48px))}
@@ -646,6 +667,7 @@
     <div class="nav">
       <button id="navDocs" class="active" onclick="showView('docs')">Dokumen</button>
       <button id="navSettings" onclick="showView('settings')">Pengaturan</button>
+      <button id="navBackup" onclick="showView('backup')">Backup</button>
     </div>
   </header>
 
@@ -819,7 +841,7 @@
 
     <section id="settingsView" class="hidden">
       <div class="hero settings-hero">
-        <div><h1>Pengaturan perusahaan</h1><p class="muted">Diisi sekali, lalu otomatis masuk ke semua Penawaran dan Invoice.</p></div>
+        <div><h1>Pengaturan perusahaan</h1><p class="muted">Kelola identitas, pembayaran, tanda tangan, dan tampilan aplikasi.</p></div>
       </div>
       <div class="panel settings-panel">
         <div class="display-mode-box settings-section">
@@ -895,18 +917,7 @@
             </div>
           </section>
 
-          <section class="settings-section backup-section">
-            <div class="settings-section-head">
-              <h3>Backup Data</h3>
-              <p class="muted">Simpan salinan seluruh dokumen, pengaturan perusahaan, dan catatan default INVOTATION.</p>
-            </div>
-            <div class="actions">
-              <button type="button" class="btn" onclick="exportBackup()">Export Backup</button>
-              <button type="button" class="btn" onclick="document.getElementById('backupFileInput').click()">Import Backup</button>
-              <input autocomplete="off" id="backupFileInput" type="file" accept=".json,application/json" class="hidden" onchange="importBackup(event)">
-            </div>
-            <div class="backup-note">Import backup akan mengganti data INVOTATION yang tersimpan di perangkat ini. INVOTATION akan meminta konfirmasi terlebih dahulu.</div>
-          </section>
+          
         </div>
 
         <div class="settings-save-footer">
@@ -915,6 +926,48 @@
         </div>
       </div>
     </section>
+    <section id="backupView" class="hidden">
+      <div class="hero backup-hero">
+        <div>
+          <h1>Backup data</h1>
+          <p class="muted">Simpan atau pulihkan data INVOTATION tanpa mengubah pengaturan perusahaan.</p>
+        </div>
+      </div>
+
+      <div class="backup-page-grid">
+        <section class="panel backup-page-card">
+          <div class="backup-page-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="backup-page-content">
+            <h2>Export Backup</h2>
+            <p class="muted">Buat satu file backup berisi seluruh history dokumen, pengaturan perusahaan, dan catatan default.</p>
+            <button type="button" class="btn primary backup-page-action" onclick="exportBackup()">Export Backup</button>
+          </div>
+        </section>
+
+        <section class="panel backup-page-card">
+          <div class="backup-page-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 21V9m0 0 4 4m-4-4-4 4M5 5h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="backup-page-content">
+            <h2>Import Backup</h2>
+            <p class="muted">Pulihkan data dari file backup INVOTATION yang pernah dibuat sebelumnya.</p>
+            <button type="button" class="btn backup-page-action" onclick="document.getElementById('backupFileInput').click()">Import Backup</button>
+            <input autocomplete="off" id="backupFileInput" type="file" accept=".json,application/json" class="hidden" onchange="importBackup(event)">
+          </div>
+        </section>
+      </div>
+
+      <div class="backup-warning panel">
+        <div class="backup-warning-icon" aria-hidden="true">!</div>
+        <div>
+          <strong>Sebelum melakukan Import</strong>
+          <p>Import akan mengganti data INVOTATION yang tersimpan di perangkat ini. Konfirmasi selalu muncul sebelum proses dijalankan.</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>
 
@@ -1283,11 +1336,12 @@ async function confirmLeaveWizard(){
 async function showView(view){
   const wizardVisible=!document.getElementById('wizardView').classList.contains('hidden');
   if(wizardVisible && view!=='wizard' && !(await confirmLeaveWizard())) return;
-  ['docsView','wizardView','settingsView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
-  document.getElementById('navDocs').classList.remove('active'); document.getElementById('navSettings').classList.remove('active');
+  ['docsView','wizardView','settingsView','backupView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  ['navDocs','navSettings','navBackup'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
   if(view==='docs'){document.getElementById('docsView').classList.remove('hidden');document.getElementById('navDocs').classList.add('active');renderDocs()}
   if(view==='wizard'){document.getElementById('wizardView').classList.remove('hidden')}
   if(view==='settings'){document.getElementById('settingsView').classList.remove('hidden');document.getElementById('navSettings').classList.add('active');loadSettingsForm();updateDisplayModeUI()}
+  if(view==='backup'){document.getElementById('backupView').classList.remove('hidden');document.getElementById('navBackup').classList.add('active')}
   window.scrollTo({top:0,behavior:'smooth'})
 }
 function startNew(type){
@@ -1902,7 +1956,9 @@ function syncPaperControlLabels(){
 applyDisplayMode();
 </script>
 <script>
-if ('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
+}
 </script>
 </body>
 </html>

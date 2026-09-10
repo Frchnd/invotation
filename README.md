@@ -1,7 +1,10 @@
-# INVOTATION V17 — Settings & QA
+# INVOTATION V18
 
-- Settings full-width per section.
-- Bank dropdown custom/theme-consistent.
-- Custom date picker and app dialogs.
-- Save Settings moved to bottom.
-- QA fixes without cloud sync.
+Baseline: V17 UI Polish & QA.
+
+Perubahan:
+- Backup menjadi halaman sendiri.
+- Navigasi utama: Dokumen / Pengaturan / Backup.
+- Pengaturan hanya berisi data/perubahan aplikasi.
+- Simpan Perubahan tetap paling bawah.
+- Logic Export/Import Backup tidak diubah.
