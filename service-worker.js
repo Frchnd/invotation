@@ -1,4 +1,4 @@
-const CACHE_NAME = 'invotation-v14-responsive';
+const CACHE_NAME = 'invotation-v15-address-optional';
 const APP_SHELL = [
   './',
   './index.html',

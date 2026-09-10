@@ -590,7 +590,7 @@
             <div class="grid">
               <div class="field"><label>Nama customer / perusahaan *</label><input autocomplete="off" id="customerName" placeholder="Contoh: PT ABC Indonesia"><div class="field-error">Nama customer wajib diisi.</div></div>
               <div class="field"><label>Nama Bapak/Ibu</label><input autocomplete="off" id="customerPic" placeholder="Contoh: Budi Santoso"></div>
-              <div class="field"><label>Alamat customer *</label><textarea autocomplete="off" id="customerAddress" placeholder="Alamat lengkap"></textarea><div class="field-error">Alamat customer wajib diisi.</div></div>
+              <div class="field"><label>Alamat customer</label><textarea autocomplete="off" id="customerAddress" placeholder="Alamat lengkap"></textarea></div>
               <div>
                 <div class="field"><label>Tanggal dokumen *</label><input autocomplete="off" id="docDate" type="date"><div class="field-error">Tanggal dokumen wajib diisi.</div></div>
               </div>
@@ -980,7 +980,6 @@ function validateStep1(){
   let ok=true;
   const required=[
     ['customerName','Nama customer wajib diisi.'],
-    ['customerAddress','Alamat customer wajib diisi.'],
     ['docDate','Tanggal dokumen wajib diisi.']
   ];
   required.forEach(([id,msg])=>{
@@ -1184,7 +1183,7 @@ function renderPreview(){
     <div class="doc-title">${inv?'INVOICE':'SURAT PENAWARAN'}</div>
     <div class="doc-number-line">${escapeHtml(d.number)}</div>
     <div class="meta">
-      <div class="box"><strong>Kepada Yth.</strong><br>${escapeHtml(d.customer)}<br>${d.pic?'Bapak/Ibu: '+escapeHtml(d.pic)+'<br>':''}${escapeHtml(d.address)}</div>
+      <div class="box"><strong>Kepada Yth.</strong><br>${escapeHtml(d.customer)}${d.pic?'<br>Bapak/Ibu: '+escapeHtml(d.pic):''}${d.address?'<br>'+escapeHtml(d.address):''}</div>
       <div class="box"><strong>${escapeHtml(s.city||'Batam')}, ${formatDate(d.date)}</strong></div>
     </div>
     ${!inv?'<div style="font-size:10pt;line-height:1.15">Dengan hormat,<br>Berikut kami sampaikan penawaran untuk kebutuhan sebagai berikut:</div>':''}

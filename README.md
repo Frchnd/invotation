@@ -1,8 +1,7 @@
-# INVOTATION v14 — Responsive UI
+# INVOTATION v15
 
-Responsive modes:
-- Otomatis: HP / Tablet / Desktop berdasarkan ukuran layar
-- HP: paksa layout mobile
-- Desktop: paksa layout desktop
-
-Aplikasi tetap static. Entry point: `index.html`.
+Perubahan:
+- Alamat customer tidak wajib pada Penawaran maupun Invoice.
+- Tidak ada label "opsional".
+- Alamat kosong tidak membuat baris kosong pada dokumen.
+- Seluruh fitur responsive V14 tetap dipertahankan.
