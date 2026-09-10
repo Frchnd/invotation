@@ -3,15 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#1d4ed8" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="INVOTATION" />
-<link rel="manifest" href="./manifest.webmanifest" />
-<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
-<link rel="apple-touch-icon" href="./icons/icon-192.png" />
 <title>INVOTATION — Penawaran & Invoice</title>
-<script src="./cloud-config.js"></script>
+<script>
+window.INVOTATION_CLOUD = window.INVOTATION_CLOUD || { url:'', publishableKey:'' };
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
@@ -40,7 +35,7 @@
     --shadow-lg:0 18px 44px rgba(15,23,42,.14);
     --radius-sm:10px; --radius:14px; --radius-lg:18px; --control-h:44px;
   }
-  *{box-sizing:border-box}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{font-size:16px}
   html,body,.app,.app *{-webkit-user-select:none;user-select:none}
   input,textarea,[contenteditable="true"]{-webkit-user-select:text!important;user-select:text!important}
@@ -50,10 +45,12 @@
     background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility
   }
   button,input,textarea,select{font:inherit}
-  button{cursor:pointer}
-  button:focus-visible,input:focus-visible,textarea:focus-visible,.app-select-trigger:focus-visible{
+  button{cursor:pointer;-webkit-touch-callout:none;touch-action:manipulation}
+  button:focus-visible,input:focus-visible,textarea:focus-visible,.app-select-trigger:focus-visible,.date-trigger:focus-visible{
     outline:3px solid rgba(29,78,216,.16);outline-offset:1px
   }
+  /* Touch/click on the top navigation must not leave Android's blue tap/focus flash. */
+  .nav button:focus:not(:focus-visible){outline:none}
   input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
   input[type="number"]{-moz-appearance:textfield}
   .app{min-height:100vh}.hidden{display:none!important}.muted{color:var(--muted)}
@@ -75,7 +72,8 @@
     font-size:13px;font-weight:700;transition:.16s ease
   }
   .nav button:hover{color:var(--text);background:#fff}
-  .nav button.active{background:#fff;color:var(--primary);box-shadow:var(--shadow-sm)}
+  .nav button:active{background:#fff;color:var(--text)}
+  .nav button.active,.nav button.active:active{background:#fff;color:var(--primary);box-shadow:var(--shadow-sm)}
 
   .container{max-width:1180px;margin:0 auto;padding:34px 24px 72px}
   .hero{display:flex;gap:24px;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
@@ -197,17 +195,24 @@
   }
   .unit-field{position:relative}
   .unit-menu,.app-select-menu,.export-menu{
-    position:absolute;background:#fff;border:1px solid var(--border);border-radius:12px;
-    box-shadow:var(--shadow-lg);padding:6px;z-index:60
+    position:absolute;background:#fff;border:1px solid var(--border);border-radius:13px;
+    box-shadow:0 18px 44px rgba(15,23,42,.16);padding:6px;z-index:60;
+    overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent
   }
-  .unit-menu{left:0;right:0;top:calc(100% + 6px);max-height:230px;overflow:auto}
+  .unit-menu::-webkit-scrollbar,.app-select-menu::-webkit-scrollbar,.export-menu::-webkit-scrollbar,.date-picker-menu::-webkit-scrollbar{width:6px}
+  .unit-menu::-webkit-scrollbar-thumb,.app-select-menu::-webkit-scrollbar-thumb,.export-menu::-webkit-scrollbar-thumb,.date-picker-menu::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}
+  .unit-menu::-webkit-scrollbar-track,.app-select-menu::-webkit-scrollbar-track,.export-menu::-webkit-scrollbar-track,.date-picker-menu::-webkit-scrollbar-track{background:transparent}
+  .unit-menu{left:0;right:0;top:calc(100% + 7px);max-height:min(260px,calc(100vh - 32px))}
   .unit-option,.app-select-option,.export-menu button{
-    width:100%;display:flex;align-items:center;border:0;background:transparent;color:var(--text-soft);
-    padding:9px 10px;border-radius:8px;font-size:12.5px;font-weight:700;text-align:left;cursor:pointer
+    width:100%;min-width:0;min-height:40px;display:flex;align-items:center;gap:10px;border:0;background:transparent;color:var(--text-soft);
+    padding:9px 11px;border-radius:9px;font-size:12.5px;font-weight:700;line-height:1.35;text-align:left;cursor:pointer;
+    white-space:normal;overflow-wrap:anywhere;transition:background .12s ease,color .12s ease
   }
   .unit-option:hover,.unit-option.active,.app-select-option:hover,.app-select-option.selected,.export-menu button:hover{
     background:var(--primary-soft);color:var(--primary)
   }
+  .unit-option.active::after,.app-select-option.selected::after{content:'✓';margin-left:auto;flex:0 0 auto;font-size:12px;font-weight:900;color:var(--primary)}
 
   .total-box{
     margin-left:auto;width:min(390px,100%);padding:17px;background:var(--surface-soft);
@@ -226,12 +231,19 @@
   .control-label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.055em;color:var(--muted)}
   .app-select{position:relative;min-width:118px}
   .app-select-trigger{
-    width:100%;height:38px;border:1px solid var(--border-strong);border-radius:10px;background:#fff;
-    padding:0 11px;text-align:left;font-size:12.5px;font-weight:750;color:var(--text);box-shadow:var(--shadow-sm)
+    width:100%;height:40px;border:1px solid var(--border-strong);border-radius:10px;background:#fff;
+    padding:0 11px;text-align:left;font-size:12.5px;font-weight:750;color:var(--text);box-shadow:var(--shadow-sm);
+    display:flex;align-items:center;justify-content:space-between;gap:12px;transition:.15s ease
   }
+  .app-select-trigger::after{
+    content:'';width:7px;height:7px;flex:0 0 auto;border-right:1.7px solid var(--muted);border-bottom:1.7px solid var(--muted);
+    transform:rotate(45deg) translate(-1px,-1px);transition:transform .16s ease
+  }
+  .app-select-trigger[aria-expanded="true"]{border-color:#9fb4d6;background:#fff;box-shadow:0 0 0 3px rgba(29,78,216,.07)}
+  .app-select-trigger[aria-expanded="true"]::after{transform:rotate(225deg) translate(-1px,-1px)}
   .app-select-trigger:hover{border-color:#aebdce;background:var(--surface-soft)}
-  .app-select-menu{left:0;right:0;top:calc(100% + 6px);min-width:135px}
-  .export-wrap{position:relative}.export-menu{right:0;top:calc(100% + 8px);min-width:170px}.export-menu button{min-height:38px}
+  .app-select-menu{left:0;right:0;top:calc(100% + 7px);min-width:100%;max-height:min(280px,calc(100vh - 32px))}
+  .export-wrap{position:relative}.export-menu{right:0;top:calc(100% + 8px);width:max-content;min-width:180px;max-width:min(260px,calc(100vw - 24px));max-height:min(280px,calc(100vh - 32px))}.export-menu button{min-height:40px}
 
   .preview-wrap{background:#e8edf4;padding:24px;border-radius:15px;overflow:auto;border:1px solid #dde4ed}
 
@@ -437,8 +449,9 @@
   .date-trigger svg{width:18px;height:18px;color:var(--muted);flex:0 0 auto}
   .date-picker.invalid .date-trigger{border-color:#ef4444;background:#fffafa}
   .date-picker-menu{
-    position:absolute;right:0;top:calc(100% + 7px);z-index:85;width:310px;max-width:calc(100vw - 30px);
-    padding:10px;background:#fff;border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow-lg)
+    position:absolute;right:0;top:calc(100% + 7px);z-index:85;width:310px;max-width:calc(100vw - 30px);max-height:min(410px,calc(100vh - 32px));
+    padding:10px;background:#fff;border:1px solid var(--border);border-radius:13px;box-shadow:0 18px 44px rgba(15,23,42,.16);
+    overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent
   }
   .date-picker-menu.drop-up{top:auto;bottom:calc(100% + 7px)}
   .date-picker-head{display:grid;grid-template-columns:36px 1fr 36px;align-items:center;gap:6px;margin-bottom:8px}
@@ -477,7 +490,7 @@
   .app-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
   .app-modal-card.danger #appModalConfirm{background:var(--danger);border-color:var(--danger)}
 
-  .unit-menu.drop-up,.app-select-menu.drop-up{top:auto!important;bottom:calc(100% + 7px)}
+  .unit-menu.drop-up,.app-select-menu.drop-up,.export-menu.drop-up{top:auto!important;bottom:calc(100% + 7px)}
 
   /* === V14 responsive layout engine === */
   .display-mode-box{
@@ -605,6 +618,8 @@
   html[data-ui-profile="mobile"] .paper-controls{width:100%}
   html[data-ui-profile="mobile"] .control-group{flex:1}
   html[data-ui-profile="mobile"] .app-select{min-width:0;width:100%}
+  html[data-ui-profile="mobile"] .unit-menu,html[data-ui-profile="mobile"] .app-select-menu{max-width:100%;min-width:0}
+  html[data-ui-profile="mobile"] .export-menu{max-width:calc(100vw - 32px)}
   html[data-ui-profile="mobile"] .preview-wrap{padding:10px;max-height:none;height:auto;overflow:auto}
   html[data-ui-profile="mobile"] .paper{transform:none;margin:0}
   html[data-ui-profile="mobile"] .actions{gap:7px}
@@ -858,7 +873,7 @@
                     <span class="control-label">Ukuran kertas</span>
                     <div class="app-select">
                       <input id="paperSize" type="hidden" value="A4">
-                      <button type="button" class="app-select-trigger" onclick="toggleAppSelect(event,'paperSizeMenu')"><span id="paperSizeLabel">A4</span></button>
+                      <button type="button" class="app-select-trigger" aria-haspopup="listbox" aria-expanded="false" onclick="toggleAppSelect(event,'paperSizeMenu')"><span id="paperSizeLabel">A4</span></button>
                       <div id="paperSizeMenu" class="app-select-menu hidden">
                         <button type="button" class="app-select-option selected" data-value="A4" onclick="chooseAppSelect('paperSize','paperSizeLabel','paperSizeMenu','A4','A4')">A4</button>
                         <button type="button" class="app-select-option" data-value="A5" onclick="chooseAppSelect('paperSize','paperSizeLabel','paperSizeMenu','A5','A5')">A5</button>
@@ -871,7 +886,7 @@
                     <span class="control-label">Orientasi</span>
                     <div class="app-select">
                       <input id="paperOrientation" type="hidden" value="portrait">
-                      <button type="button" class="app-select-trigger" onclick="toggleAppSelect(event,'paperOrientationMenu')"><span id="paperOrientationLabel">Portrait</span></button>
+                      <button type="button" class="app-select-trigger" aria-haspopup="listbox" aria-expanded="false" onclick="toggleAppSelect(event,'paperOrientationMenu')"><span id="paperOrientationLabel">Portrait</span></button>
                       <div id="paperOrientationMenu" class="app-select-menu hidden">
                         <button type="button" class="app-select-option selected" data-value="portrait" onclick="chooseAppSelect('paperOrientation','paperOrientationLabel','paperOrientationMenu','portrait','Portrait')">Portrait</button>
                         <button type="button" class="app-select-option" data-value="landscape" onclick="chooseAppSelect('paperOrientation','paperOrientationLabel','paperOrientationMenu','landscape','Landscape')">Landscape</button>
@@ -2057,8 +2072,12 @@ function renderUnitMenu(i,filter=''){
   const menu=document.getElementById('unitMenu'+i);
   if(!menu) return;
   const q=String(filter||'').trim().toLowerCase();
+  const current=String(items[i]?.unit||'').trim().toLowerCase();
   const options=UNIT_OPTIONS.filter(v=>!q || v.toLowerCase().includes(q));
-  menu.innerHTML=options.map(v=>`<div class="unit-option" onmousedown="selectUnitOption(event,${i},'${v.replace(/'/g,"\\'")}')">${v}</div>`).join('');
+  menu.innerHTML=options.map(v=>{
+    const active=v.toLowerCase()===current?' active':'';
+    return `<div class="unit-option${active}" onmousedown="selectUnitOption(event,${i},'${v.replace(/'/g,"\\'")}')">${v}</div>`;
+  }).join('');
   menu.classList.toggle('hidden',options.length===0);
 }
 function openUnitMenu(i){
@@ -2473,7 +2492,10 @@ function preparePrint(){
 function toggleExportMenu(e){
   if(e) e.stopPropagation();
   const menu=document.getElementById('exportMenu');
-  if(menu) menu.classList.toggle('hidden');
+  if(!menu) return;
+  const willOpen=menu.classList.contains('hidden');
+  menu.classList.toggle('hidden');
+  if(willOpen) placeFloatingMenu(menu,menu.closest('.export-wrap'));
 }
 function closeExportMenu(){
   const menu=document.getElementById('exportMenu');
@@ -2484,9 +2506,13 @@ document.addEventListener('click',e=>{
   if(!wrap) closeExportMenu();
 });
 
+function setAppSelectExpanded(menu,expanded){
+  const trigger=menu?.closest('.app-select')?.querySelector('.app-select-trigger');
+  if(trigger) trigger.setAttribute('aria-expanded',expanded?'true':'false');
+}
 function closeAppSelects(exceptId=null){
   document.querySelectorAll('.app-select-menu').forEach(menu=>{
-    if(menu.id!==exceptId) menu.classList.add('hidden');
+    if(menu.id!==exceptId){menu.classList.add('hidden');setAppSelectExpanded(menu,false)}
   });
 }
 function toggleAppSelect(e,menuId){
@@ -2495,7 +2521,8 @@ function toggleAppSelect(e,menuId){
   if(!menu) return;
   const willOpen=menu.classList.contains('hidden');
   closeAppSelects(menuId);
-  if(willOpen){menu.classList.remove('hidden');placeFloatingMenu(menu,menu.closest('.app-select'))} else menu.classList.add('hidden');
+  if(willOpen){menu.classList.remove('hidden');setAppSelectExpanded(menu,true);placeFloatingMenu(menu,menu.closest('.app-select'))}
+  else{menu.classList.add('hidden');setAppSelectExpanded(menu,false)}
 }
 function chooseAppSelect(inputId,labelId,menuId,value,label){
   const input=document.getElementById(inputId);
@@ -2508,6 +2535,7 @@ function chooseAppSelect(inputId,labelId,menuId,value,label){
       btn.classList.toggle('selected',btn.dataset.value===value);
     });
     menu.classList.add('hidden');
+    setAppSelectExpanded(menu,false);
   }
   applyPaperFormat();
 }
@@ -2684,11 +2712,6 @@ async function optimizeLegacySettingsImagesOnce(){
   initCloud();
 })();
 applyDisplayMode();
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
-}
 </script>
 </body>
 </html>
