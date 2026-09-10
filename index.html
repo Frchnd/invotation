@@ -319,6 +319,106 @@
   }
 
 
+
+  /* === V17 Settings polish & themed controls === */
+  textarea{resize:none}
+  .settings-hero{margin-bottom:18px}
+  .settings-panel{padding:18px}
+  .settings-stack{display:grid;grid-template-columns:1fr;gap:14px}
+  .settings-section{
+    width:100%;margin:0;padding:18px;border:1px solid var(--border);border-radius:14px;background:#fbfcfe
+  }
+  .settings-section-head{margin-bottom:17px;padding-bottom:13px;border-bottom:1px solid var(--border)}
+  .settings-section-head h3{margin:0 0 4px}
+  .settings-section-head p{margin:0;font-size:12px;line-height:1.5}
+  .settings-section>.field:last-child{margin-bottom:0}
+  .settings-save-footer{
+    display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:18px;padding:18px;
+    border:1px solid #bfdbfe;border-radius:14px;background:var(--primary-soft)
+  }
+  .settings-save-copy{display:flex;flex-direction:column;gap:3px}
+  .settings-save-copy strong{font-size:13px;color:var(--text)}
+  .settings-save-copy span{font-size:11.5px;color:var(--muted)}
+  .settings-save-btn{min-width:168px}
+  .signature-preview{width:180px;height:110px}
+  .field-hint{margin-top:7px;font-size:11px;line-height:1.45;color:var(--muted)}
+
+  .bank-select{position:relative}
+  .bank-select>input{padding-right:44px}
+  .bank-chevron{
+    position:absolute;right:5px;top:5px;width:34px;height:34px;border:0;border-radius:8px;background:transparent;
+    color:var(--muted);display:grid;place-items:center;transition:.15s ease
+  }
+  .bank-chevron:hover{background:var(--surface-hover);color:var(--text)}
+  .bank-chevron svg{width:18px;height:18px}
+  .bank-menu{
+    position:absolute;left:0;right:0;top:calc(100% + 7px);z-index:80;max-height:310px;overflow:auto;
+    padding:7px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-lg)
+  }
+  .bank-menu.drop-up{top:auto;bottom:calc(100% + 7px)}
+  .bank-group-title{
+    padding:8px 9px 5px;font-size:9px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)
+  }
+  .bank-option{
+    width:100%;min-height:38px;padding:8px 10px;border:0;border-radius:8px;background:transparent;color:var(--text);
+    display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-size:12px;font-weight:700
+  }
+  .bank-option:hover,.bank-option.selected{background:var(--primary-soft);color:var(--primary)}
+  .bank-option .bank-code{font-size:10px;font-weight:750;color:var(--muted)}
+  .bank-empty{padding:16px 12px;text-align:center;font-size:12px;color:var(--muted)}
+
+  .date-picker{position:relative}
+  .date-trigger{
+    width:100%;min-height:var(--control-h);padding:0 12px;border:1px solid var(--border-strong);border-radius:10px;
+    background:#fff;color:var(--text);display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;
+    font-size:13px;font-weight:650;box-shadow:var(--shadow-sm);transition:.15s ease
+  }
+  .date-trigger:hover{border-color:#94a3b8}
+  .date-trigger svg{width:18px;height:18px;color:var(--muted);flex:0 0 auto}
+  .date-picker.invalid .date-trigger{border-color:#ef4444;background:#fffafa}
+  .date-picker-menu{
+    position:absolute;right:0;top:calc(100% + 7px);z-index:85;width:310px;max-width:calc(100vw - 30px);
+    padding:10px;background:#fff;border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow-lg)
+  }
+  .date-picker-menu.drop-up{top:auto;bottom:calc(100% + 7px)}
+  .date-picker-head{display:grid;grid-template-columns:36px 1fr 36px;align-items:center;gap:6px;margin-bottom:8px}
+  .date-picker-head strong{text-align:center;font-size:12.5px}
+  .icon-btn{
+    width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:var(--text-soft);font-size:24px;
+    line-height:1;display:grid;place-items:center
+  }
+  .icon-btn:hover{background:var(--surface-hover);color:var(--primary)}
+  .date-weekdays,.date-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+  .date-weekdays{margin-bottom:3px}
+  .date-weekdays span{padding:5px 0;text-align:center;font-size:9px;font-weight:850;color:var(--muted)}
+  .date-day{
+    aspect-ratio:1;border:0;border-radius:9px;background:transparent;color:var(--text);font-size:11.5px;font-weight:700
+  }
+  .date-day:hover{background:var(--surface-hover)}
+  .date-day.today{box-shadow:inset 0 0 0 1px #93c5fd;color:var(--primary)}
+  .date-day.selected{background:var(--primary);color:#fff;box-shadow:none}
+  .date-day.blank{pointer-events:none;visibility:hidden}
+  .date-picker-foot{display:flex;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+
+  .app-modal{position:fixed;inset:0;z-index:500;display:grid;place-items:center;padding:18px}
+  .app-modal-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.44);backdrop-filter:blur(3px)}
+  .app-modal-card{
+    position:relative;z-index:1;width:min(430px,100%);padding:20px;display:flex;gap:14px;background:#fff;
+    border:1px solid var(--border);border-radius:17px;box-shadow:0 24px 70px rgba(15,23,42,.26)
+  }
+  .app-modal-icon{
+    width:38px;height:38px;flex:0 0 auto;border-radius:11px;background:var(--primary-soft);color:var(--primary);
+    display:grid;place-items:center;font-size:16px;font-weight:900
+  }
+  .app-modal-card.danger .app-modal-icon{background:var(--danger-soft);color:var(--danger)}
+  .app-modal-content{min-width:0;flex:1}
+  .app-modal-content h3{margin:1px 0 7px;font-size:16px}
+  .app-modal-message{white-space:pre-line;font-size:12.5px;line-height:1.55;color:var(--text-soft)}
+  .app-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+  .app-modal-card.danger #appModalConfirm{background:var(--danger);border-color:var(--danger)}
+
+  .unit-menu.drop-up,.app-select-menu.drop-up{top:auto!important;bottom:calc(100% + 7px)}
+
   /* === V14 responsive layout engine === */
   .display-mode-box{
     display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
@@ -393,6 +493,13 @@
   html[data-ui-profile="mobile"] .settings-grid{grid-template-columns:1fr;gap:14px}
   html[data-ui-profile="mobile"] .settings-grid>div{padding:14px}
   html[data-ui-profile="mobile"] .display-mode-box{align-items:stretch;padding:14px}
+  html[data-ui-profile="mobile"] .settings-panel{padding:12px}
+  html[data-ui-profile="mobile"] .settings-section{padding:14px}
+  html[data-ui-profile="mobile"] .settings-save-footer{align-items:stretch;flex-direction:column;padding:14px}
+  html[data-ui-profile="mobile"] .settings-save-btn{width:100%;min-width:0}
+  html[data-ui-profile="mobile"] .bank-menu{max-height:260px}
+  html[data-ui-profile="mobile"] .date-picker-menu{left:0;right:auto;width:min(310px,calc(100vw - 48px))}
+
   html[data-ui-profile="mobile"] .display-mode-control{display:grid;grid-template-columns:repeat(3,1fr);width:100%}
   html[data-ui-profile="mobile"] .display-mode-btn{padding:0 7px}
   html[data-ui-profile="mobile"] .item-head{display:none}
@@ -592,7 +699,26 @@
               <div class="field"><label>Nama Bapak/Ibu</label><input autocomplete="off" id="customerPic" placeholder="Contoh: Budi Santoso"></div>
               <div class="field"><label>Alamat customer</label><textarea autocomplete="off" id="customerAddress" placeholder="Alamat lengkap"></textarea></div>
               <div>
-                <div class="field"><label>Tanggal dokumen *</label><input autocomplete="off" id="docDate" type="date"><div class="field-error">Tanggal dokumen wajib diisi.</div></div>
+                <div class="field date-field-wrap"><label>Tanggal dokumen *</label>
+                  <div class="date-picker" id="datePickerControl">
+                    <input id="docDate" type="hidden">
+                    <button type="button" id="docDateTrigger" class="date-trigger" onclick="toggleDatePicker(event)">
+                      <span id="docDateDisplay">Pilih tanggal</span>
+                      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3.5v2M15 3.5v2M3.5 8h13M5 5h10a1.5 1.5 0 0 1 1.5 1.5V16A1.5 1.5 0 0 1 15 17.5H5A1.5 1.5 0 0 1 3.5 16V6.5A1.5 1.5 0 0 1 5 5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    </button>
+                    <div id="datePickerMenu" class="date-picker-menu hidden">
+                      <div class="date-picker-head">
+                        <button type="button" class="icon-btn" aria-label="Bulan sebelumnya" onclick="changeDateMonth(-1)">‹</button>
+                        <strong id="datePickerTitle"></strong>
+                        <button type="button" class="icon-btn" aria-label="Bulan berikutnya" onclick="changeDateMonth(1)">›</button>
+                      </div>
+                      <div class="date-weekdays"><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span></div>
+                      <div id="datePickerDays" class="date-days"></div>
+                      <div class="date-picker-foot"><button type="button" class="btn small" onclick="selectTodayDate()">Hari ini</button></div>
+                    </div>
+                  </div>
+                  <div class="field-error">Tanggal dokumen wajib diisi.</div>
+                </div>
               </div>
             </div>
             <div class="wizard-actions"><span></span><button class="btn primary" onclick="nextFromStep1()">Lanjut →</button></div>
@@ -692,12 +818,11 @@
     </section>
 
     <section id="settingsView" class="hidden">
-      <div class="hero">
+      <div class="hero settings-hero">
         <div><h1>Pengaturan perusahaan</h1><p class="muted">Diisi sekali, lalu otomatis masuk ke semua Penawaran dan Invoice.</p></div>
-        <button class="btn primary" onclick="saveSettings()">Simpan Pengaturan</button>
       </div>
-      <div class="panel">
-        <div class="display-mode-box">
+      <div class="panel settings-panel">
+        <div class="display-mode-box settings-section">
           <div>
             <h3>Tampilan aplikasi</h3>
             <p class="muted">Otomatis menyesuaikan ukuran layar secara realtime. Pilihan manual hanya mengubah layout aplikasi, bukan format dokumen.</p>
@@ -709,9 +834,13 @@
           </div>
           <div id="displayModeHint" class="display-mode-hint"></div>
         </div>
-        <div class="settings-grid">
-          <div>
-            <h3>Identitas Perusahaan</h3>
+
+        <div class="settings-stack">
+          <section class="settings-section">
+            <div class="settings-section-head">
+              <h3>Identitas Perusahaan</h3>
+              <p class="muted">Data kop surat dan informasi perusahaan.</p>
+            </div>
             <div class="field"><label>Nama perusahaan</label><input autocomplete="off" id="sCompany" value="CV CONTOH PERUSAHAAN"></div>
             <div class="field"><label>Nama kota</label><input autocomplete="off" id="sCity" value="Batam" placeholder="Contoh: Batam"></div>
             <div class="field"><label>Alamat</label><textarea autocomplete="off" id="sAddress">Batam, Kepulauan Riau</textarea></div>
@@ -721,48 +850,90 @@
             <div class="field"><label>NPWP</label><input autocomplete="off" id="sNpwp" placeholder="Opsional"></div>
             <div class="field"><label>Logo perusahaan</label>
               <div class="upload-control">
-                <input autocomplete="off" id="sLogo" type="file" accept="image/*" class="hidden" onchange="loadImageFile(event,'logo')">
+                <input autocomplete="off" id="sLogo" type="file" accept="image/png,image/jpeg,image/webp" class="hidden" onchange="loadImageFile(event,'logo')">
                 <button type="button" class="btn" onclick="document.getElementById('sLogo').click()">Pilih Logo</button>
-                <span class="upload-help">PNG/JPG, disarankan background transparan.</span>
+                <span class="upload-help">PNG/JPG/WEBP, disarankan background transparan.</span>
               </div>
               <div class="logo-preview" id="logoPreview">Belum ada logo</div>
             </div>
-          </div>
-          <div>
-            <h3>Pembayaran & Tanda Tangan</h3>
-            <div class="field"><label>Nama bank</label><input autocomplete="off" id="sBank" value="BCA"></div>
-            <div class="field"><label>No. rekening</label><input autocomplete="off" id="sAccount" value="1234567890"></div>
+          </section>
+
+          <section class="settings-section">
+            <div class="settings-section-head">
+              <h3>Pembayaran</h3>
+              <p class="muted">Informasi rekening yang ditampilkan pada Invoice.</p>
+            </div>
+            <div class="field bank-field-wrap">
+              <label>Nama bank</label>
+              <div class="bank-select" id="bankSelect">
+                <input autocomplete="off" id="sBank" value="BCA" placeholder="Cari atau pilih bank" onfocus="openBankMenu()" onclick="openBankMenu()" oninput="handleBankInput(this)">
+                <button type="button" class="bank-chevron" aria-label="Buka daftar bank" onclick="toggleBankMenu(event)">
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 7.5 10 12l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div id="bankMenu" class="bank-menu hidden"></div>
+              </div>
+              <div class="field-hint">Daftar Bank Umum, Bank Syariah, BPD, dan cabang bank asing. Nama lain tetap bisa diketik manual.</div>
+            </div>
+            <div class="field"><label>No. rekening</label><input autocomplete="off" inputmode="numeric" id="sAccount" value="1234567890"></div>
             <div class="field"><label>Atas nama</label><input autocomplete="off" id="sAccountName" value="CV CONTOH PERUSAHAAN"></div>
+          </section>
+
+          <section class="settings-section">
+            <div class="settings-section-head">
+              <h3>Tanda Tangan</h3>
+              <p class="muted">Penanggung jawab dokumen dan gambar tanda tangan atau stempel.</p>
+            </div>
             <div class="field"><label>Nama penandatangan</label><input autocomplete="off" id="sSigner" value="Nama Penanggung Jawab"></div>
             <div class="field"><label>Jabatan</label><input autocomplete="off" id="sRole" value="Manager"></div>
             <div class="field"><label>Tanda tangan / stempel</label>
               <div class="upload-control">
-                <input autocomplete="off" id="sSignature" type="file" accept="image/*" class="hidden" onchange="loadImageFile(event,'signature')">
+                <input autocomplete="off" id="sSignature" type="file" accept="image/png,image/jpeg,image/webp" class="hidden" onchange="loadImageFile(event,'signature')">
                 <button type="button" class="btn" onclick="document.getElementById('sSignature').click()">Pilih TTD / Stempel</button>
                 <span class="upload-help">PNG transparan memberi hasil paling rapi.</span>
               </div>
-              <div class="logo-preview" id="signaturePreview">Belum ada TTD</div>
+              <div class="logo-preview signature-preview" id="signaturePreview">Belum ada TTD</div>
             </div>
-          </div>
+          </section>
+
+          <section class="settings-section backup-section">
+            <div class="settings-section-head">
+              <h3>Backup Data</h3>
+              <p class="muted">Simpan salinan seluruh dokumen, pengaturan perusahaan, dan catatan default INVOTATION.</p>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn" onclick="exportBackup()">Export Backup</button>
+              <button type="button" class="btn" onclick="document.getElementById('backupFileInput').click()">Import Backup</button>
+              <input autocomplete="off" id="backupFileInput" type="file" accept=".json,application/json" class="hidden" onchange="importBackup(event)">
+            </div>
+            <div class="backup-note">Import backup akan mengganti data INVOTATION yang tersimpan di perangkat ini. INVOTATION akan meminta konfirmasi terlebih dahulu.</div>
+          </section>
         </div>
 
-        <div class="backup-box">
-          <h3>Backup Data</h3>
-          <p class="muted">Simpan salinan seluruh dokumen, pengaturan perusahaan, dan catatan default INVOTATION ke satu file backup.</p>
-          <div class="actions">
-            <button class="btn" onclick="exportBackup()">Export Backup</button>
-            <button class="btn" onclick="document.getElementById('backupFileInput').click()">Import Backup</button>
-            <input autocomplete="off" id="backupFileInput" type="file" accept=".json,application/json" class="hidden" onchange="importBackup(event)">
-          </div>
-          <div class="backup-note">
-            Import backup akan mengganti data INVOTATION yang tersimpan di perangkat ini. INVOTATION akan meminta konfirmasi terlebih dahulu.
-          </div>
+        <div class="settings-save-footer">
+          <div class="settings-save-copy"><strong>Selesai mengatur?</strong><span>Perubahan baru digunakan setelah disimpan.</span></div>
+          <button type="button" class="btn primary settings-save-btn" onclick="saveSettings()">Simpan Perubahan</button>
         </div>
       </div>
     </section>
   </main>
 </div>
-<div id="toast" class="toast">Tersimpan</div>
+
+  <div id="appModal" class="app-modal hidden" role="dialog" aria-modal="true" aria-labelledby="appModalTitle">
+    <div class="app-modal-backdrop"></div>
+    <div class="app-modal-card">
+      <div class="app-modal-icon" id="appModalIcon">!</div>
+      <div class="app-modal-content">
+        <h3 id="appModalTitle">Konfirmasi</h3>
+        <div id="appModalMessage" class="app-modal-message"></div>
+        <div class="app-modal-actions">
+          <button type="button" id="appModalCancel" class="btn" onclick="resolveAppModal(false)">Batal</button>
+          <button type="button" id="appModalConfirm" class="btn primary" onclick="resolveAppModal(true)">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">Tersimpan</div>
 <div id="printRoot" aria-hidden="true"></div>
 
 <script>
@@ -822,6 +993,43 @@ window.addEventListener('resize',()=>{
 });
 let items=[{description:'',qty:'',unit:'',price:''}];
 const UNIT_OPTIONS=['Pcs','Unit','Job','Lot','Set','Paket','m','m²','m³','cm','mm','kg','gram','Liter','ml','Roll','Box','Lembar','Batang','Titik','Hari','Jam'];
+const BANK_GROUPS=[
+  {group:'Bank Nasional & Swasta',banks:[
+    'Bank Rakyat Indonesia (BRI)','Bank Mandiri','Bank Negara Indonesia (BNI)','Bank Tabungan Negara (BTN)',
+    'Bank Danamon Indonesia','PermataBank','Bank Central Asia (BCA)','Maybank Indonesia','Panin Bank','CIMB Niaga',
+    'Bank UOB Indonesia','Bank OCBC Indonesia','Bank Artha Graha Internasional','Bank Bumi Arta','Bank HSBC Indonesia',
+    'J Trust Bank Indonesia','Bank Mayapada International','Bank of India Indonesia','Bank Mestika Dharma','Bank Shinhan Indonesia',
+    'Bank Sinarmas','Bank Maspion Indonesia','Bank Ganesha','ICBC Indonesia','Bank QNB Indonesia','Bank Woori Saudara Indonesia 1906',
+    'Bank Mega','KB Bank Indonesia','Hana Bank Indonesia','MNC Bank','Bank Raya Indonesia','Bank SBI Indonesia','Bank Index Selindo',
+    'hibank','China Construction Bank Indonesia','Bank DBS Indonesia','Bank Resona Perdania','Bank Mizuho Indonesia',
+    'Bank Capital Indonesia','Bank BNP Paribas Indonesia','Bank ANZ Indonesia','Bank IBK Indonesia','Bank CTBC Indonesia',
+    'Bank SMBC Indonesia','Krom Bank Indonesia','Bank Saqu Indonesia (Bank Saqu)','Bank Neo Commerce','BCA Digital (blu)',
+    'Nobu Bank','Bank INA Perdana','Bank Sahabat Sampoerna','OK Bank Indonesia','Amar Bank','SeaBank Indonesia',
+    'Bank Jago','Bank Multiarta Sentosa (Bank MAS)','Superbank Indonesia','Bank Mandiri Taspen','Bank Victoria International','Allo Bank Indonesia'
+  ]},
+  {group:'Bank Syariah',banks:[
+    'Bank Syariah Indonesia (BSI)','Bank Muamalat Indonesia','Bank Mega Syariah','Bank Aladin Syariah','Bank Victoria Syariah',
+    'Bank Jabar Banten Syariah','Panin Dubai Syariah Bank','KB Bank Syariah','BCA Syariah','BTPN Syariah','Bank Nano Syariah'
+  ]},
+  {group:'Bank Pembangunan Daerah',banks:[
+    'Bank BJB','Bank DKI','BPD DIY','Bank Jateng','Bank Jatim','Bank Jambi','Bank Aceh Syariah','Bank Sumut','Bank Nagari',
+    'BRK Syariah (Bank Riau Kepri Syariah)','Bank Sumsel Babel','Bank Lampung','Bank Kalsel','Bank Kalbar','Bankaltimtara',
+    'Bank Kalteng','Bank Sulselbar','Bank SulutGo','Bank NTB Syariah','BPD Bali','Bank NTT','Bank Maluku Malut','Bank Papua',
+    'Bank Bengkulu','Bank Sulteng','Bank Sultra','Bank Banten'
+  ]},
+  {group:'Cabang Bank Asing',banks:[
+    'Citibank N.A. Indonesia','JPMorgan Chase Bank N.A. Indonesia','Bank of America N.A. Indonesia','MUFG Bank Ltd. Indonesia',
+    'Standard Chartered Bank Indonesia','Deutsche Bank AG Indonesia','Bank of China (Hong Kong) Jakarta'
+  ]}
+];
+const BANK_ALIASES={
+  'Bank Rakyat Indonesia (BRI)':'bri 002','Bank Mandiri':'mandiri 008','Bank Negara Indonesia (BNI)':'bni 009',
+  'Bank Tabungan Negara (BTN)':'btn 200','Bank Central Asia (BCA)':'bca 014','CIMB Niaga':'cimb 022',
+  'Bank OCBC Indonesia':'ocbc nisp 028','Bank SMBC Indonesia':'smbc btpn jenius 213','KB Bank Indonesia':'kb bukopin 441',
+  'BCA Digital (blu)':'blu bank digital bca 501','Bank Saqu Indonesia (Bank Saqu)':'saqu bjj 472','SeaBank Indonesia':'seabank 535',
+  'Bank Jago':'jago 542','Superbank Indonesia':'superbank 562','Allo Bank Indonesia':'allo 567','Bank Syariah Indonesia (BSI)':'bsi 451',
+  'BRK Syariah (Bank Riau Kepri Syariah)':'brk riau kepri 119','Bank BJB':'bjb 110','Bankaltimtara':'kaltimtara 124'
+};
 let settings={
   company:'CV CONTOH PERUSAHAAN',city:'Batam',address:'Batam, Kepulauan Riau',phone:'0812-3456-7890',
   email:'admin@perusahaan.com',website:'',npwp:'',bank:'BCA',account:'1234567890',
@@ -891,21 +1099,23 @@ function setPrintPageStyle(){
 function rupiah(v){return 'Rp'+Math.round(Number(v)||0).toLocaleString('id-ID')}
 function escapeHtml(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function formatDate(v){if(!v)return '-'; return new Date(v+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})}
-function today(){return new Date().toISOString().slice(0,10)}
+function today(){
+  const d=new Date();
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
 function getSavedNotes(){
   try{
     const saved=JSON.parse(localStorage.getItem(STORE_NOTES)||'{}');
     return {
-      PENAWARAN: typeof saved.PENAWARAN==='string' ? saved.PENAWARAN : '',
-      INVOICE: typeof saved.INVOICE==='string' ? saved.INVOICE : ''
+      PENAWARAN: typeof saved.PENAWARAN==='string' ? saved.PENAWARAN : null,
+      INVOICE: typeof saved.INVOICE==='string' ? saved.INVOICE : null
     };
-  }catch(e){
-    return {PENAWARAN:'',INVOICE:''};
-  }
+  }catch(e){return {PENAWARAN:null,INVOICE:null}}
 }
 function starterNote(type){
   const saved=getSavedNotes()[type];
-  if(saved) return saved;
+  if(saved!==null) return saved;
   return type==='PENAWARAN'
     ? 'Harga sesuai dengan rincian penawaran ini.\nPekerjaan dilaksanakan setelah persetujuan.\nPembayaran mengikuti kesepakatan kedua belah pihak.'
     : 'Mohon melakukan pembayaran sesuai nominal yang tercantum pada invoice.';
@@ -923,6 +1133,139 @@ function updateNotesUI(){
   if(hint) hint.textContent=`Catatan ${isPenawaran?'Penawaran':'Invoice'} tersimpan terpisah dan tidak akan muncul pada ${isPenawaran?'Invoice':'Penawaran'}.`;
 }
 function addDays(dateStr,days){let d=new Date(dateStr+'T00:00:00');d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
+
+let dateCursor=new Date();
+let appModalResolver=null;
+
+function placeFloatingMenu(menu,anchor){
+  if(!menu||!anchor) return;
+  menu.classList.remove('drop-up');
+  requestAnimationFrame(()=>{
+    const r=anchor.getBoundingClientRect();
+    const spaceBelow=window.innerHeight-r.bottom;
+    const needed=Math.min(menu.scrollHeight||260,320)+14;
+    if(spaceBelow<needed && r.top>needed) menu.classList.add('drop-up');
+  });
+}
+
+function setDocDate(value,dirty=false){
+  const hidden=document.getElementById('docDate');
+  const display=document.getElementById('docDateDisplay');
+  if(hidden) hidden.value=value||'';
+  if(display) display.textContent=value?formatDate(value):'Pilih tanggal';
+  document.getElementById('datePickerControl')?.classList.remove('invalid');
+  const err=document.querySelector('.date-field-wrap .field-error');
+  if(err) err.style.display='none';
+  if(dirty) markDirty();
+}
+function renderDatePicker(){
+  const title=document.getElementById('datePickerTitle');
+  const days=document.getElementById('datePickerDays');
+  if(!title||!days) return;
+  const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const y=dateCursor.getFullYear(),m=dateCursor.getMonth();
+  title.textContent=`${months[m]} ${y}`;
+  const first=new Date(y,m,1);
+  const mondayIndex=(first.getDay()+6)%7;
+  const count=new Date(y,m+1,0).getDate();
+  const selected=document.getElementById('docDate')?.value||'';
+  const todayIso=today();
+  let cells='';
+  for(let i=0;i<mondayIndex;i++) cells+='<button type="button" class="date-day blank" tabindex="-1"></button>';
+  for(let d=1;d<=count;d++){
+    const iso=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const cls=['date-day'];
+    if(iso===todayIso) cls.push('today');
+    if(iso===selected) cls.push('selected');
+    cells+=`<button type="button" class="${cls.join(' ')}" onclick="chooseDate('${iso}')">${d}</button>`;
+  }
+  days.innerHTML=cells;
+}
+function openDatePicker(){
+  closeBankMenu();closeUnitMenus();closeAppSelects();closeExportMenu();
+  const current=document.getElementById('docDate')?.value||today();
+  const d=new Date(current+'T00:00:00');
+  dateCursor=Number.isNaN(d.getTime())?new Date():new Date(d.getFullYear(),d.getMonth(),1);
+  renderDatePicker();
+  const menu=document.getElementById('datePickerMenu');
+  if(menu){menu.classList.remove('hidden');placeFloatingMenu(menu,document.getElementById('datePickerControl'))}
+}
+function closeDatePicker(){document.getElementById('datePickerMenu')?.classList.add('hidden')}
+function toggleDatePicker(e){
+  if(e) e.stopPropagation();
+  const menu=document.getElementById('datePickerMenu');
+  if(!menu) return;
+  if(menu.classList.contains('hidden')) openDatePicker(); else closeDatePicker();
+}
+function changeDateMonth(delta){
+  dateCursor=new Date(dateCursor.getFullYear(),dateCursor.getMonth()+delta,1);renderDatePicker();
+}
+function chooseDate(iso){setDocDate(iso,true);closeDatePicker()}
+function selectTodayDate(){setDocDate(today(),true);closeDatePicker()}
+
+document.addEventListener('click',e=>{if(!e.target.closest?.('.date-picker')) closeDatePicker()});
+
+function flattenBanks(){return BANK_GROUPS.flatMap(g=>g.banks.map(name=>({group:g.group,name})))}
+function renderBankMenu(filter=''){
+  const menu=document.getElementById('bankMenu'); if(!menu) return;
+  const q=String(filter||'').trim().toLowerCase();
+  const selected=document.getElementById('sBank')?.value||'';
+  let out=''; let total=0;
+  BANK_GROUPS.forEach(g=>{
+    const hits=g.banks.filter(name=>{
+      const hay=(name+' '+(BANK_ALIASES[name]||'')).toLowerCase();
+      return !q||hay.includes(q);
+    });
+    if(!hits.length) return;
+    total+=hits.length;
+    out+=`<div class="bank-group-title">${escapeHtml(g.group)}</div>`;
+    out+=hits.map(name=>`<button type="button" class="bank-option ${name===selected?'selected':''}" data-bank="${escapeHtml(name)}" onclick="chooseBank(this.dataset.bank)"><span>${escapeHtml(name)}</span></button>`).join('');
+  });
+  if(!total) out='<div class="bank-empty">Tidak ada yang cocok. Nama bank tetap bisa diketik manual.</div>';
+  menu.innerHTML=out;
+}
+function openBankMenu(){
+  closeDatePicker();closeUnitMenus();closeAppSelects();closeExportMenu();
+  const menu=document.getElementById('bankMenu'); if(!menu) return;
+  renderBankMenu('');
+  menu.classList.remove('hidden');placeFloatingMenu(menu,document.getElementById('bankSelect'));
+}
+function closeBankMenu(){document.getElementById('bankMenu')?.classList.add('hidden')}
+function toggleBankMenu(e){
+  if(e) e.stopPropagation();
+  const menu=document.getElementById('bankMenu'); if(!menu) return;
+  if(menu.classList.contains('hidden')) openBankMenu(); else closeBankMenu();
+}
+function handleBankInput(el){renderBankMenu(el.value);const menu=document.getElementById('bankMenu');menu?.classList.remove('hidden');placeFloatingMenu(menu,document.getElementById('bankSelect'))}
+function chooseBank(name){const el=document.getElementById('sBank');if(el)el.value=name;closeBankMenu()}
+document.addEventListener('click',e=>{if(!e.target.closest?.('.bank-select')) closeBankMenu()});
+
+function openAppModal({title='Pemberitahuan',message='',confirmText='OK',cancelText='',danger=false}={}){
+  const modal=document.getElementById('appModal'),card=modal?.querySelector('.app-modal-card');
+  if(!modal||!card) return Promise.resolve(true);
+  document.getElementById('appModalTitle').textContent=title;
+  document.getElementById('appModalMessage').textContent=message;
+  const confirmBtn=document.getElementById('appModalConfirm'),cancelBtn=document.getElementById('appModalCancel');
+  confirmBtn.textContent=confirmText||'OK';
+  cancelBtn.textContent=cancelText||'Batal';
+  cancelBtn.classList.toggle('hidden',!cancelText);
+  card.classList.toggle('danger',!!danger);
+  modal.classList.remove('hidden');
+  setTimeout(()=>confirmBtn.focus(),0);
+  return new Promise(resolve=>{appModalResolver=resolve});
+}
+function resolveAppModal(result){
+  const modal=document.getElementById('appModal');modal?.classList.add('hidden');
+  const resolve=appModalResolver;appModalResolver=null;if(resolve)resolve(!!result);
+}
+function appAlert(message,title='Pemberitahuan'){return openAppModal({title,message,confirmText:'OK'})}
+function appConfirm(message,{title='Konfirmasi',confirmText='Lanjut',cancelText='Batal',danger=false}={}){
+  return openAppModal({title,message,confirmText,cancelText,danger});
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&!document.getElementById('appModal')?.classList.contains('hidden')) resolveAppModal(false);
+});
+
 function showToast(msg='Tersimpan'){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
 
 function markDirty(){isDirty=true}
@@ -932,14 +1275,14 @@ document.addEventListener('input',e=>{
 document.addEventListener('change',e=>{
   if(document.getElementById('wizardView')?.contains(e.target)) markDirty();
 });
-function confirmLeaveWizard(){
+async function confirmLeaveWizard(){
   if(!isDirty) return true;
-  return confirm('Perubahan belum disimpan. Tetap keluar?');
+  return await appConfirm('Perubahan belum disimpan. Tetap keluar?',{title:'Keluar tanpa menyimpan?',confirmText:'Tetap Keluar',cancelText:'Kembali'});
 }
 
-function showView(view){
+async function showView(view){
   const wizardVisible=!document.getElementById('wizardView').classList.contains('hidden');
-  if(wizardVisible && view!=='wizard' && !confirmLeaveWizard()) return;
+  if(wizardVisible && view!=='wizard' && !(await confirmLeaveWizard())) return;
   ['docsView','wizardView','settingsView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   document.getElementById('navDocs').classList.remove('active'); document.getElementById('navSettings').classList.remove('active');
   if(view==='docs'){document.getElementById('docsView').classList.remove('hidden');document.getElementById('navDocs').classList.add('active');renderDocs()}
@@ -952,7 +1295,7 @@ function startNew(type){
   editingId=null;
   items=[{description:'',qty:'',unit:'',price:''}];
   document.getElementById('wizardHeading').textContent='Buat '+(type==='PENAWARAN'?'Penawaran':'Invoice');
-  document.getElementById('docDate').value=today();
+  setDocDate(today(),false);
   // Dokumen baru selalu dimulai bersih; history hanya tampil di beranda dan tidak dipanggil kembali.
   ['customerName','customerPic','customerAddress'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('discount').value=0; document.getElementById('useTax').checked=false;
@@ -963,6 +1306,7 @@ function startNew(type){
 }
 function clearValidation(){
   document.querySelectorAll('.invalid').forEach(el=>el.classList.remove('invalid'));
+  document.getElementById('datePickerControl')?.classList.remove('invalid');
   document.querySelectorAll('.field-error').forEach(el=>el.style.display='none');
   document.querySelectorAll('.form-alert').forEach(el=>el.classList.remove('show'));
 }
@@ -978,14 +1322,14 @@ function invalidate(el,message=''){
 function validateStep1(){
   clearValidation();
   let ok=true;
-  const required=[
-    ['customerName','Nama customer wajib diisi.'],
-    ['docDate','Tanggal dokumen wajib diisi.']
-  ];
-  required.forEach(([id,msg])=>{
-    const el=document.getElementById(id);
-    if(!String(el.value||'').trim()){invalidate(el,msg);ok=false}
-  });
+  const customer=document.getElementById('customerName');
+  if(!String(customer.value||'').trim()){invalidate(customer,'Nama customer wajib diisi.');ok=false}
+  const date=document.getElementById('docDate');
+  if(!String(date.value||'').trim()){
+    document.getElementById('datePickerControl')?.classList.add('invalid');
+    const err=document.querySelector('.date-field-wrap .field-error');if(err)err.style.display='block';
+    ok=false;
+  }
   document.getElementById('step1Alert')?.classList.toggle('show',!ok);
   return ok;
 }
@@ -1084,7 +1428,9 @@ function openUnitMenu(i){
   document.querySelectorAll('.unit-menu').forEach((m,idx)=>{
     if(m.id!=='unitMenu'+i) m.classList.add('hidden');
   });
-  renderUnitMenu(i,items[i]?.unit||'');
+  renderUnitMenu(i,'');
+  const menu=document.getElementById('unitMenu'+i);
+  placeFloatingMenu(menu,menu?.closest('.unit-field'));
 }
 function closeUnitMenus(){
   document.querySelectorAll('.unit-menu').forEach(m=>m.classList.add('hidden'));
@@ -1123,7 +1469,7 @@ function renderItems(){
       </div></div>
       <div class="item-cell price-cell"><span class="mobile-label">Harga</span><input class="price" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(it.price)}" placeholder="0" oninput="handlePriceInput(this,${i})" /></div>
       <div class="item-cell subtotal-cell"><span class="mobile-label">Jumlah</span><div class="subtotal">${rupiah((parseQty(it.qty)||0)*(Number(it.price)||0))}</div></div>
-      <button class="btn small danger del" title="Hapus item" aria-label="Hapus item" onclick="removeItem(${i})">×</button>
+      <button class="btn small danger del" aria-label="Hapus item" onclick="removeItem(${i})">×</button>
     </div>`).join('');
   recalc()
 }
@@ -1224,17 +1570,17 @@ function renderDocs(){
   const q=(document.getElementById('searchInput')?.value||'').toLowerCase();
   let docs=getDocs().filter(d=>[d.number,d.customer,d.type].join(' ').toLowerCase().includes(q));
   const el=document.getElementById('docsTable');
-  if(!docs.length){el.innerHTML='<div class="empty"><strong>Belum ada dokumen.</strong><br><span>Buat Penawaran atau Invoice pertama dari tombol di atas.</span></div>';return}
+  if(!docs.length){el.innerHTML=q?'<div class="empty"><strong>Dokumen tidak ditemukan.</strong><br><span>Coba kata pencarian lain.</span></div>':'<div class="empty"><strong>Belum ada dokumen.</strong><br><span>Buat Penawaran atau Invoice pertama dari tombol di atas.</span></div>';return}
   el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>No. Dokumen</th><th>Jenis</th><th>Customer</th><th>Tanggal</th><th>Total</th><th>Aksi</th></tr></thead><tbody>
     ${docs.map(d=>`<tr><td data-label="No. Dokumen"><strong>${escapeHtml(d.number)}</strong></td><td data-label="Jenis"><span class="badge ${d.type==='INVOICE'?'invoice':'quote'}">${d.type}</span></td><td data-label="Customer">${escapeHtml(d.customer)}</td><td data-label="Tanggal">${formatDate(d.date)}</td><td data-label="Total">${rupiah(d.totals?.grand||0)}</td><td data-label="Aksi"><div class="actions"><button class="btn small" onclick="openDoc('${d.id}')">Buka</button><button class="btn small" onclick="duplicateDoc('${d.id}')">Duplikat</button><button class="btn small danger" onclick="deleteDoc('${d.id}')">Hapus</button></div></td></tr>`).join('')}
   </tbody></table></div>`
 }
 function openDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
-  editingId=d.id; docType=d.type; items=JSON.parse(JSON.stringify(d.items||[]));
+  editingId=d.id; docType=d.type; items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:''}]));
   document.getElementById('wizardHeading').textContent='Edit '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
-  document.getElementById('docDate').value=d.date||today();
+  setDocDate(d.date||today(),false);
   document.getElementById('discount').value=d.discount||0; document.getElementById('useTax').checked=!!d.useTax; document.getElementById('notes').value=d.notes||'';
   document.getElementById('saveNoteAsDefault').checked=false;
   updateNotesUI();
@@ -1242,16 +1588,16 @@ function openDoc(id){
 }
 function duplicateDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
-  editingId=null; docType=d.type; items=JSON.parse(JSON.stringify(d.items||[]));
+  editingId=null; docType=d.type; items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:''}]));
   document.getElementById('wizardHeading').textContent='Duplikat '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
-  document.getElementById('docDate').value=today();
+  setDocDate(today(),false);
   document.getElementById('discount').value=d.discount||0; document.getElementById('useTax').checked=!!d.useTax; document.getElementById('notes').value=d.notes||'';
   document.getElementById('saveNoteAsDefault').checked=false;
   updateNotesUI();
   renderItems(); isDirty=false; showView('wizard'); goStep(1)
 }
-function deleteDoc(id){if(!confirm('Hapus dokumen ini?'))return;localStorage.setItem(STORE_DOCS,JSON.stringify(getDocs().filter(d=>d.id!==id)));renderDocs();showToast('Dokumen dihapus')}
+async function deleteDoc(id){if(!(await appConfirm('Dokumen yang dihapus tidak bisa dikembalikan kecuali melalui backup.',{title:'Hapus dokumen?',confirmText:'Hapus',cancelText:'Batal',danger:true})))return;localStorage.setItem(STORE_DOCS,JSON.stringify(getDocs().filter(d=>d.id!==id)));renderDocs();showToast('Dokumen dihapus')}
 
 function buildBackupPayload(){
   let docs=[], savedSettings=null, savedNotes=null;
@@ -1273,7 +1619,7 @@ function buildBackupPayload(){
 function exportBackup(){
   const payload=buildBackupPayload();
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
-  const date=new Date().toISOString().slice(0,10);
+  const date=today();
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download=`INVOTATION_Backup_${date}.json`;
@@ -1297,21 +1643,18 @@ function importBackup(event){
   if(!file) return;
 
   const reader=new FileReader();
-  reader.onload=()=>{
+  reader.onload=async()=>{
     try{
       const payload=JSON.parse(reader.result);
       if(!validateBackupPayload(payload)){
-        alert('File backup tidak valid atau bukan backup INVOTATION.');
+        await appAlert('File backup tidak valid atau bukan backup INVOTATION.','Backup tidak valid');
         input.value='';
         return;
       }
 
       const count=payload.data.documents.length;
-      const ok=confirm(`Import backup ini?\n\n${count} dokumen akan dimuat.\nData INVOTATION di perangkat ini akan diganti.`);
-      if(!ok){
-        input.value='';
-        return;
-      }
+      const ok=await appConfirm(`${count} dokumen akan dimuat.\nData INVOTATION di perangkat ini akan diganti.`,{title:'Import backup?',confirmText:'Import',cancelText:'Batal'});
+      if(!ok){input.value='';return}
 
       localStorage.setItem(STORE_DOCS,JSON.stringify(payload.data.documents));
       localStorage.setItem(STORE_SETTINGS,JSON.stringify(payload.data.settings));
@@ -1324,7 +1667,7 @@ function importBackup(event){
       input.value='';
       showToast('Backup berhasil dipulihkan');
     }catch(e){
-      alert('File backup tidak dapat dibaca.');
+      await appAlert('File backup tidak dapat dibaca.','Gagal membaca backup');
       input.value='';
     }
   };
@@ -1332,15 +1675,28 @@ function importBackup(event){
 }
 
 function saveSettings(){
-  settings={company:sCompany.value,city:sCity.value,address:sAddress.value,phone:sPhone.value,email:sEmail.value,website:sWebsite.value,npwp:sNpwp.value,bank:sBank.value,account:sAccount.value,accountName:sAccountName.value,signer:sSigner.value,role:sRole.value,logo:settings.logo||'',signature:settings.signature||''};
-  localStorage.setItem(STORE_SETTINGS,JSON.stringify(settings));showToast('Pengaturan tersimpan')
+  const val=id=>document.getElementById(id)?.value||'';
+  settings={company:val('sCompany'),city:val('sCity'),address:val('sAddress'),phone:val('sPhone'),email:val('sEmail'),website:val('sWebsite'),npwp:val('sNpwp'),bank:val('sBank'),account:val('sAccount'),accountName:val('sAccountName'),signer:val('sSigner'),role:val('sRole'),logo:document.getElementById('sLogo')?.dataset.imageData||settings.logo||'',signature:document.getElementById('sSignature')?.dataset.imageData||settings.signature||''};
+  localStorage.setItem(STORE_SETTINGS,JSON.stringify(settings));showToast('Perubahan disimpan')
 }
 function loadSettingsForm(){
-  sCompany.value=settings.company;sCity.value=settings.city||'Batam';sAddress.value=settings.address;sPhone.value=settings.phone;sEmail.value=settings.email;sWebsite.value=settings.website||'';sNpwp.value=settings.npwp;sBank.value=settings.bank;sAccount.value=settings.account;sAccountName.value=settings.accountName;sSigner.value=settings.signer;sRole.value=settings.role;
-  logoPreview.innerHTML=settings.logo?`<img src="${settings.logo}">`:'Belum ada logo';signaturePreview.innerHTML=settings.signature?`<img src="${settings.signature}">`:'Belum ada TTD'
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.value=value??''};
+  set('sCompany',settings.company);set('sCity',settings.city||'Batam');set('sAddress',settings.address);set('sPhone',settings.phone);set('sEmail',settings.email);set('sWebsite',settings.website||'');set('sNpwp',settings.npwp);set('sBank',settings.bank);set('sAccount',settings.account);set('sAccountName',settings.accountName);set('sSigner',settings.signer);set('sRole',settings.role);
+  const logo=document.getElementById('logoPreview'),sig=document.getElementById('signaturePreview');
+  const logoInput=document.getElementById('sLogo'),sigInput=document.getElementById('sSignature');
+  if(logoInput){logoInput.dataset.imageData=settings.logo||'';logoInput.value=''}if(sigInput){sigInput.dataset.imageData=settings.signature||'';sigInput.value=''}
+  if(logo)logo.innerHTML=settings.logo?`<img src="${settings.logo}">`:'Belum ada logo';
+  if(sig)sig.innerHTML=settings.signature?`<img src="${settings.signature}">`:'Belum ada TTD';
 }
-function loadImageFile(e,type){
-  const file=e.target.files[0]; if(!file)return; const r=new FileReader(); r.onload=ev=>{settings[type]=ev.target.result;loadSettingsForm()};r.readAsDataURL(file)
+async function loadImageFile(e,type){
+  const file=e.target.files?.[0]; if(!file)return;
+  if(!/^image\/(png|jpeg|webp)$/i.test(file.type)){
+    await appAlert('Gunakan file PNG, JPG, atau WEBP.','Format gambar tidak didukung');e.target.value='';return;
+  }
+  if(file.size>3*1024*1024){
+    await appAlert('Ukuran gambar maksimal 3 MB supaya penyimpanan aplikasi tetap stabil.','Gambar terlalu besar');e.target.value='';return;
+  }
+  const r=new FileReader();r.onload=ev=>{const data=ev.target.result;const input=document.getElementById(type==='logo'?'sLogo':'sSignature');const preview=document.getElementById(type==='logo'?'logoPreview':'signaturePreview');if(input)input.dataset.imageData=data;if(preview)preview.innerHTML=`<img src="${data}">`};r.readAsDataURL(file)
 }
 function preparePrint(){
   renderPreview();
@@ -1388,7 +1744,7 @@ function toggleAppSelect(e,menuId){
   if(!menu) return;
   const willOpen=menu.classList.contains('hidden');
   closeAppSelects(menuId);
-  if(willOpen) menu.classList.remove('hidden'); else menu.classList.add('hidden');
+  if(willOpen){menu.classList.remove('hidden');placeFloatingMenu(menu,menu.closest('.app-select'))} else menu.classList.add('hidden');
 }
 function chooseAppSelect(inputId,labelId,menuId,value,label){
   const input=document.getElementById(inputId);
@@ -1435,7 +1791,7 @@ function zipStore(files){
     const nb=enc.encode(name), data=typeof content==='string'?enc.encode(content):content, crc=crc32(data);
     const local=new Uint8Array([80,75,3,4,20,0,0,0,0,0,0,0,0,0,...u32(crc),...u32(data.length),...u32(data.length),...u16(nb.length),0,0,...nb]);
     chunks.push(local,data);
-    const cent=new Uint8Array([80,75,1,2,20,0,20,0,0,0,0,0,0,0,0,0,...u32(crc),...u32(data.length),...u32(data.length),...u16(nb.length),0,0,0,0,0,0,0,0,0,0,...u32(offset),...nb]);
+    const cent=new Uint8Array([80,75,1,2,20,0,20,0,0,0,0,0,0,0,0,0,...u32(crc),...u32(data.length),...u32(data.length),...u16(nb.length),0,0,0,0,0,0,0,0,0,0,0,0,...u32(offset),...nb]);
     central.push(cent); offset+=local.length+data.length;
   }
   const centralSize=central.reduce((s,c)=>s+c.length,0);
@@ -1445,14 +1801,36 @@ function zipStore(files){
 function xmlEscape(s=''){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function p(text,bold=false,align='left',size=10.5,italic=false){
   const halfPts=Math.round(size*2);
-  return `<w:p><w:pPr><w:jc w:val="${align}"/><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri"/>${bold?'<w:b/>':''}${italic?'<w:i/>':''}<w:sz w:val="${halfPts}"/><w:szCs w:val="${halfPts}"/></w:rPr><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
+  const rPr=`<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri"/>${bold?'<w:b/>':''}${italic?'<w:i/>':''}<w:sz w:val="${halfPts}"/><w:szCs w:val="${halfPts}"/></w:rPr>`;
+  const parts=String(text??'').split('\n');
+  const runs=parts.map((part,i)=>`<w:r>${rPr}${i?'<w:br/>':''}<w:t xml:space="preserve">${xmlEscape(part)}</w:t></w:r>`).join('');
+  return `<w:p><w:pPr><w:jc w:val="${align}"/><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr>${runs}</w:p>`;
 }
+function dataUrlToImage(dataUrl){
+  const m=String(dataUrl||'').match(/^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/i);
+  if(!m)return null;
+  const ext=m[1].toLowerCase()==='jpeg'?'jpg':m[1].toLowerCase();
+  const mime=ext==='jpg'?'image/jpeg':`image/${ext}`;
+  const bin=atob(m[2]);const bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  return {ext,mime,bytes};
+}
+function docxImageParagraph(relId,cx,cy,docPrId,name,align='center'){
+  return `<w:p><w:pPr><w:jc w:val="${align}"/></w:pPr><w:r><w:drawing><wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${cx}" cy="${cy}"/><wp:docPr id="${docPrId}" name="${xmlEscape(name)}"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="0" name="${xmlEscape(name)}"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="${relId}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>`;
+}
+function imageCell(relId,cx,cy,docPrId,name,width=null){return `<w:tc><w:tcPr>${width?`<w:tcW w:w="${width}" w:type="dxa"/>`:''}</w:tcPr>${docxImageParagraph(relId,cx,cy,docPrId,name)}</w:tc>`}
+
 function cell(text,bold=false,align='left',width=null,size=9.5){
   return `<w:tc><w:tcPr>${width?`<w:tcW w:w="${width}" w:type="dxa"/>`:''}</w:tcPr>${p(text,bold,align,size)}</w:tc>`;
 }
 function blankCell(width=null){return `<w:tc><w:tcPr>${width?`<w:tcW w:w="${width}" w:type="dxa"/>`:''}</w:tcPr><w:p/></w:tc>`}
 function exportDOCX(){
   const d=gatherData(), s=settings, inv=d.type==='INVOICE', f=getPaperFormat();
+  const logoImg=dataUrlToImage(s.logo),sigImg=dataUrlToImage(s.signature);
+  const rels=[];const media=[];let relIndex=1;
+  let logoRel=null,sigRel=null;
+  if(logoImg){logoRel='rIdImg'+relIndex++;rels.push({id:logoRel,target:`media/logo.${logoImg.ext}`});media.push([`word/media/logo.${logoImg.ext}`,logoImg.bytes])}
+  if(sigImg){sigRel='rIdImg'+relIndex++;rels.push({id:sigRel,target:`media/signature.${sigImg.ext}`});media.push([`word/media/signature.${sigImg.ext}`,sigImg.bytes])}
+
   const rows=d.items.map((it,i)=>`<w:tr>
     ${cell(String(i+1),false,'center',null,9.5)}
     ${cell(it.description||'-',false,'left',null,9.5)}
@@ -1462,79 +1840,43 @@ function exportDOCX(){
     ${cell(rupiah((parseQty(it.qty)||0)*(Number(it.price)||0)),false,'right',null,9.5)}
   </w:tr>`).join('');
 
+  const logoCell=logoRel?imageCell(logoRel,900000,900000,1,'Logo',1800):cell('',false,'left',1800,9);
+  const contact=[s.phone,s.email,s.website].filter(Boolean).join(' · ');
+  const companyCell=`<w:tc><w:tcPr><w:tcW w:w="6400" w:type="dxa"/></w:tcPr>${p((s.company||'').toUpperCase(),true,'center',16)}${s.address?p(s.address,false,'center',9):''}${contact?p(contact,false,'center',9):''}${s.npwp?p('NPWP: '+s.npwp,false,'center',9):''}</w:tc>`;
   const headerTable=`<w:tbl>
     <w:tblPr><w:tblW w:w="10000" w:type="pct"/><w:tblBorders><w:bottom w:val="single" w:sz="10"/></w:tblBorders></w:tblPr>
-    <w:tr>
-      ${cell('[ LOGO ]',false,'left',1800,9)}
-      ${cell((s.company||'').toUpperCase()+'\\n'+s.address+'\\n'+[s.phone,s.email,s.website].filter(Boolean).join(' · ')+(s.npwp?'\\nNPWP: '+s.npwp:''),true,'center',6400,9)}
-      ${blankCell(1800)}
-    </w:tr>
+    <w:tr>${logoCell}${companyCell}${blankCell(1800)}</w:tr>
   </w:tbl>`;
 
-  const rightMeta=[
-    (s.city||'Batam')+', '+formatDate(d.date)
-  ].filter(Boolean).join('\\n');
-
+  const rightMeta=(s.city||'Batam')+', '+formatDate(d.date);
   const numberLine=p(d.number,false,'left',10.5);
-
-  const metaTable=`<w:tbl>
-    <w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr>
-    <w:tr>
-      ${cell('Kepada Yth.\\n'+d.customer+(d.pic?'\\nBapak/Ibu: '+d.pic:'')+(d.address?'\\n'+d.address:''),false,'left',5000,10.5)}
+  const metaTable=`<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr><w:tr>
+      ${cell('Kepada Yth.\n'+d.customer+(d.pic?'\nBapak/Ibu: '+d.pic:'')+(d.address?'\n'+d.address:''),false,'left',5000,10.5)}
       ${cell(rightMeta,false,'right',5000,10.5)}
-    </w:tr>
-  </w:tbl>`;
+    </w:tr></w:tbl>`;
 
   const itemsTable=`<w:tbl>
-    <w:tblPr><w:tblW w:w="10000" w:type="pct"/><w:tblBorders>
-      <w:top w:val="single" w:sz="4"/><w:left w:val="single" w:sz="4"/><w:bottom w:val="single" w:sz="4"/>
-      <w:right w:val="single" w:sz="4"/><w:insideH w:val="single" w:sz="4"/><w:insideV w:val="single" w:sz="4"/>
-    </w:tblBorders></w:tblPr>
-    <w:tr>
-      ${cell('No',true,'center',null,10)}${cell('Deskripsi',true,'center',null,10)}${cell('Qty',true,'center',null,10)}
-      ${cell('Satuan',true,'center',null,10)}${cell('Harga Satuan',true,'center',null,10)}${cell('Jumlah',true,'center',null,10)}
-    </w:tr>${rows}
+    <w:tblPr><w:tblW w:w="10000" w:type="pct"/><w:tblBorders><w:top w:val="single" w:sz="4"/><w:left w:val="single" w:sz="4"/><w:bottom w:val="single" w:sz="4"/><w:right w:val="single" w:sz="4"/><w:insideH w:val="single" w:sz="4"/><w:insideV w:val="single" w:sz="4"/></w:tblBorders></w:tblPr>
+    <w:tr>${cell('No',true,'center',null,10)}${cell('Deskripsi',true,'center',null,10)}${cell('Qty',true,'center',null,10)}${cell('Satuan',true,'center',null,10)}${cell('Harga Satuan',true,'center',null,10)}${cell('Jumlah',true,'center',null,10)}</w:tr>${rows}
   </w:tbl>`;
 
-  const totals = [
-    p('Subtotal: '+rupiah(d.totals.subtotal),false,'right',10),
-    d.discount?p('Diskon: '+rupiah(d.discount),false,'right',10):'',
-    d.useTax?p('PPN 11%: '+rupiah(d.totals.tax),false,'right',10):'',
-    p('TOTAL: '+rupiah(d.totals.grand),true,'right',12)
-  ].join('');
+  const totals=[p('Subtotal: '+rupiah(d.totals.subtotal),false,'right',10),d.discount?p('Diskon: '+rupiah(d.discount),false,'right',10):'',d.useTax?p('PPN 11%: '+rupiah(d.totals.tax),false,'right',10):'',p('TOTAL: '+rupiah(d.totals.grand),true,'right',12)].join('');
+  const payment=inv?p('Pembayaran',true,'left',8.5)+p([s.bank+' · '+s.account,'a.n. '+s.accountName].join('\n'),false,'left',8.5):'';
+  const notes=p('Catatan / Ketentuan',true,'left',8.5,true)+String(d.notes||'').split('\n').map(x=>p(x,false,'left',8.5,true)).join('');
 
-  const payment = inv ? p('Pembayaran',true,'left',8.5)+p(s.bank+' · '+s.account+'\\na.n. '+s.accountName,false,'left',8.5) : '';
-  const notes = p('Catatan / Ketentuan',true,'left',8.5,true)+d.notes.split('\\n').map(x=>p(x,false,'left',8.5,true)).join('');
+  const signerBlock=p(s.signer||'',true,'center',10)+p(s.role||'',false,'center',10);
+  const sigBody=sigRel?docxImageParagraph(sigRel,1400000,700000,2,'Tanda Tangan')+signerBlock:p('\n\n\n',false,'center',10)+signerBlock;
+  const sigTable=`<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr><w:tr>${blankCell(5600)}${cell('Hormat Kami,\n'+(s.company||'').toUpperCase(),false,'center',4400,10)}</w:tr><w:tr>${blankCell(5600)}<w:tc><w:tcPr><w:tcW w:w="4400" w:type="dxa"/></w:tcPr>${sigBody}</w:tc></w:tr></w:tbl>`;
 
-  const sigTable=`<w:tbl>
-    <w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr>
-    <w:tr>${blankCell(5600)}${cell('Hormat Kami,\\n'+(s.company||'').toUpperCase(),false,'center',4400,10)}</w:tr>
-    <w:tr>${blankCell(5600)}${cell('\\n\\n\\n\\n'+s.signer+'\\n'+s.role,true,'center',4400,10)}</w:tr>
-  </w:tbl>`;
+  const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${headerTable}${p(inv?'INVOICE':'SURAT PENAWARAN',true,'center',15)}${numberLine}${metaTable}${!inv?p('Dengan hormat,',false,'left',10)+p('Berikut kami sampaikan penawaran untuk kebutuhan sebagai berikut:',false,'left',10):''}${itemsTable}${totals}${payment}${notes}${sigTable}<w:sectPr><w:pgSz w:w="${f.docxW}" w:h="${f.docxH}"${paperOrientation==='landscape'?' w:orient="landscape"':''}/><w:pgMar w:top="850" w:right="850" w:bottom="850" w:left="850"/></w:sectPr></w:body></w:document>`;
 
-  const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-  <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>
-    ${headerTable}
-    ${p(inv?'INVOICE':'SURAT PENAWARAN',true,'center',15)}
-    ${numberLine}
-    ${metaTable}
-    ${!inv?p('Dengan hormat,',false,'left',10)+p('Berikut kami sampaikan penawaran untuk kebutuhan sebagai berikut:',false,'left',10):''}
-    ${itemsTable}
-    ${totals}
-    ${payment}
-    ${notes}
-    ${sigTable}
-    <w:sectPr><w:pgSz w:w="${f.docxW}" w:h="${f.docxH}"${paperOrientation==='landscape'?' w:orient="landscape"':''}/><w:pgMar w:top="850" w:right="850" w:bottom="850" w:left="850"/></w:sectPr>
-  </w:body></w:document>`;
-
-  const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`;
-  const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
-  const blob=zipStore([['[Content_Types].xml',contentTypes],['_rels/.rels',rels],['word/document.xml',doc]]);
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=(d.type==='INVOICE'?'Invoice_':'Penawaran_')+(d.number.replace(/\//g,'-'))+'.docx';
-  a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),500)
+  const imgTypes=[logoImg,sigImg].filter(Boolean).map(x=>x.ext).filter((v,i,a)=>a.indexOf(v)===i).map(ext=>`<Default Extension="${ext}" ContentType="${ext==='jpg'?'image/jpeg':`image/${ext}`}"/>`).join('');
+  const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${imgTypes}<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`;
+  const rootRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+  const docRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${rels.map(r=>`<Relationship Id="${r.id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="${r.target}"/>`).join('')}</Relationships>`;
+  const files=[['[Content_Types].xml',contentTypes],['_rels/.rels',rootRels],['word/document.xml',doc],['word/_rels/document.xml.rels',docRels],...media];
+  const blob=zipStore(files);
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(d.type==='INVOICE'?'Invoice_':'Penawaran_')+(d.number.replace(/\//g,'-'))+'.docx';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)
 }
 
 window.addEventListener('beforeunload',e=>{
@@ -1555,18 +1897,12 @@ function syncPaperControlLabels(){
 
 (function init(){
   try{const s=JSON.parse(localStorage.getItem(STORE_SETTINGS)||'null');if(s)settings={...settings,...s}}catch(e){}
-  document.getElementById('docDate').value=today();renderItems();renderDocs();syncPaperControlLabels();applyPaperFormat();
+  setDocDate(today(),false);renderItems();renderDocs();syncPaperControlLabels();applyPaperFormat();
 })();
 applyDisplayMode();
 </script>
-
 <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
-  });
-}
+if ('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 </script>
-
 </body>
 </html>
