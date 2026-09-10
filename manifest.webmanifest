@@ -1,7 +1,7 @@
 {
   "name": "INVOTATION — Penawaran & Invoice",
   "short_name": "INVOTATION",
-  "description": "Aplikasi responsif untuk membuat Penawaran dan Invoice profesional.",
+  "description": "Penawaran & Invoice personal dengan QR device sync tanpa login.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

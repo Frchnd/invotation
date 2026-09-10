@@ -11,6 +11,10 @@
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
 <link rel="apple-touch-icon" href="./icons/icon-192.png" />
 <title>INVOTATION — Penawaran & Invoice</title>
+<script src="./cloud-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <script>
 (function(){
   const key='invotation_display_mode_v1';
@@ -294,6 +298,72 @@
   .backup-warning strong{font-size:13px;color:#78350f}
   .backup-warning p{margin:4px 0 0;font-size:12px;line-height:1.5;color:#92400e}
 
+  /* === V22 QR Device Pairing === */
+  .account-shell{max-width:760px}
+  .account-card{display:flex;align-items:flex-start;gap:17px;padding:22px}
+  .account-icon{
+    flex:0 0 auto;display:grid;place-items:center;width:46px;height:46px;border-radius:13px;
+    background:var(--primary-soft);border:1px solid #dbeafe;color:var(--primary)
+  }
+  .account-icon.success{background:#ecfdf5;border-color:#bbf7d0;color:#047857}
+  .account-icon.neutral{background:#f8fafc;border-color:var(--border);color:var(--muted)}
+  .account-icon svg{width:22px;height:22px}
+  .account-card-body{flex:1;min-width:0}
+  .account-card-body h2{margin:0 0 7px;font-size:18px}
+  .account-card-body>p{margin-bottom:18px;font-size:12.5px;line-height:1.55}
+  .account-actions,.sync-start-actions{display:flex;gap:9px;flex-wrap:wrap}
+  .account-small{margin-top:9px;font-size:11.5px;line-height:1.45;color:var(--muted)}
+  .account-status-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+  .account-eyebrow{font-size:9.5px;font-weight:850;letter-spacing:.065em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .sync-badge{display:inline-flex;align-items:center;min-height:25px;padding:0 9px;border-radius:999px;background:#ecfdf5;color:#047857;font-size:10px;font-weight:850;letter-spacing:.035em}
+  .sync-badge.syncing{background:var(--primary-soft);color:var(--primary)}
+  .sync-badge.offline{background:#fff7ed;color:#c2410c}
+  .account-sync-box{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0;padding:13px;border:1px solid var(--border);border-radius:12px;background:var(--surface-soft)}
+  .account-sync-box>div{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .account-sync-label{font-size:9px;font-weight:850;letter-spacing:.055em;text-transform:uppercase;color:var(--muted)}
+  .account-sync-box strong{font-size:12px;line-height:1.4;color:var(--text-soft)}
+  #syncNowBtn[disabled],#createSyncBtn[disabled]{opacity:.6;cursor:wait}
+  .pair-panel{
+    margin-top:18px;padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--surface-soft)
+  }
+  .pair-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .pair-panel-head .account-small{margin-top:4px}
+  .pair-qr{
+    width:244px;height:244px;margin:16px auto 10px;padding:12px;border-radius:16px;background:#fff;
+    display:grid;place-items:center;border:1px solid var(--border);box-shadow:var(--shadow-sm)
+  }
+  .pair-qr img,.pair-qr canvas{max-width:100%;height:auto}
+  .pair-expiry{text-align:center;font-size:11.5px;color:var(--muted);margin:0 0 12px}
+  .pair-panel>.btn{display:flex;margin:0 auto}
+  .icon-btn{
+    display:grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid var(--border);
+    border-radius:10px;background:#fff;color:var(--muted);font-size:20px;line-height:1;cursor:pointer
+  }
+  .icon-btn:hover{background:var(--surface-hover);color:var(--text)}
+  .qr-scanner-modal{position:fixed;inset:0;z-index:4000;display:grid;place-items:center;padding:18px}
+  .qr-scanner-modal.hidden{display:none}
+  .qr-scanner-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.62);backdrop-filter:blur(4px)}
+  .qr-scanner-card{
+    position:relative;width:min(520px,100%);max-height:calc(100vh - 36px);overflow:auto;
+    border:1px solid rgba(255,255,255,.12);border-radius:18px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.25);padding:18px
+  }
+  .qr-scanner-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
+  .qr-scanner-head h3{margin:0 0 4px;font-size:17px}
+  .qr-scanner-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+  .qr-video-wrap{position:relative;aspect-ratio:1/1;overflow:hidden;border-radius:15px;background:#0f172a}
+  #qrVideo{width:100%;height:100%;display:block;object-fit:cover}
+  .qr-frame{
+    position:absolute;inset:18%;border:2px solid rgba(255,255,255,.88);border-radius:15px;
+    box-shadow:0 0 0 999px rgba(15,23,42,.22);pointer-events:none
+  }
+  .qr-camera-message{
+    position:absolute;left:14px;right:14px;bottom:14px;padding:9px 11px;border-radius:10px;
+    background:rgba(15,23,42,.76);color:#fff;text-align:center;font-size:11.5px
+  }
+  .qr-scanner-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .manual-pair-area{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+  .manual-pair-area .field{margin-bottom:9px}
+  .manual-pair-area textarea{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;line-height:1.4}
   .toast{
     position:fixed;right:22px;bottom:22px;background:#0f172a;color:#fff;padding:11px 14px;border-radius:11px;
     font-size:12.5px;font-weight:750;z-index:100;opacity:0;transform:translateY(10px);transition:.2s;box-shadow:var(--shadow-lg)
@@ -356,30 +426,6 @@
   .settings-save-btn{min-width:168px}
   .signature-preview{width:180px;height:110px}
   .field-hint{margin-top:7px;font-size:11px;line-height:1.45;color:var(--muted)}
-
-  .bank-select{position:relative}
-  .bank-select>input{padding-right:44px}
-  .bank-chevron{
-    position:absolute;right:5px;top:5px;width:34px;height:34px;border:0;border-radius:8px;background:transparent;
-    color:var(--muted);display:grid;place-items:center;transition:.15s ease
-  }
-  .bank-chevron:hover{background:var(--surface-hover);color:var(--text)}
-  .bank-chevron svg{width:18px;height:18px}
-  .bank-menu{
-    position:absolute;left:0;right:0;top:calc(100% + 7px);z-index:80;max-height:310px;overflow:auto;
-    padding:7px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-lg)
-  }
-  .bank-menu.drop-up{top:auto;bottom:calc(100% + 7px)}
-  .bank-group-title{
-    padding:8px 9px 5px;font-size:9px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)
-  }
-  .bank-option{
-    width:100%;min-height:38px;padding:8px 10px;border:0;border-radius:8px;background:transparent;color:var(--text);
-    display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-size:12px;font-weight:700
-  }
-  .bank-option:hover,.bank-option.selected{background:var(--primary-soft);color:var(--primary)}
-  .bank-option .bank-code{font-size:10px;font-weight:750;color:var(--muted)}
-  .bank-empty{padding:16px 12px;text-align:center;font-size:12px;color:var(--muted)}
 
   .date-picker{position:relative}
   .date-trigger{
@@ -486,7 +532,21 @@
   html[data-ui-profile="mobile"] .brand-mark{width:32px;height:32px;border-radius:10px}
   html[data-ui-profile="mobile"] .brand span{font-size:14px}
   html[data-ui-profile="mobile"] .nav{padding:3px;border-radius:10px}
-  html[data-ui-profile="mobile"] .nav button{height:32px;padding:0 9px;font-size:11.5px}
+  html[data-ui-profile="mobile"] .nav button{height:32px;padding:0 7px;font-size:11px}
+  html[data-ui-profile="mobile"] .account-card{padding:16px;gap:13px}
+  html[data-ui-profile="mobile"] .sync-start-actions,
+  html[data-ui-profile="mobile"] .sync-linked-actions{display:grid;grid-template-columns:1fr}
+  html[data-ui-profile="mobile"] .sync-start-actions .btn,
+  html[data-ui-profile="mobile"] .sync-linked-actions .btn{width:100%}
+  html[data-ui-profile="mobile"] .pair-qr{width:min(244px,100%);height:auto;aspect-ratio:1}
+  html[data-ui-profile="mobile"] .qr-scanner-modal{padding:10px}
+  html[data-ui-profile="mobile"] .qr-scanner-card{max-height:calc(100vh - 20px);padding:14px}
+  html[data-ui-profile="mobile"] .qr-scanner-actions{grid-template-columns:1fr}
+  html[data-ui-profile="mobile"] .account-icon{width:40px;height:40px;border-radius:11px}
+  html[data-ui-profile="mobile"] .account-sync-box{grid-template-columns:1fr}
+  html[data-ui-profile="mobile"] .account-actions{display:grid;grid-template-columns:1fr 1fr}
+  html[data-ui-profile="mobile"] .account-actions .btn{width:100%}
+  html[data-ui-profile="mobile"] .account-status-row{flex-direction:column;gap:8px}
   html[data-ui-profile="mobile"] .container{padding:22px 12px 48px}
   html[data-ui-profile="mobile"] .hero{flex-direction:column;gap:15px;margin-bottom:18px}
   html[data-ui-profile="mobile"] .hero .actions{width:100%}
@@ -518,7 +578,6 @@
   html[data-ui-profile="mobile"] .backup-page-action{width:100%}
   html[data-ui-profile="mobile"] .backup-warning{padding:14px}
   html[data-ui-profile="mobile"] .settings-save-btn{width:100%;min-width:0}
-  html[data-ui-profile="mobile"] .bank-menu{max-height:260px}
   html[data-ui-profile="mobile"] .date-picker-menu{left:0;right:auto;width:min(310px,calc(100vw - 48px))}
 
   html[data-ui-profile="mobile"] .display-mode-control{display:grid;grid-template-columns:repeat(3,1fr);width:100%}
@@ -636,6 +695,9 @@
   html[data-ui-profile="desktop"] #docsTable td::before{display:none}
 
   @media(max-width:380px){
+    html[data-ui-profile="mobile"] .brand{display:none}
+    html[data-ui-profile="mobile"] .nav{width:100%;justify-content:space-between}
+    html[data-ui-profile="mobile"] .nav button{flex:1;padding:0 4px}
     html[data-ui-profile="mobile"] .brand span{display:none}
     html[data-ui-profile="mobile"] .nav button{padding:0 8px}
     html[data-ui-profile="mobile"] .item-row:not(.item-head){grid-template-columns:1fr}
@@ -668,6 +730,7 @@
       <button id="navDocs" class="active" onclick="showView('docs')">Dokumen</button>
       <button id="navSettings" onclick="showView('settings')">Pengaturan</button>
       <button id="navBackup" onclick="showView('backup')">Backup</button>
+      <button id="navAccount" onclick="showView('account')">Sync</button>
     </div>
   </header>
 
@@ -863,11 +926,11 @@
               <h3>Identitas Perusahaan</h3>
               <p class="muted">Data kop surat dan informasi perusahaan.</p>
             </div>
-            <div class="field"><label>Nama perusahaan</label><input autocomplete="off" id="sCompany" value="CV CONTOH PERUSAHAAN"></div>
-            <div class="field"><label>Nama kota</label><input autocomplete="off" id="sCity" value="Batam" placeholder="Contoh: Batam"></div>
-            <div class="field"><label>Alamat</label><textarea autocomplete="off" id="sAddress">Batam, Kepulauan Riau</textarea></div>
-            <div class="field"><label>Telepon</label><input autocomplete="off" id="sPhone" value="0812-3456-7890"></div>
-            <div class="field"><label>Email</label><input autocomplete="off" id="sEmail" value="admin@perusahaan.com"></div>
+            <div class="field"><label>Nama perusahaan</label><input autocomplete="off" id="sCompany" placeholder="Nama perusahaan"></div>
+            <div class="field"><label>Nama kota</label><input autocomplete="off" id="sCity" placeholder="Contoh: Batam"></div>
+            <div class="field"><label>Alamat</label><textarea autocomplete="off" id="sAddress" placeholder="Alamat perusahaan"></textarea></div>
+            <div class="field"><label>Telepon</label><input autocomplete="off" id="sPhone" placeholder="Nomor telepon"></div>
+            <div class="field"><label>Email</label><input autocomplete="off" id="sEmail" placeholder="Email perusahaan"></div>
             <div class="field"><label>Website</label><input autocomplete="off" id="sWebsite" placeholder="Contoh: www.perusahaan.com"></div>
             <div class="field"><label>NPWP</label><input autocomplete="off" id="sNpwp" placeholder="Opsional"></div>
             <div class="field"><label>Logo perusahaan</label>
@@ -885,19 +948,12 @@
               <h3>Pembayaran</h3>
               <p class="muted">Informasi rekening yang ditampilkan pada Invoice.</p>
             </div>
-            <div class="field bank-field-wrap">
+            <div class="field">
               <label>Nama bank</label>
-              <div class="bank-select" id="bankSelect">
-                <input autocomplete="off" id="sBank" value="BCA" placeholder="Cari atau pilih bank" onfocus="openBankMenu()" onclick="openBankMenu()" oninput="handleBankInput(this)">
-                <button type="button" class="bank-chevron" aria-label="Buka daftar bank" onclick="toggleBankMenu(event)">
-                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 7.5 10 12l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-                <div id="bankMenu" class="bank-menu hidden"></div>
-              </div>
-              <div class="field-hint">Daftar Bank Umum, Bank Syariah, BPD, dan cabang bank asing. Nama lain tetap bisa diketik manual.</div>
+              <input autocomplete="off" id="sBank" placeholder="Contoh: BCA, BRI, Mandiri">
             </div>
-            <div class="field"><label>No. rekening</label><input autocomplete="off" inputmode="numeric" id="sAccount" value="1234567890"></div>
-            <div class="field"><label>Atas nama</label><input autocomplete="off" id="sAccountName" value="CV CONTOH PERUSAHAAN"></div>
+            <div class="field"><label>No. rekening</label><input autocomplete="off" inputmode="numeric" id="sAccount" placeholder="Nomor rekening"></div>
+            <div class="field"><label>Atas nama</label><input autocomplete="off" id="sAccountName" placeholder="Nama pemilik rekening"></div>
           </section>
 
           <section class="settings-section">
@@ -905,8 +961,8 @@
               <h3>Tanda Tangan</h3>
               <p class="muted">Penanggung jawab dokumen dan gambar tanda tangan atau stempel.</p>
             </div>
-            <div class="field"><label>Nama penandatangan</label><input autocomplete="off" id="sSigner" value="Nama Penanggung Jawab"></div>
-            <div class="field"><label>Jabatan</label><input autocomplete="off" id="sRole" value="Manager"></div>
+            <div class="field"><label>Nama penandatangan</label><input autocomplete="off" id="sSigner" placeholder="Nama penandatangan"></div>
+            <div class="field"><label>Jabatan</label><input autocomplete="off" id="sRole" placeholder="Jabatan"></div>
             <div class="field"><label>Tanda tangan / stempel</label>
               <div class="upload-control">
                 <input autocomplete="off" id="sSignature" type="file" accept="image/png,image/jpeg,image/webp" class="hidden" onchange="loadImageFile(event,'signature')">
@@ -968,6 +1024,91 @@
       </div>
     </section>
 
+        <section id="accountView" class="hidden">
+      <div class="hero account-hero">
+        <div>
+          <h1>Sinkronisasi perangkat</h1>
+          <p class="muted">Hubungkan HP, tablet, atau PC tanpa akun dan tanpa password.</p>
+        </div>
+      </div>
+
+      <div class="account-shell">
+        <section id="syncCloudUnavailable" class="panel account-card hidden">
+          <div class="account-icon neutral" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .7-7.94A6 6 0 0 0 6.4 8.3 4.5 4.5 0 0 0 7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <div class="account-card-body">
+            <h2>Cloud belum diaktifkan</h2>
+            <p class="muted">INVOTATION tetap bisa dipakai normal secara lokal. Sync QR aktif setelah konfigurasi Supabase selesai.</p>
+          </div>
+        </section>
+
+        <section id="syncUnpaired" class="panel account-card hidden">
+          <div class="account-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3m13 5h3a2 2 0 0 0 2-2v-3M8 8h3v3H8V8Zm5 0h3v3h-3V8Zm-5 5h3v3H8v-3Zm5 0h1v1h-1v-1Zm2 0h1v3h-3v-1h2v-2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="account-card-body">
+            <h2>Perangkat belum terhubung</h2>
+            <p class="muted">Kalau ini perangkat utama, mulai ruang sync baru. Kalau perangkat lain sudah terhubung, cukup scan QR dari perangkat tersebut.</p>
+
+            <div class="sync-start-actions">
+              <button type="button" id="createSyncBtn" class="btn primary" onclick="createSyncSpace()">Mulai Sync di Perangkat Ini</button>
+              <button type="button" class="btn" onclick="openQrScanner()">Scan QR Perangkat Lain</button>
+            </div>
+
+            <div class="account-small">Tidak ada email, password, OTP, Google Login, atau pendaftaran akun.</div>
+          </div>
+        </section>
+
+        <section id="syncLinked" class="panel account-card hidden">
+          <div class="account-icon success" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m7 12 3 3 7-7M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="account-card-body">
+            <div class="account-status-row">
+              <div>
+                <div class="account-eyebrow">Status perangkat</div>
+                <h2>Terhubung ke INVOTATION Sync</h2>
+              </div>
+              <span id="syncBadge" class="sync-badge">Tersambung</span>
+            </div>
+
+            <p class="muted">History, pengaturan perusahaan, catatan default, logo, dan TTD tersinkron sebagai data ringan. PDF, DOCX, dan backup tetap dibuat di perangkat.</p>
+
+            <div class="account-sync-box">
+              <div>
+                <span class="account-sync-label">Status</span>
+                <strong id="syncStatusText">Menunggu sinkronisasi</strong>
+              </div>
+              <div>
+                <span class="account-sync-label">Terakhir sync</span>
+                <strong id="lastSyncText">Belum pernah</strong>
+              </div>
+            </div>
+
+            <div class="account-actions sync-linked-actions">
+              <button type="button" class="btn primary" onclick="showPairQr()">Hubungkan Perangkat Baru</button>
+              <button type="button" id="syncNowBtn" class="btn" onclick="cloudSyncNow(true)">Sync Sekarang</button>
+              <button type="button" class="btn danger" onclick="disconnectThisDevice()">Putuskan Perangkat Ini</button>
+            </div>
+
+            <div id="pairPanel" class="pair-panel hidden">
+              <div class="pair-panel-head">
+                <div>
+                  <strong>Scan dari perangkat baru</strong>
+                  <div class="account-small">QR berlaku satu kali dan otomatis kadaluarsa.</div>
+                </div>
+                <button type="button" class="icon-btn" aria-label="Tutup QR" onclick="closePairPanel()">×</button>
+              </div>
+              <div id="pairQr" class="pair-qr"></div>
+              <div class="pair-expiry" id="pairExpiry">Menyiapkan QR...</div>
+              <button type="button" class="btn small" onclick="copyPairCode()">Salin Kode Pairing</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
   </main>
 </div>
 
@@ -986,12 +1127,524 @@
     </div>
   </div>
 
+  <div id="qrScannerModal" class="qr-scanner-modal hidden" role="dialog" aria-modal="true" aria-labelledby="qrScannerTitle">
+    <div class="qr-scanner-backdrop" onclick="closeQrScanner()"></div>
+    <div class="qr-scanner-card">
+      <div class="qr-scanner-head">
+        <div>
+          <h3 id="qrScannerTitle">Scan QR INVOTATION</h3>
+          <p>Arahkan kamera ke QR dari perangkat yang sudah terhubung.</p>
+        </div>
+        <button type="button" class="icon-btn" aria-label="Tutup scanner" onclick="closeQrScanner()">×</button>
+      </div>
+
+      <div class="qr-video-wrap">
+        <video id="qrVideo" playsinline muted></video>
+        <div class="qr-frame" aria-hidden="true"></div>
+        <div id="qrCameraMessage" class="qr-camera-message">Menyiapkan kamera...</div>
+      </div>
+
+      <canvas id="qrCanvas" class="hidden"></canvas>
+
+      <div class="qr-scanner-actions">
+        <button type="button" class="btn" onclick="document.getElementById('qrImageInput').click()">Pilih Foto QR</button>
+        <button type="button" class="btn" onclick="showManualPairInput()">Masukkan Kode</button>
+        <input id="qrImageInput" type="file" accept="image/*" class="hidden" onchange="scanQrImageFile(event)">
+      </div>
+
+      <div id="manualPairArea" class="manual-pair-area hidden">
+        <div class="field">
+          <label>Kode Pairing</label>
+          <textarea id="manualPairCode" rows="3" placeholder="Paste kode pairing dari perangkat lain"></textarea>
+        </div>
+        <button type="button" class="btn primary" onclick="pairFromManualCode()">Hubungkan</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast" class="toast">Tersimpan</div>
 <div id="printRoot" aria-hidden="true"></div>
 
 <script>
 const STORE_DOCS='protodoc_docs_v1', STORE_SETTINGS='protodoc_settings_v1', STORE_NOTES='proto_default_notes_v1', STORE_DISPLAY='invotation_display_mode_v1';
+const STORE_SYNC_META='invotation_sync_meta_v1', STORE_SYNC_LAST='invotation_sync_last_v1', STORE_SYNC_FORCE='invotation_sync_force_replace_v1', STORE_SYNC_SPACE='invotation_sync_space_v1';
 let currentStep=1, editingId=null, docType='PENAWARAN', isDirty=false;
+let cloudClient=null, cloudUser=null, cloudBusy=false, cloudTimer=null;
+let qrCameraStream=null, qrScanRaf=0, activePairCode='', pairExpiryTimer=null;
+
+function cloudConfig(){
+  const cfg=window.INVOTATION_CLOUD||{};
+  return {url:String(cfg.url||'').trim(),key:String(cfg.publishableKey||cfg.key||'').trim()};
+}
+function isCloudConfigured(){
+  const c=cloudConfig();
+  return /^https:\/\/.+\.supabase\.co$/i.test(c.url) && c.key.length>20 && !/PASTE_|YOUR_|GANTI_/i.test(c.key);
+}
+function getSyncSpaceId(){return localStorage.getItem(STORE_SYNC_SPACE)||''}
+function setSyncSpaceId(id){
+  if(id)localStorage.setItem(STORE_SYNC_SPACE,id);
+  else localStorage.removeItem(STORE_SYNC_SPACE);
+}
+function getSyncMeta(){
+  try{
+    const m=JSON.parse(localStorage.getItem(STORE_SYNC_META)||'{}');
+    return {
+      settingsUpdatedAt:Number(m.settingsUpdatedAt)||0,
+      notesUpdatedAt:Number(m.notesUpdatedAt)||0,
+      tombstones:(m.tombstones&&typeof m.tombstones==='object')?m.tombstones:{}
+    };
+  }catch(e){return {settingsUpdatedAt:0,notesUpdatedAt:0,tombstones:{}}}
+}
+function saveSyncMeta(meta){localStorage.setItem(STORE_SYNC_META,JSON.stringify(meta))}
+function markSettingsChanged(){const m=getSyncMeta();m.settingsUpdatedAt=Date.now();saveSyncMeta(m);scheduleCloudSync()}
+function markNotesChanged(){const m=getSyncMeta();m.notesUpdatedAt=Date.now();saveSyncMeta(m);scheduleCloudSync()}
+function markDocumentDeleted(id){const m=getSyncMeta();m.tombstones[id]=Date.now();saveSyncMeta(m);scheduleCloudSync()}
+function clearDocumentTombstone(id){const m=getSyncMeta();if(m.tombstones[id]){delete m.tombstones[id];saveSyncMeta(m)}}
+function stampExistingDataForSync(){
+  const now=Date.now();
+  let docs=getDocs(),changed=false;
+  docs=docs.map(d=>{
+    if(Number(d._updatedAt)>0)return d;
+    changed=true;return {...d,_updatedAt:now};
+  });
+  if(changed)localStorage.setItem(STORE_DOCS,JSON.stringify(docs));
+  const m=getSyncMeta();
+  let metaChanged=false;
+  if(localStorage.getItem(STORE_SETTINGS) && !m.settingsUpdatedAt){m.settingsUpdatedAt=now;metaChanged=true}
+  if(localStorage.getItem(STORE_NOTES) && !m.notesUpdatedAt){m.notesUpdatedAt=now;metaChanged=true}
+  if(metaChanged)saveSyncMeta(m);
+}
+function currentLocalPayload(){
+  let docs=[],storedSettings={},storedNotes={};
+  try{docs=JSON.parse(localStorage.getItem(STORE_DOCS)||'[]')}catch(e){}
+  try{storedSettings=JSON.parse(localStorage.getItem(STORE_SETTINGS)||'{}')}catch(e){}
+  try{storedNotes=JSON.parse(localStorage.getItem(STORE_NOTES)||'{}')}catch(e){}
+  const m=getSyncMeta();
+  return {
+    version:2,
+    documents:Array.isArray(docs)?docs:[],
+    settings:(storedSettings&&typeof storedSettings==='object')?storedSettings:{},
+    notes:(storedNotes&&typeof storedNotes==='object')?storedNotes:{},
+    meta:{
+      settingsUpdatedAt:m.settingsUpdatedAt,
+      notesUpdatedAt:m.notesUpdatedAt,
+      tombstones:m.tombstones
+    }
+  };
+}
+function normalizeSyncPayload(payload,fallbackTs=0){
+  const p=(payload&&typeof payload==='object')?payload:{};
+  const fallback=Number(fallbackTs)||0;
+  const docs=(Array.isArray(p.documents)?p.documents:[]).map(d=>({...d,_updatedAt:Number(d?._updatedAt)||fallback}));
+  const meta=(p.meta&&typeof p.meta==='object')?p.meta:{};
+  const settings=(p.settings&&typeof p.settings==='object')?p.settings:{};
+  const notes=(p.notes&&typeof p.notes==='object')?p.notes:{};
+  return {
+    version:2,documents:docs,settings,notes,
+    meta:{
+      settingsUpdatedAt:Number(meta.settingsUpdatedAt)||(Object.keys(settings).length?fallback:0),
+      notesUpdatedAt:Number(meta.notesUpdatedAt)||(Object.keys(notes).length?fallback:0),
+      tombstones:(meta.tombstones&&typeof meta.tombstones==='object')?meta.tombstones:{}
+    }
+  };
+}
+function mergeSyncPayload(localPayload,remotePayload){
+  const local=normalizeSyncPayload(localPayload),remote=normalizeSyncPayload(remotePayload);
+  const tombstones={...remote.meta.tombstones};
+  Object.entries(local.meta.tombstones).forEach(([id,ts])=>tombstones[id]=Math.max(Number(tombstones[id])||0,Number(ts)||0));
+
+  const docs=new Map();
+  [...remote.documents,...local.documents].forEach(d=>{
+    if(!d||!d.id)return;
+    const prev=docs.get(d.id);
+    if(!prev || (Number(d._updatedAt)||0)>(Number(prev._updatedAt)||0))docs.set(d.id,d);
+  });
+  [...docs.entries()].forEach(([id,d])=>{
+    if((Number(tombstones[id])||0)>=(Number(d._updatedAt)||0))docs.delete(id);
+  });
+
+  const sl=local.meta.settingsUpdatedAt,sr=remote.meta.settingsUpdatedAt;
+  const nl=local.meta.notesUpdatedAt,nr=remote.meta.notesUpdatedAt;
+
+  return {
+    version:2,
+    documents:[...docs.values()].sort((a,b)=>(Number(b._updatedAt)||0)-(Number(a._updatedAt)||0)),
+    settings:sr>sl?remote.settings:local.settings,
+    notes:nr>nl?remote.notes:local.notes,
+    meta:{
+      settingsUpdatedAt:Math.max(sl,sr),
+      notesUpdatedAt:Math.max(nl,nr),
+      tombstones
+    }
+  };
+}
+function applySyncPayload(payload){
+  const p=normalizeSyncPayload(payload);
+  localStorage.setItem(STORE_DOCS,JSON.stringify(p.documents));
+  localStorage.setItem(STORE_SETTINGS,JSON.stringify(p.settings));
+  localStorage.setItem(STORE_NOTES,JSON.stringify(p.notes));
+  saveSyncMeta(p.meta);
+  settings={...EMPTY_SETTINGS,...p.settings};
+  renderDocs();loadSettingsForm();
+}
+function stableSyncPayload(payload){
+  const p=normalizeSyncPayload(payload);
+  const docs=[...p.documents].sort((a,b)=>String(a.id||'').localeCompare(String(b.id||'')));
+  const tombstones=Object.fromEntries(Object.entries(p.meta.tombstones||{}).sort(([a],[b])=>a.localeCompare(b)));
+  return JSON.stringify({
+    version:2,documents:docs,settings:p.settings,notes:p.notes,
+    meta:{settingsUpdatedAt:p.meta.settingsUpdatedAt,notesUpdatedAt:p.meta.notesUpdatedAt,tombstones}
+  });
+}
+function formatLastSync(ts){
+  const n=Number(ts)||0;if(!n)return 'Belum pernah';
+  try{return new Intl.DateTimeFormat('id-ID',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(n))}
+  catch(e){return 'Sudah tersinkron'}
+}
+function setSyncVisual(state,text=''){
+  const badge=document.getElementById('syncBadge'),status=document.getElementById('syncStatusText');
+  if(badge){
+    badge.className='sync-badge';
+    if(state==='syncing'){badge.classList.add('syncing');badge.textContent='Sync...'}
+    else if(state==='offline'){badge.classList.add('offline');badge.textContent='Offline'}
+    else badge.textContent='Tersambung';
+  }
+  if(status)status.textContent=text||(state==='syncing'?'Menyinkronkan data...':state==='offline'?'Menunggu internet':'Data tersinkron');
+}
+function updateAccountUI(){
+  const unavailable=document.getElementById('syncCloudUnavailable');
+  const unpaired=document.getElementById('syncUnpaired');
+  const linked=document.getElementById('syncLinked');
+  if(!unavailable||!unpaired||!linked)return;
+  unavailable.classList.add('hidden');unpaired.classList.add('hidden');linked.classList.add('hidden');
+
+  if(!isCloudConfigured()||!window.supabase?.createClient){
+    unavailable.classList.remove('hidden');return;
+  }
+  if(!getSyncSpaceId()){
+    unpaired.classList.remove('hidden');return;
+  }
+  linked.classList.remove('hidden');
+  const last=document.getElementById('lastSyncText');
+  if(last)last.textContent=formatLastSync(localStorage.getItem(STORE_SYNC_LAST));
+  setSyncVisual(navigator.onLine?'online':'offline');
+}
+async function ensureAnonymousSession(){
+  if(!cloudClient)throw new Error('Cloud belum siap.');
+  const {data:sessionData,error:sessionErr}=await cloudClient.auth.getSession();
+  if(sessionErr)throw sessionErr;
+  if(sessionData?.session?.user){
+    cloudUser=sessionData.session.user;return cloudUser;
+  }
+  const {data,error}=await cloudClient.auth.signInAnonymously();
+  if(error)throw error;
+  cloudUser=data?.user||data?.session?.user||null;
+  if(!cloudUser)throw new Error('Sesi perangkat tidak dapat dibuat.');
+  return cloudUser;
+}
+async function createSyncSpace(){
+  if(!navigator.onLine){await appAlert('Hubungkan perangkat ke internet terlebih dahulu.','Sedang offline');return}
+  const btn=document.getElementById('createSyncBtn');if(btn)btn.disabled=true;
+  try{
+    await ensureAnonymousSession();
+    stampExistingDataForSync();
+    const spaceId=crypto.randomUUID();
+    const {data,error}=await cloudClient.rpc('create_invotation_space',{
+      p_space_id:spaceId,
+      p_payload:currentLocalPayload()
+    });
+    if(error)throw error;
+    setSyncSpaceId(String(data||spaceId));
+    localStorage.setItem(STORE_SYNC_LAST,String(Date.now()));
+    updateAccountUI();
+    showToast('Sync perangkat aktif');
+    await showPairQr();
+  }catch(err){
+    console.error('Create sync space error',err);
+    await appAlert(err?.message||'Ruang sync gagal dibuat.','Gagal mengaktifkan sync');
+  }finally{if(btn)btn.disabled=false}
+}
+async function cloudFetchRow(){
+  const spaceId=getSyncSpaceId();
+  if(!spaceId)return {data:null,error:null};
+  return await cloudClient.from('invotation_spaces').select('payload,updated_at').eq('id',spaceId).maybeSingle();
+}
+async function cloudWritePayload(payload){
+  const spaceId=getSyncSpaceId();
+  if(!spaceId)throw new Error('Perangkat belum terhubung.');
+  const {error}=await cloudClient.from('invotation_spaces').update({
+    payload,updated_at:new Date().toISOString()
+  }).eq('id',spaceId);
+  if(error)throw error;
+}
+async function cloudSyncNow(showFeedback=false){
+  if(!cloudClient||!getSyncSpaceId())return;
+  if(!navigator.onLine){setSyncVisual('offline');if(showFeedback)showToast('Sedang offline');return}
+  if(cloudBusy)return;
+  cloudBusy=true;
+  const btn=document.getElementById('syncNowBtn');if(btn)btn.disabled=true;
+  setSyncVisual('syncing');
+  try{
+    await ensureAnonymousSession();
+    stampExistingDataForSync();
+    const local=currentLocalPayload();
+    const {data,error}=await cloudFetchRow();
+    if(error)throw error;
+    if(!data)throw new Error('Ruang sync tidak ditemukan atau perangkat sudah tidak memiliki akses.');
+
+    const remoteTs=Date.parse(data.updated_at)||0;
+    const remote=normalizeSyncPayload(data.payload,remoteTs);
+    const merged=mergeSyncPayload(local,remote);
+    applySyncPayload(merged);
+
+    if(localStorage.getItem(STORE_SYNC_FORCE)==='1' || stableSyncPayload(merged)!==stableSyncPayload(remote)){
+      await cloudWritePayload(localStorage.getItem(STORE_SYNC_FORCE)==='1'?local:merged);
+      localStorage.removeItem(STORE_SYNC_FORCE);
+    }
+
+    const now=Date.now();
+    localStorage.setItem(STORE_SYNC_LAST,String(now));
+    const last=document.getElementById('lastSyncText');if(last)last.textContent=formatLastSync(now);
+    setSyncVisual('online','Data tersinkron');
+    if(showFeedback)showToast('Sync selesai');
+  }catch(err){
+    console.error('INVOTATION sync error',err);
+    setSyncVisual(navigator.onLine?'online':'offline','Sync gagal, data lokal tetap aman');
+    if(showFeedback)await appAlert('Sinkronisasi gagal. Data lokal di perangkat tetap aman.','Sync gagal');
+  }finally{
+    cloudBusy=false;if(btn)btn.disabled=false;updateAccountUI();
+  }
+}
+function scheduleCloudSync(){
+  clearTimeout(cloudTimer);
+  if(!cloudClient||!getSyncSpaceId()||!navigator.onLine)return;
+  cloudTimer=setTimeout(()=>cloudSyncNow(false),900);
+}
+function randomPairToken(){
+  const bytes=new Uint8Array(24);crypto.getRandomValues(bytes);
+  let s='';bytes.forEach(b=>s+=String.fromCharCode(b));
+  return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+async function sha256Hex(text){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function pairPayload(spaceId,token){return `INVOTATION:PAIR:1:${spaceId}:${token}`}
+function parsePairPayload(text){
+  const raw=String(text||'').trim();
+  const m=raw.match(/^INVOTATION:PAIR:1:([0-9a-f-]{36}):([A-Za-z0-9_-]{20,})$/i);
+  if(!m)return null;
+  return {spaceId:m[1],token:m[2]};
+}
+async function showPairQr(){
+  if(!navigator.onLine){await appAlert('Hubungkan perangkat ke internet untuk membuat QR pairing.','Sedang offline');return}
+  const spaceId=getSyncSpaceId();
+  if(!spaceId)return;
+  try{
+    await ensureAnonymousSession();
+    const token=randomPairToken(),tokenHash=await sha256Hex(token);
+    const {data,error}=await cloudClient.rpc('create_invotation_pair_token',{
+      p_space_id:spaceId,p_token_hash:tokenHash
+    });
+    if(error)throw error;
+
+    activePairCode=pairPayload(spaceId,token);
+    const panel=document.getElementById('pairPanel'),qr=document.getElementById('pairQr');
+    if(panel)panel.classList.remove('hidden');
+    if(qr){
+      qr.innerHTML='';
+      if(!window.QRCode)throw new Error('Generator QR belum termuat. Coba refresh saat online.');
+      new QRCode(qr,{text:activePairCode,width:216,height:216,correctLevel:QRCode.CorrectLevel.M});
+    }
+
+    const expiryMs=Date.parse(data)||Date.now()+10*60*1000;
+    clearInterval(pairExpiryTimer);
+    const tick=()=>{
+      const left=Math.max(0,expiryMs-Date.now());
+      const mm=Math.floor(left/60000),ss=Math.floor((left%60000)/1000);
+      const el=document.getElementById('pairExpiry');
+      if(el)el.textContent=left>0?`Berlaku ${mm}:${String(ss).padStart(2,'0')} lagi`:'QR sudah kadaluarsa';
+      if(left<=0){clearInterval(pairExpiryTimer);pairExpiryTimer=null;activePairCode=''}
+    };
+    tick();pairExpiryTimer=setInterval(tick,1000);
+  }catch(err){
+    console.error('Pair QR error',err);
+    await appAlert(err?.message||'QR pairing gagal dibuat.','Gagal membuat QR');
+  }
+}
+function closePairPanel(){
+  document.getElementById('pairPanel')?.classList.add('hidden');
+  clearInterval(pairExpiryTimer);pairExpiryTimer=null;activePairCode='';
+}
+async function copyPairCode(){
+  if(!activePairCode){showToast('QR sudah kadaluarsa');return}
+  try{await navigator.clipboard.writeText(activePairCode);showToast('Kode pairing disalin')}
+  catch(e){await appAlert(activePairCode,'Kode Pairing')}
+}
+async function redeemPair(parsed){
+  if(!parsed)return false;
+  try{
+    await ensureAnonymousSession();
+    const hash=await sha256Hex(parsed.token);
+    const {data,error}=await cloudClient.rpc('redeem_invotation_pair_token',{p_token_hash:hash});
+    if(error)throw error;
+    const spaceId=String(data||'');
+    if(!spaceId)throw new Error('Kode pairing tidak valid.');
+    setSyncSpaceId(spaceId);
+    localStorage.removeItem(STORE_SYNC_LAST);
+    closeQrScanner();
+    updateAccountUI();
+    await cloudSyncNow(true);
+    showToast('Perangkat berhasil dihubungkan');
+    return true;
+  }catch(err){
+    console.error('Redeem pairing error',err);
+    await appAlert('QR/kode pairing tidak valid, sudah dipakai, atau sudah kadaluarsa.','Gagal menghubungkan perangkat');
+    return false;
+  }
+}
+async function handlePairText(text){
+  const parsed=parsePairPayload(text);
+  if(!parsed){
+    await appAlert('QR ini bukan QR pairing INVOTATION yang valid.','QR tidak dikenali');return false;
+  }
+  return await redeemPair(parsed);
+}
+async function openQrScanner(){
+  if(!cloudClient){await appAlert('Cloud Sync belum dikonfigurasi.','Cloud belum aktif');return}
+  if(!navigator.onLine){await appAlert('Hubungkan perangkat ke internet untuk pairing.','Sedang offline');return}
+
+  document.getElementById('qrScannerModal')?.classList.remove('hidden');
+  document.getElementById('manualPairArea')?.classList.add('hidden');
+  const message=document.getElementById('qrCameraMessage');
+  if(message)message.textContent='Menyiapkan kamera...';
+
+  if(!window.jsQR){
+    if(message)message.textContent='Scanner QR belum termuat. Gunakan Pilih Foto QR atau Masukkan Kode.';
+    return;
+  }
+  if(!navigator.mediaDevices?.getUserMedia){
+    if(message)message.textContent='Kamera tidak tersedia. Gunakan Pilih Foto QR atau Masukkan Kode.';
+    return;
+  }
+
+  try{
+    qrCameraStream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{ideal:'environment'}},audio:false
+    });
+    const video=document.getElementById('qrVideo');
+    video.srcObject=qrCameraStream;
+    await video.play();
+    if(message)message.textContent='Arahkan QR ke dalam kotak';
+    scanCameraFrame();
+  }catch(err){
+    console.warn('Camera unavailable',err);
+    if(message)message.textContent='Kamera tidak dapat dibuka. Gunakan Pilih Foto QR atau Masukkan Kode.';
+  }
+}
+function scanCameraFrame(){
+  cancelAnimationFrame(qrScanRaf);
+  const video=document.getElementById('qrVideo'),canvas=document.getElementById('qrCanvas');
+  if(!video||!canvas||document.getElementById('qrScannerModal')?.classList.contains('hidden'))return;
+  if(video.readyState>=2 && video.videoWidth>0){
+    const max=720,scale=Math.min(1,max/video.videoWidth);
+    canvas.width=Math.max(1,Math.round(video.videoWidth*scale));
+    canvas.height=Math.max(1,Math.round(video.videoHeight*scale));
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    const image=ctx.getImageData(0,0,canvas.width,canvas.height);
+    const code=window.jsQR(image.data,image.width,image.height,{inversionAttempts:'dontInvert'});
+    if(code?.data){
+      handlePairText(code.data);
+      return;
+    }
+  }
+  qrScanRaf=requestAnimationFrame(scanCameraFrame);
+}
+function stopQrCamera(){
+  cancelAnimationFrame(qrScanRaf);qrScanRaf=0;
+  if(qrCameraStream){
+    qrCameraStream.getTracks().forEach(t=>t.stop());
+    qrCameraStream=null;
+  }
+  const video=document.getElementById('qrVideo');
+  if(video)video.srcObject=null;
+}
+function closeQrScanner(){
+  stopQrCamera();
+  document.getElementById('qrScannerModal')?.classList.add('hidden');
+  const input=document.getElementById('qrImageInput');if(input)input.value='';
+}
+function showManualPairInput(){
+  stopQrCamera();
+  document.getElementById('manualPairArea')?.classList.remove('hidden');
+  document.getElementById('manualPairCode')?.focus();
+}
+async function pairFromManualCode(){
+  const text=document.getElementById('manualPairCode')?.value||'';
+  await handlePairText(text);
+}
+async function scanQrImageFile(event){
+  const file=event.target.files?.[0];if(!file)return;
+  if(!window.jsQR){await appAlert('Scanner QR belum termuat. Coba refresh aplikasi saat online.','Scanner belum siap');return}
+  try{
+    const dataUrl=await new Promise((resolve,reject)=>{
+      const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file);
+    });
+    const img=await loadImageElement(dataUrl);
+    const max=1400,scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+    const canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));
+    canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    const image=ctx.getImageData(0,0,canvas.width,canvas.height);
+    const code=window.jsQR(image.data,image.width,image.height,{inversionAttempts:'attemptBoth'});
+    if(!code?.data)throw new Error('QR tidak ditemukan pada gambar.');
+    await handlePairText(code.data);
+  }catch(err){
+    await appAlert(err?.message||'QR tidak dapat dibaca dari gambar.','Gagal membaca QR');
+  }finally{event.target.value=''}
+}
+async function disconnectThisDevice(){
+  const spaceId=getSyncSpaceId();if(!spaceId)return;
+  const ok=await appConfirm('History lokal tetap ada di perangkat ini, tapi perangkat berhenti menerima perubahan dari perangkat lain.',{
+    title:'Putuskan perangkat ini?',confirmText:'Putuskan',cancelText:'Batal',danger:true
+  });
+  if(!ok)return;
+  try{
+    await ensureAnonymousSession();
+    const {error}=await cloudClient.rpc('leave_invotation_space',{p_space_id:spaceId});
+    if(error)throw error;
+  }catch(err){
+    console.warn('Leave sync space error',err);
+  }
+  setSyncSpaceId('');
+  localStorage.removeItem(STORE_SYNC_LAST);
+  closePairPanel();
+  updateAccountUI();
+  showToast('Perangkat diputus dari sync');
+}
+async function initCloud(){
+  if(!isCloudConfigured()||!window.supabase?.createClient){updateAccountUI();return}
+  const c=cloudConfig();
+  cloudClient=window.supabase.createClient(c.url,c.key,{
+    auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}
+  });
+  try{
+    await ensureAnonymousSession();
+    updateAccountUI();
+    if(getSyncSpaceId())await cloudSyncNow(false);
+  }catch(err){
+    console.error('Cloud initialization error',err);
+    updateAccountUI();
+  }
+}
+window.addEventListener('online',()=>{updateAccountUI();if(getSyncSpaceId())cloudSyncNow(false)});
+window.addEventListener('offline',()=>updateAccountUI());
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'&&getSyncSpaceId()&&navigator.onLine)cloudSyncNow(false);
+});
 let displayMode=(()=>{try{return localStorage.getItem(STORE_DISPLAY)||'auto'}catch(e){return 'auto'}})();
 if(!['auto','mobile','desktop'].includes(displayMode)) displayMode='auto';
 
@@ -1046,48 +1699,11 @@ window.addEventListener('resize',()=>{
 });
 let items=[{description:'',qty:'',unit:'',price:''}];
 const UNIT_OPTIONS=['Pcs','Unit','Job','Lot','Set','Paket','m','m²','m³','cm','mm','kg','gram','Liter','ml','Roll','Box','Lembar','Batang','Titik','Hari','Jam'];
-const BANK_GROUPS=[
-  {group:'Bank Nasional & Swasta',banks:[
-    'Bank Rakyat Indonesia (BRI)','Bank Mandiri','Bank Negara Indonesia (BNI)','Bank Tabungan Negara (BTN)',
-    'Bank Danamon Indonesia','PermataBank','Bank Central Asia (BCA)','Maybank Indonesia','Panin Bank','CIMB Niaga',
-    'Bank UOB Indonesia','Bank OCBC Indonesia','Bank Artha Graha Internasional','Bank Bumi Arta','Bank HSBC Indonesia',
-    'J Trust Bank Indonesia','Bank Mayapada International','Bank of India Indonesia','Bank Mestika Dharma','Bank Shinhan Indonesia',
-    'Bank Sinarmas','Bank Maspion Indonesia','Bank Ganesha','ICBC Indonesia','Bank QNB Indonesia','Bank Woori Saudara Indonesia 1906',
-    'Bank Mega','KB Bank Indonesia','Hana Bank Indonesia','MNC Bank','Bank Raya Indonesia','Bank SBI Indonesia','Bank Index Selindo',
-    'hibank','China Construction Bank Indonesia','Bank DBS Indonesia','Bank Resona Perdania','Bank Mizuho Indonesia',
-    'Bank Capital Indonesia','Bank BNP Paribas Indonesia','Bank ANZ Indonesia','Bank IBK Indonesia','Bank CTBC Indonesia',
-    'Bank SMBC Indonesia','Krom Bank Indonesia','Bank Saqu Indonesia (Bank Saqu)','Bank Neo Commerce','BCA Digital (blu)',
-    'Nobu Bank','Bank INA Perdana','Bank Sahabat Sampoerna','OK Bank Indonesia','Amar Bank','SeaBank Indonesia',
-    'Bank Jago','Bank Multiarta Sentosa (Bank MAS)','Superbank Indonesia','Bank Mandiri Taspen','Bank Victoria International','Allo Bank Indonesia'
-  ]},
-  {group:'Bank Syariah',banks:[
-    'Bank Syariah Indonesia (BSI)','Bank Muamalat Indonesia','Bank Mega Syariah','Bank Aladin Syariah','Bank Victoria Syariah',
-    'Bank Jabar Banten Syariah','Panin Dubai Syariah Bank','KB Bank Syariah','BCA Syariah','BTPN Syariah','Bank Nano Syariah'
-  ]},
-  {group:'Bank Pembangunan Daerah',banks:[
-    'Bank BJB','Bank DKI','BPD DIY','Bank Jateng','Bank Jatim','Bank Jambi','Bank Aceh Syariah','Bank Sumut','Bank Nagari',
-    'BRK Syariah (Bank Riau Kepri Syariah)','Bank Sumsel Babel','Bank Lampung','Bank Kalsel','Bank Kalbar','Bankaltimtara',
-    'Bank Kalteng','Bank Sulselbar','Bank SulutGo','Bank NTB Syariah','BPD Bali','Bank NTT','Bank Maluku Malut','Bank Papua',
-    'Bank Bengkulu','Bank Sulteng','Bank Sultra','Bank Banten'
-  ]},
-  {group:'Cabang Bank Asing',banks:[
-    'Citibank N.A. Indonesia','JPMorgan Chase Bank N.A. Indonesia','Bank of America N.A. Indonesia','MUFG Bank Ltd. Indonesia',
-    'Standard Chartered Bank Indonesia','Deutsche Bank AG Indonesia','Bank of China (Hong Kong) Jakarta'
-  ]}
-];
-const BANK_ALIASES={
-  'Bank Rakyat Indonesia (BRI)':'bri 002','Bank Mandiri':'mandiri 008','Bank Negara Indonesia (BNI)':'bni 009',
-  'Bank Tabungan Negara (BTN)':'btn 200','Bank Central Asia (BCA)':'bca 014','CIMB Niaga':'cimb 022',
-  'Bank OCBC Indonesia':'ocbc nisp 028','Bank SMBC Indonesia':'smbc btpn jenius 213','KB Bank Indonesia':'kb bukopin 441',
-  'BCA Digital (blu)':'blu bank digital bca 501','Bank Saqu Indonesia (Bank Saqu)':'saqu bjj 472','SeaBank Indonesia':'seabank 535',
-  'Bank Jago':'jago 542','Superbank Indonesia':'superbank 562','Allo Bank Indonesia':'allo 567','Bank Syariah Indonesia (BSI)':'bsi 451',
-  'BRK Syariah (Bank Riau Kepri Syariah)':'brk riau kepri 119','Bank BJB':'bjb 110','Bankaltimtara':'kaltimtara 124'
+const EMPTY_SETTINGS={
+  company:'',city:'',address:'',phone:'',email:'',website:'',npwp:'',bank:'',account:'',
+  accountName:'',signer:'',role:'',logo:'',signature:''
 };
-let settings={
-  company:'CV CONTOH PERUSAHAAN',city:'Batam',address:'Batam, Kepulauan Riau',phone:'0812-3456-7890',
-  email:'admin@perusahaan.com',website:'',npwp:'',bank:'BCA',account:'1234567890',
-  accountName:'CV CONTOH PERUSAHAAN',signer:'Nama Penanggung Jawab',role:'Manager',logo:'',signature:''
-};
+let settings={...EMPTY_SETTINGS};
 
 const PAPER_FORMATS = {
   A4:     {label:'A4',     widthPx:794, heightPx:1123, widthMm:210, heightMm:297, docxW:11906, docxH:16838},
@@ -1177,6 +1793,7 @@ function saveNoteForType(type,text){
   const notes=getSavedNotes();
   notes[type]=String(text||'');
   localStorage.setItem(STORE_NOTES,JSON.stringify(notes));
+  markNotesChanged();
 }
 function updateNotesUI(){
   const isPenawaran=docType==='PENAWARAN';
@@ -1235,7 +1852,7 @@ function renderDatePicker(){
   days.innerHTML=cells;
 }
 function openDatePicker(){
-  closeBankMenu();closeUnitMenus();closeAppSelects();closeExportMenu();
+  closeUnitMenus();closeAppSelects();closeExportMenu();
   const current=document.getElementById('docDate')?.value||today();
   const d=new Date(current+'T00:00:00');
   dateCursor=Number.isNaN(d.getTime())?new Date():new Date(d.getFullYear(),d.getMonth(),1);
@@ -1257,41 +1874,6 @@ function chooseDate(iso){setDocDate(iso,true);closeDatePicker()}
 function selectTodayDate(){setDocDate(today(),true);closeDatePicker()}
 
 document.addEventListener('click',e=>{if(!e.target.closest?.('.date-picker')) closeDatePicker()});
-
-function flattenBanks(){return BANK_GROUPS.flatMap(g=>g.banks.map(name=>({group:g.group,name})))}
-function renderBankMenu(filter=''){
-  const menu=document.getElementById('bankMenu'); if(!menu) return;
-  const q=String(filter||'').trim().toLowerCase();
-  const selected=document.getElementById('sBank')?.value||'';
-  let out=''; let total=0;
-  BANK_GROUPS.forEach(g=>{
-    const hits=g.banks.filter(name=>{
-      const hay=(name+' '+(BANK_ALIASES[name]||'')).toLowerCase();
-      return !q||hay.includes(q);
-    });
-    if(!hits.length) return;
-    total+=hits.length;
-    out+=`<div class="bank-group-title">${escapeHtml(g.group)}</div>`;
-    out+=hits.map(name=>`<button type="button" class="bank-option ${name===selected?'selected':''}" data-bank="${escapeHtml(name)}" onclick="chooseBank(this.dataset.bank)"><span>${escapeHtml(name)}</span></button>`).join('');
-  });
-  if(!total) out='<div class="bank-empty">Tidak ada yang cocok. Nama bank tetap bisa diketik manual.</div>';
-  menu.innerHTML=out;
-}
-function openBankMenu(){
-  closeDatePicker();closeUnitMenus();closeAppSelects();closeExportMenu();
-  const menu=document.getElementById('bankMenu'); if(!menu) return;
-  renderBankMenu('');
-  menu.classList.remove('hidden');placeFloatingMenu(menu,document.getElementById('bankSelect'));
-}
-function closeBankMenu(){document.getElementById('bankMenu')?.classList.add('hidden')}
-function toggleBankMenu(e){
-  if(e) e.stopPropagation();
-  const menu=document.getElementById('bankMenu'); if(!menu) return;
-  if(menu.classList.contains('hidden')) openBankMenu(); else closeBankMenu();
-}
-function handleBankInput(el){renderBankMenu(el.value);const menu=document.getElementById('bankMenu');menu?.classList.remove('hidden');placeFloatingMenu(menu,document.getElementById('bankSelect'))}
-function chooseBank(name){const el=document.getElementById('sBank');if(el)el.value=name;closeBankMenu()}
-document.addEventListener('click',e=>{if(!e.target.closest?.('.bank-select')) closeBankMenu()});
 
 function openAppModal({title='Pemberitahuan',message='',confirmText='OK',cancelText='',danger=false}={}){
   const modal=document.getElementById('appModal'),card=modal?.querySelector('.app-modal-card');
@@ -1336,12 +1918,13 @@ async function confirmLeaveWizard(){
 async function showView(view){
   const wizardVisible=!document.getElementById('wizardView').classList.contains('hidden');
   if(wizardVisible && view!=='wizard' && !(await confirmLeaveWizard())) return;
-  ['docsView','wizardView','settingsView','backupView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
-  ['navDocs','navSettings','navBackup'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
+  ['docsView','wizardView','settingsView','backupView','accountView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  ['navDocs','navSettings','navBackup','navAccount'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
   if(view==='docs'){document.getElementById('docsView').classList.remove('hidden');document.getElementById('navDocs').classList.add('active');renderDocs()}
   if(view==='wizard'){document.getElementById('wizardView').classList.remove('hidden')}
   if(view==='settings'){document.getElementById('settingsView').classList.remove('hidden');document.getElementById('navSettings').classList.add('active');loadSettingsForm();updateDisplayModeUI()}
   if(view==='backup'){document.getElementById('backupView').classList.remove('hidden');document.getElementById('navBackup').classList.add('active')}
+  if(view==='account'){document.getElementById('accountView').classList.remove('hidden');document.getElementById('navAccount').classList.add('active');updateAccountUI()}
   window.scrollTo({top:0,behavior:'smooth'})
 }
 function startNew(type){
@@ -1584,7 +2167,7 @@ function renderPreview(){
     <div class="doc-number-line">${escapeHtml(d.number)}</div>
     <div class="meta">
       <div class="box"><strong>Kepada Yth.</strong><br>${escapeHtml(d.customer)}${d.pic?'<br>Bapak/Ibu: '+escapeHtml(d.pic):''}${d.address?'<br>'+escapeHtml(d.address):''}</div>
-      <div class="box"><strong>${escapeHtml(s.city||'Batam')}, ${formatDate(d.date)}</strong></div>
+      <div class="box"><strong>${s.city?escapeHtml(s.city)+', ':''}${formatDate(d.date)}</strong></div>
     </div>
     ${!inv?'<div style="font-size:10pt;line-height:1.15">Dengan hormat,<br>Berikut kami sampaikan penawaran untuk kebutuhan sebagai berikut:</div>':''}
     <table class="doc-table">
@@ -1610,14 +2193,15 @@ function saveDocument(done=false){
   if(!validateStep2()){goStep(2);return}
   if(!validateStep3()){goStep(3);return}
 
-  const data=gatherData(); let docs=getDocs(); const idx=docs.findIndex(d=>d.id===data.id);
+  const data={...gatherData(),_updatedAt:Date.now()}; clearDocumentTombstone(data.id);
+  let docs=getDocs(); const idx=docs.findIndex(d=>d.id===data.id);
   if(idx>=0)docs[idx]=data;else docs.unshift(data);
 
   if(document.getElementById('saveNoteAsDefault')?.checked){
     saveNoteForType(data.type,data.notes);
   }
 
-  localStorage.setItem(STORE_DOCS,JSON.stringify(docs)); editingId=data.id; isDirty=false; showToast('Dokumen tersimpan');
+  localStorage.setItem(STORE_DOCS,JSON.stringify(docs)); scheduleCloudSync(); editingId=data.id; isDirty=false; showToast('Dokumen tersimpan');
   if(done)showView('docs')
 }
 function renderDocs(){
@@ -1651,7 +2235,7 @@ function duplicateDoc(id){
   updateNotesUI();
   renderItems(); isDirty=false; showView('wizard'); goStep(1)
 }
-async function deleteDoc(id){if(!(await appConfirm('Dokumen yang dihapus tidak bisa dikembalikan kecuali melalui backup.',{title:'Hapus dokumen?',confirmText:'Hapus',cancelText:'Batal',danger:true})))return;localStorage.setItem(STORE_DOCS,JSON.stringify(getDocs().filter(d=>d.id!==id)));renderDocs();showToast('Dokumen dihapus')}
+async function deleteDoc(id){if(!(await appConfirm('Dokumen yang dihapus tidak bisa dikembalikan kecuali melalui backup.',{title:'Hapus dokumen?',confirmText:'Hapus',cancelText:'Batal',danger:true})))return;localStorage.setItem(STORE_DOCS,JSON.stringify(getDocs().filter(d=>d.id!==id)));markDocumentDeleted(id);renderDocs();showToast('Dokumen dihapus')}
 
 function buildBackupPayload(){
   let docs=[], savedSettings=null, savedNotes=null;
@@ -1710,15 +2294,20 @@ function importBackup(event){
       const ok=await appConfirm(`${count} dokumen akan dimuat.\nData INVOTATION di perangkat ini akan diganti.`,{title:'Import backup?',confirmText:'Import',cancelText:'Batal'});
       if(!ok){input.value='';return}
 
-      localStorage.setItem(STORE_DOCS,JSON.stringify(payload.data.documents));
+      const importTs=Date.now();
+      const importedDocs=payload.data.documents.map(d=>({...d,_updatedAt:importTs}));
+      localStorage.setItem(STORE_DOCS,JSON.stringify(importedDocs));
       localStorage.setItem(STORE_SETTINGS,JSON.stringify(payload.data.settings));
       localStorage.setItem(STORE_NOTES,JSON.stringify(payload.data.notes));
+      saveSyncMeta({settingsUpdatedAt:importTs,notesUpdatedAt:importTs,tombstones:{}});
+      localStorage.setItem(STORE_SYNC_FORCE,'1');
 
-      settings={...settings,...payload.data.settings};
+      settings={...EMPTY_SETTINGS,...payload.data.settings};
       isDirty=false;
       loadSettingsForm();
       renderDocs();
       input.value='';
+      scheduleCloudSync();
       showToast('Backup berhasil dipulihkan');
     }catch(e){
       await appAlert('File backup tidak dapat dibaca.','Gagal membaca backup');
@@ -1728,30 +2317,138 @@ function importBackup(event){
   reader.readAsText(file);
 }
 
-function saveSettings(){
+async function saveSettings(){
   const val=id=>document.getElementById(id)?.value||'';
-  settings={company:val('sCompany'),city:val('sCity'),address:val('sAddress'),phone:val('sPhone'),email:val('sEmail'),website:val('sWebsite'),npwp:val('sNpwp'),bank:val('sBank'),account:val('sAccount'),accountName:val('sAccountName'),signer:val('sSigner'),role:val('sRole'),logo:document.getElementById('sLogo')?.dataset.imageData||settings.logo||'',signature:document.getElementById('sSignature')?.dataset.imageData||settings.signature||''};
-  localStorage.setItem(STORE_SETTINGS,JSON.stringify(settings));showToast('Perubahan disimpan')
+  const nextSettings={company:val('sCompany'),city:val('sCity'),address:val('sAddress'),phone:val('sPhone'),email:val('sEmail'),website:val('sWebsite'),npwp:val('sNpwp'),bank:val('sBank'),account:val('sAccount'),accountName:val('sAccountName'),signer:val('sSigner'),role:val('sRole'),logo:document.getElementById('sLogo')?.dataset.imageData||settings.logo||'',signature:document.getElementById('sSignature')?.dataset.imageData||settings.signature||''};
+  try{
+    localStorage.setItem(STORE_SETTINGS,JSON.stringify(nextSettings));
+    settings=nextSettings;
+    markSettingsChanged();
+    showToast('Perubahan disimpan');
+  }catch(err){
+    console.error('Settings storage error',err);
+    await appAlert('Penyimpanan perangkat hampir penuh. Coba gunakan logo/TTD yang lebih kecil atau buat backup lalu bersihkan data browser yang tidak diperlukan.','Gagal menyimpan');
+  }
 }
 function loadSettingsForm(){
   const set=(id,value)=>{const el=document.getElementById(id);if(el)el.value=value??''};
-  set('sCompany',settings.company);set('sCity',settings.city||'Batam');set('sAddress',settings.address);set('sPhone',settings.phone);set('sEmail',settings.email);set('sWebsite',settings.website||'');set('sNpwp',settings.npwp);set('sBank',settings.bank);set('sAccount',settings.account);set('sAccountName',settings.accountName);set('sSigner',settings.signer);set('sRole',settings.role);
+  set('sCompany',settings.company);set('sCity',settings.city);set('sAddress',settings.address);set('sPhone',settings.phone);set('sEmail',settings.email);set('sWebsite',settings.website||'');set('sNpwp',settings.npwp);set('sBank',settings.bank);set('sAccount',settings.account);set('sAccountName',settings.accountName);set('sSigner',settings.signer);set('sRole',settings.role);
   const logo=document.getElementById('logoPreview'),sig=document.getElementById('signaturePreview');
   const logoInput=document.getElementById('sLogo'),sigInput=document.getElementById('sSignature');
   if(logoInput){logoInput.dataset.imageData=settings.logo||'';logoInput.value=''}if(sigInput){sigInput.dataset.imageData=settings.signature||'';sigInput.value=''}
   if(logo)logo.innerHTML=settings.logo?`<img src="${settings.logo}">`:'Belum ada logo';
   if(sig)sig.innerHTML=settings.signature?`<img src="${settings.signature}">`:'Belum ada TTD';
 }
+function dataUrlBytes(dataUrl){
+  const s=String(dataUrl||'');
+  const comma=s.indexOf(',');
+  if(comma<0)return 0;
+  const b64=s.slice(comma+1);
+  const padding=(b64.endsWith('==')?2:b64.endsWith('=')?1:0);
+  return Math.max(0,Math.floor(b64.length*3/4)-padding);
+}
+function loadImageElement(dataUrl){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>resolve(img);
+    img.onerror=()=>reject(new Error('Gambar tidak dapat dibaca.'));
+    img.src=dataUrl;
+  });
+}
+function canvasHasTransparency(ctx,w,h){
+  try{
+    const data=ctx.getImageData(0,0,w,h).data;
+    for(let i=3;i<data.length;i+=4){
+      if(data[i]<250)return true;
+    }
+  }catch(e){}
+  return false;
+}
+function renderImageCanvas(img,maxW,maxH,scaleMultiplier=1){
+  const baseScale=Math.min(1,maxW/img.naturalWidth,maxH/img.naturalHeight);
+  const scale=Math.max(.1,baseScale*scaleMultiplier);
+  const w=Math.max(1,Math.round(img.naturalWidth*scale));
+  const h=Math.max(1,Math.round(img.naturalHeight*scale));
+  const canvas=document.createElement('canvas');
+  canvas.width=w;canvas.height=h;
+  const ctx=canvas.getContext('2d',{alpha:true});
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality='high';
+  ctx.drawImage(img,0,0,w,h);
+  return {canvas,ctx,w,h};
+}
+async function optimizeImageData(dataUrl,type){
+  const img=await loadImageElement(dataUrl);
+  const isSignature=type==='signature';
+  const maxW=isSignature?900:720;
+  const maxH=isSignature?420:720;
+  const targetBytes=isSignature?220*1024:320*1024;
+
+  let multiplier=1;
+  let best=dataUrl;
+
+  for(let pass=0;pass<5;pass++){
+    const {canvas,ctx,w,h}=renderImageCanvas(img,maxW,maxH,multiplier);
+    const transparent=canvasHasTransparency(ctx,w,h);
+
+    let candidate;
+    if(transparent){
+      candidate=canvas.toDataURL('image/png');
+    }else{
+      const quality=Math.max(.62,.84-(pass*.05));
+      candidate=canvas.toDataURL('image/jpeg',quality);
+    }
+
+    best=candidate;
+    if(dataUrlBytes(candidate)<=targetBytes)break;
+    multiplier*=.82;
+  }
+
+  return best;
+}
 async function loadImageFile(e,type){
-  const file=e.target.files?.[0]; if(!file)return;
+  const file=e.target.files?.[0];
+  if(!file)return;
+
   if(!/^image\/(png|jpeg|webp)$/i.test(file.type)){
-    await appAlert('Gunakan file PNG, JPG, atau WEBP.','Format gambar tidak didukung');e.target.value='';return;
+    await appAlert('Gunakan file PNG, JPG, atau WEBP.','Format gambar tidak didukung');
+    e.target.value='';
+    return;
   }
   if(file.size>3*1024*1024){
-    await appAlert('Ukuran gambar maksimal 3 MB supaya penyimpanan aplikasi tetap stabil.','Gambar terlalu besar');e.target.value='';return;
+    await appAlert('Ukuran file awal maksimal 3 MB. INVOTATION akan mengoptimalkannya otomatis setelah dipilih.','Gambar terlalu besar');
+    e.target.value='';
+    return;
   }
-  const r=new FileReader();r.onload=ev=>{const data=ev.target.result;const input=document.getElementById(type==='logo'?'sLogo':'sSignature');const preview=document.getElementById(type==='logo'?'logoPreview':'signaturePreview');if(input)input.dataset.imageData=data;if(preview)preview.innerHTML=`<img src="${data}">`};r.readAsDataURL(file)
+
+  const reader=new FileReader();
+  reader.onload=async ev=>{
+    try{
+      const original=String(ev.target.result||'');
+      const optimized=await optimizeImageData(original,type);
+      const input=document.getElementById(type==='logo'?'sLogo':'sSignature');
+      const preview=document.getElementById(type==='logo'?'logoPreview':'signaturePreview');
+
+      if(input)input.dataset.imageData=optimized;
+      if(preview)preview.innerHTML=`<img src="${optimized}">`;
+
+      const before=dataUrlBytes(original);
+      const after=dataUrlBytes(optimized);
+      if(before>0 && after>0 && after<before){
+        const pct=Math.max(1,Math.round((1-after/before)*100));
+        showToast(`Gambar dioptimalkan · ${pct}% lebih kecil`);
+      }else{
+        showToast('Gambar siap digunakan');
+      }
+    }catch(err){
+      console.error('Image optimization error',err);
+      await appAlert('Gambar tidak dapat diproses. Coba file PNG, JPG, atau WEBP lain.','Gagal memproses gambar');
+      e.target.value='';
+    }
+  };
+  reader.readAsDataURL(file);
 }
+
 function preparePrint(){
   renderPreview();
   applyPaperFormat();
@@ -1902,7 +2599,7 @@ function exportDOCX(){
     <w:tr>${logoCell}${companyCell}${blankCell(1800)}</w:tr>
   </w:tbl>`;
 
-  const rightMeta=(s.city||'Batam')+', '+formatDate(d.date);
+  const rightMeta=(s.city?s.city+', ':'')+formatDate(d.date);
   const numberLine=p(d.number,false,'left',10.5);
   const metaTable=`<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr><w:tr>
       ${cell('Kepada Yth.\n'+d.customer+(d.pic?'\nBapak/Ibu: '+d.pic:'')+(d.address?'\n'+d.address:''),false,'left',5000,10.5)}
@@ -1949,9 +2646,42 @@ function syncPaperControlLabels(){
   const b=document.getElementById('paperOrientationLabel'); if(b) b.textContent=oriMap[ori]||ori;
 }
 
-(function init(){
-  try{const s=JSON.parse(localStorage.getItem(STORE_SETTINGS)||'null');if(s)settings={...settings,...s}}catch(e){}
-  setDocDate(today(),false);renderItems();renderDocs();syncPaperControlLabels();applyPaperFormat();
+async function optimizeLegacySettingsImagesOnce(){
+  const key='invotation_images_optimized_v21';
+  if(localStorage.getItem(key)==='1')return;
+
+  let changed=false;
+  try{
+    if(settings.logo && dataUrlBytes(settings.logo)>360*1024){
+      settings.logo=await optimizeImageData(settings.logo,'logo');
+      changed=true;
+    }
+    if(settings.signature && dataUrlBytes(settings.signature)>260*1024){
+      settings.signature=await optimizeImageData(settings.signature,'signature');
+      changed=true;
+    }
+
+    if(changed){
+      localStorage.setItem(STORE_SETTINGS,JSON.stringify(settings));
+      markSettingsChanged();
+      loadSettingsForm();
+    }
+  }catch(err){
+    console.warn('Legacy image optimization skipped',err);
+  }finally{
+    localStorage.setItem(key,'1');
+  }
+}
+
+(async function init(){
+  try{
+    const s=JSON.parse(localStorage.getItem(STORE_SETTINGS)||'null');
+    if(s)settings={...EMPTY_SETTINGS,...s};
+  }catch(e){}
+  stampExistingDataForSync();
+  setDocDate(today(),false);renderItems();renderDocs();syncPaperControlLabels();applyPaperFormat();updateAccountUI();
+  await optimizeLegacySettingsImagesOnce();
+  initCloud();
 })();
 applyDisplayMode();
 </script>
