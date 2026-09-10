@@ -1,4 +1,3 @@
-INVOTATION V23 SAFE UPDATE
-
-Replace only index.html and service-worker.js in your existing GitHub repo.
-Do NOT replace cloud-config.js. Your existing Supabase connection stays intact.
+INVOTATION V23 SAFE UPDATE — FIXED CLOUD CONFIG
+Replace only index.html and service-worker.js in the existing deployment.
+DO NOT replace or delete your existing cloud-config.js.
