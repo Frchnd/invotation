@@ -280,12 +280,13 @@
   .doc-table th{background:#fff;color:#111;text-transform:none;letter-spacing:0;font-size:10pt;font-weight:700;text-align:center;vertical-align:middle}
   .doc-table td:nth-child(1),.doc-table td:nth-child(3),.doc-table td:nth-child(4){text-align:center}
   .doc-table td.desc{white-space:pre-line;text-align:left}
-  .doc-table td.num{text-align:right;white-space:nowrap}
+  .doc-table td.num,.doc-table tbody td:nth-child(5),.doc-table tbody td:nth-child(6),.doc-table td.total-amount{text-align:right!important;white-space:nowrap}
+  .doc-table tbody tr:last-child td{border-bottom:0.35mm solid #111!important}
   .doc-table tfoot td{font-weight:400;vertical-align:middle}
-  .doc-table tfoot tr.total-row td.total-label{border:0!important;text-align:right;font-weight:700;font-size:12pt;padding:1.8mm 2.5mm 1.8mm 1mm;height:auto}
-  .doc-table tfoot tr.total-row td.total-amount{border:0.35mm solid #111!important;text-align:right;font-weight:700;font-size:10pt;white-space:nowrap;padding:1.8mm 2.5mm;height:auto}
-  .doc-table tfoot tr.adjustment-row td.total-label{border:0!important;text-align:right;font-weight:400;padding:.8mm 2.5mm .8mm 1mm;height:auto}
-  .doc-table tfoot tr.adjustment-row td.total-amount{border-left:0.35mm solid #111!important;border-right:0.35mm solid #111!important;border-top:0!important;border-bottom:0.35mm solid #111!important;text-align:right;white-space:nowrap;padding:.8mm 2.5mm;height:auto}
+  .doc-table tfoot tr.total-row td.total-label{border-top:0.35mm solid #111!important;border-left:0!important;border-right:0!important;border-bottom:0!important;text-align:right;font-weight:700;font-size:12pt;padding:1.8mm 2.5mm 1.8mm 1mm;height:auto}
+  .doc-table tfoot tr.total-row td.total-amount{border:0.35mm solid #111!important;text-align:right!important;font-weight:700;font-size:10pt;white-space:nowrap;padding:1.8mm 2.5mm;height:auto}
+  .doc-table tfoot tr.adjustment-row td.total-label{border-top:0.35mm solid #111!important;border-left:0!important;border-right:0!important;border-bottom:0!important;text-align:right;font-weight:400;padding:.8mm 2.5mm .8mm 1mm;height:auto}
+  .doc-table tfoot tr.adjustment-row td.total-amount{border-left:0.35mm solid #111!important;border-right:0.35mm solid #111!important;border-top:0.35mm solid #111!important;border-bottom:0.35mm solid #111!important;text-align:right!important;white-space:nowrap;padding:.8mm 2.5mm;height:auto}
   .doc-terbilang{margin-top:3mm;font-size:10pt;line-height:1.22}
   .doc-terbilang strong{display:block;font-weight:700;margin-bottom:1mm}
   .doc-terbilang em{font-style:italic;font-weight:400}
@@ -295,7 +296,9 @@
   .doc-payment-row .pay-label{font-weight:700}
   .doc-notes{margin-top:5.5mm;font-size:10pt;line-height:1.28}
   .doc-notes strong{display:block;margin-bottom:1.5mm}
-  .doc-notes-body{white-space:pre-line}
+  .doc-notes-body{white-space:normal}
+  .doc-notes-list{margin:0;padding-left:5mm}
+  .doc-notes-list li{margin:.35mm 0;padding-left:.5mm}
   .doc-closing{margin-top:3mm;font-size:10pt;line-height:1.35}
   .signatures{display:flex;justify-content:flex-end;margin-top:6mm;font-size:10pt;page-break-inside:avoid;break-inside:avoid}
   .sig{width:70mm;text-align:center}
@@ -2537,6 +2540,8 @@ function renderPreview(){
 
   const signatureImage=s.signature?`<img src="${s.signature}" class="sig-img" alt="Tanda tangan">`:'';
   const signature=`<div class="signatures"><div class="sig"><div class="sig-closing">Hormat saya,</div><div class="sig-space">${signatureImage}</div><div class="signer-name">${escapeHtml(s.signer||'')}</div><div class="signer-company">${escapeHtml(s.company||'')}</div></div></div>`;
+  const noteLines=String(d.notes||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  const notesHtml=noteLines.length?`<ul class="doc-notes-list">${noteLines.map(line=>`<li>${escapeHtml(line.replace(/^[•·▪\-]\s*/,''))}</li>`).join('')}</ul>`:'';
 
   document.getElementById('paper').innerHTML=`
     <header class="doc-header">
@@ -2554,7 +2559,7 @@ function renderPreview(){
     </table>
     <div class="doc-terbilang"><strong>Terbilang:</strong><em>${escapeHtml(terbilangID(d.totals.grand))}</em></div>
     ${payment}
-    <section class="doc-notes"><strong>Notes:</strong><div class="doc-notes-body">${escapeHtml(d.notes||'').replace(/\n/g,'<br>')}</div></section>
+    <section class="doc-notes"><strong>Catatan:</strong><div class="doc-notes-body">${notesHtml}</div></section>
     <div class="doc-closing">Demikian ${closingType} ini kami sampaikan, besar harapan kami untuk dapat bekerja sama dengan Bapak/Ibu. Atas perhatian dan kepercayaannya kami ucapkan terima kasih.</div>
     ${signature}
   `;
