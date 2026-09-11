@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- INVOTATION V25: controlled document template editor + multiline item descriptions -->
+<!-- INVOTATION V26: simplified navigation + fixed professional print layout + multiline item descriptions -->
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
@@ -253,37 +253,58 @@
   .preview-wrap{background:#e8edf4;padding:24px;border-radius:15px;overflow:auto;border:1px solid #dde4ed}
 
   .paper{
-    width:794px;min-height:1123px;margin:0 auto;background:#fff;padding:54px 58px;color:#161616;
-    box-shadow:0 14px 34px rgba(15,23,42,.14);font-family:"Calibri","Aptos","Segoe UI",Arial,sans-serif;
-    font-size:10.5pt;line-height:1.15;transition:width .2s,min-height .2s
+    width:794px;min-height:1123px;margin:0 auto;background:#fff;padding:12mm 32mm 18mm;color:#111;
+    box-shadow:0 14px 34px rgba(15,23,42,.14);font-family:Arial,Helvetica,sans-serif;
+    font-size:10pt;line-height:1.22;transition:width .2s,min-height .2s
   }
   .doc-header{
-    display:grid;grid-template-columns:90px 1fr 90px;align-items:center;gap:18px;border-bottom:2px solid #111;
-    padding-bottom:16px;margin-bottom:26px
+    display:grid;grid-template-columns:26mm minmax(0,1fr);align-items:start;gap:8mm;
+    padding-bottom:9mm;margin-bottom:7mm;border-bottom:1.2mm double #111
   }
   .logo-box{
-    width:72px;height:72px;border:1px dashed #bbb;display:grid;place-items:center;font-size:11px;color:#777;
-    text-align:center;padding:4px;justify-self:start
+    width:26mm;height:26mm;display:flex;align-items:center;justify-content:center;overflow:hidden;
+    border:0;background:transparent;padding:0;justify-self:start
   }
-  .company{text-align:center;font-size:9pt;line-height:1.15;min-width:0}
-  .company strong{font-size:16pt;display:block;letter-spacing:.015em;font-weight:700;margin-bottom:3px;text-transform:uppercase}
-  .doc-header-spacer{width:72px;height:72px;justify-self:end}
-  .doc-title{text-align:center;font-size:15pt;font-weight:700;letter-spacing:.035em;margin-bottom:20px}
-  .doc-number-line{font-size:10.5pt;line-height:1.1;margin-bottom:3px;font-weight:400}
-  .meta{display:grid;grid-template-columns:1fr 1fr;gap:24px;font-size:10.5pt;margin-bottom:20px}
-  .meta .box{line-height:1.1}.meta .box:last-child{text-align:right}
-  .doc-table{width:100%;border-collapse:collapse;font-size:9.5pt;margin-top:14px}
-  .doc-table th,.doc-table td{border:1px solid #333;padding:6px;white-space:normal;vertical-align:middle}
-  .doc-table th{background:#eceff2;color:#111;text-transform:none;letter-spacing:0;font-size:10pt;font-weight:700}
+  .logo-box img{max-width:100%;max-height:100%;object-fit:contain}
+  .company{text-align:center;line-height:1.18;min-width:0;color:#111}
+  .company strong{display:block;margin:0 0 4mm;font-family:Arial,Helvetica,sans-serif;font-size:18pt;line-height:1.05;font-weight:700;color:#0d2d61;text-transform:uppercase}
+  .company-line{font-size:10pt;font-weight:400;margin-top:1.8mm;overflow-wrap:anywhere}
+  .doc-title{text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:18pt;line-height:1;font-weight:700;margin:0 0 5mm}
+  .doc-meta-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10mm;font-size:10pt;margin-bottom:4mm}
+  .doc-meta-row .doc-date{text-align:right;white-space:nowrap}
+  .doc-recipient{font-size:10pt;line-height:1.22;margin-bottom:4mm}
+  .doc-intro{font-size:10pt;line-height:1.25;margin-bottom:.8mm}
+  .doc-intro .salutation{margin-bottom:2mm}
+  .doc-table{width:100%;border-collapse:collapse;border-spacing:0;font-family:Arial,Helvetica,sans-serif;font-size:10pt;margin:0}
+  .doc-table th,.doc-table td{border:0.35mm solid #111;padding:.35mm 1mm;white-space:normal;vertical-align:top;line-height:1.08;height:4.55mm}
+  .doc-table th{background:#fff;color:#111;text-transform:none;letter-spacing:0;font-size:10pt;font-weight:700;text-align:center;vertical-align:middle}
   .doc-table td:nth-child(1),.doc-table td:nth-child(3),.doc-table td:nth-child(4){text-align:center}
-  .doc-table .num{text-align:right}
-  .summary{width:44%;margin-left:auto;margin-top:10px;font-size:10pt}
-  .summary div{display:flex;justify-content:space-between;padding:3px 0}
-  .summary .grand{font-weight:700;border-top:1px solid #333;padding-top:6px;font-size:12pt}
-  .notes{font-size:8.5pt;line-height:1.15;margin-top:20px}.notes.terms{font-style:italic}
-  .signatures{display:flex;justify-content:flex-end;margin-top:38px;font-size:10pt;page-break-inside:avoid;break-inside:avoid}
-  .sig{width:42%;text-align:center}.sig-space{height:3cm;display:grid;place-items:center}
-  .sig-img{max-height:2.7cm;max-width:150px}.line{border-top:0;padding-top:0}.signer-name{font-weight:700}.signer-role{font-weight:400}
+  .doc-table td.desc{white-space:pre-line;text-align:left}
+  .doc-table td.num{text-align:right;white-space:nowrap}
+  .doc-table tfoot td{font-weight:400;vertical-align:middle}
+  .doc-table tfoot td.total-label{text-align:right;font-weight:700}
+  .doc-adjustments{width:46%;margin-left:auto;margin-top:2mm;font-size:10pt}
+  .doc-adjustments>div{display:flex;justify-content:space-between;gap:6mm;padding:.8mm 0}
+  .doc-grand-total{display:flex;justify-content:flex-end;align-items:stretch;margin-top:0;font-size:12pt;font-weight:700}
+  .doc-grand-total .doc-grand-label{display:flex;align-items:center;padding:0 3mm}
+  .doc-grand-total .doc-grand-amount{display:flex;align-items:center;border:0.35mm solid #111;padding:2.3mm 2.5mm;font-size:10pt;font-weight:700;white-space:nowrap}
+  .doc-terbilang{margin-top:3mm;font-size:10pt;line-height:1.22}
+  .doc-terbilang strong{display:block;font-weight:700;margin-bottom:1mm}
+  .doc-terbilang em{font-style:italic;font-weight:400}
+  .doc-payment{margin-top:6mm;font-size:10pt;line-height:1.25}
+  .doc-payment-title{font-size:11pt;font-weight:700;margin-bottom:5mm}
+  .doc-payment-row{display:grid;grid-template-columns:31mm 3mm minmax(0,1fr);gap:0;margin:.5mm 0}
+  .doc-payment-row .pay-label{font-weight:700}
+  .doc-notes{margin-top:5.5mm;font-size:10pt;line-height:1.28}
+  .doc-notes strong{display:block;margin-bottom:1.5mm}
+  .doc-notes-body{white-space:pre-line}
+  .doc-closing{margin-top:3mm;font-size:10pt;line-height:1.35}
+  .signatures{display:flex;justify-content:flex-end;margin-top:6mm;font-size:10pt;page-break-inside:avoid;break-inside:avoid}
+  .sig{width:70mm;text-align:center}
+  .sig-closing{font-weight:400;margin-bottom:1mm}
+  .sig-space{height:21mm;display:flex;align-items:center;justify-content:center}
+  .sig-img{max-height:20mm;max-width:60mm;object-fit:contain}
+  .signer-name{font-weight:700}.signer-company{font-weight:400}.signer-role{font-weight:400}
 
   .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
   .settings-grid>div{min-width:0;padding:18px;border:1px solid var(--border);border-radius:14px;background:#fbfcfe}
@@ -729,8 +750,20 @@
     html[data-ui-profile="mobile"] .item-row .del{grid-column:1;justify-self:end}
   }
 
+  /* === V26 Compact navigation: four stable destinations only === */
+  .nav{max-width:100%;overflow:hidden}
+  .nav button{white-space:nowrap}
+  html[data-ui-profile="mobile"] .topbar{padding-left:18px;padding-right:18px}
+  html[data-ui-profile="mobile"] .nav{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}
+  html[data-ui-profile="mobile"] .nav button{min-width:0;padding:0 3px;font-size:10.5px}
+  @media(max-width:520px){
+    html[data-ui-profile="mobile"] .brand{display:none}
+    html[data-ui-profile="mobile"] .topbar{padding:0 14px}
+    html[data-ui-profile="mobile"] .nav{width:100%;grid-template-columns:repeat(4,minmax(0,1fr))}
+    html[data-ui-profile="mobile"] .nav button{padding:0 2px;font-size:10px}
+  }
 
-  /* === V25 Controlled Template Editor === */
+  /* === Legacy V25 template styles retained only for data compatibility; editor UI removed in V26 === */
   .template-hero{margin-bottom:14px}
   .template-type-tabs{display:inline-flex;gap:4px;padding:4px;margin-bottom:16px;border:1px solid var(--border);border-radius:12px;background:var(--surface-soft)}
   .template-type-btn{height:36px;padding:0 16px;border:0;border-radius:9px;background:transparent;color:var(--muted);font-size:13px;font-weight:800}
@@ -773,18 +806,18 @@
   html[data-ui-profile="mobile"] .template-signature-list{grid-template-columns:1fr}.template-signature-fields{grid-template-columns:1fr}.template-signature-fields .full{grid-column:1}
   html[data-ui-profile="mobile"] .template-save-footer{align-items:stretch;flex-direction:column;padding:14px}.template-save-footer .btn{width:100%}
   html[data-ui-profile="mobile"] .template-control-grid{grid-template-columns:1fr 1fr}
-  @media(max-width:520px){html[data-ui-profile="mobile"] .brand{display:none}html[data-ui-profile="mobile"] .nav{width:100%;display:grid;grid-template-columns:repeat(5,1fr)}html[data-ui-profile="mobile"] .nav button{padding:0 2px;font-size:10.5px}}
+  @media(max-width:520px){html[data-ui-profile="mobile"] .brand{display:none}html[data-ui-profile="mobile"] .nav{width:100%;display:grid;grid-template-columns:repeat(4,1fr)}html[data-ui-profile="mobile"] .nav button{padding:0 2px;font-size:10.5px}}
 
   @media print{
     html,body{background:#fff!important;margin:0!important;padding:0!important;width:100%!important;height:auto!important}
     body > .app,body > #toast{display:none!important}
     #printRoot{display:block!important;margin:0!important;padding:0!important;background:#fff!important;width:100%!important}
     #printRoot .paper{
-      display:block!important;box-shadow:none!important;margin:0!important;padding:14mm 15mm!important;transform:none!important;
+      display:block!important;box-shadow:none!important;margin:0!important;padding:12mm 32mm 18mm!important;transform:none!important;
       height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;break-after:auto!important;page-break-after:auto!important
     }
     #printRoot .doc-table thead{display:table-header-group}
-    #printRoot .summary,#printRoot .notes,#printRoot .signatures{break-inside:avoid;page-break-inside:avoid}
+    #printRoot .doc-grand-total,#printRoot .doc-terbilang,#printRoot .doc-payment,#printRoot .doc-notes,#printRoot .doc-closing,#printRoot .signatures{break-inside:avoid;page-break-inside:avoid}
   }
 </style>
 </head>
@@ -794,7 +827,6 @@
     <div class="brand"><div class="brand-mark">I</div><span>INVOTATION</span></div>
     <div class="nav">
       <button id="navDocs" class="active" onclick="showView('docs')">Dokumen</button>
-      <button id="navTemplate" onclick="showView('template')">Template</button>
       <button id="navSettings" onclick="showView('settings')">Pengaturan</button>
       <button id="navBackup" onclick="showView('backup')">Backup</button>
       <button id="navAccount" onclick="showView('account')">Sync</button>
@@ -919,7 +951,7 @@
             <div class="toolbar no-print" style="align-items:flex-end">
               <div>
                 <h2 style="margin-bottom:4px">Preview dokumen</h2>
-                <div class="muted">Ukuran kertas dan orientasi bisa diubah sebelum export atau print.</div>
+                <div class="muted">Ukuran kertas dan orientasi bisa diubah sebelum PDF atau print.</div>
                 <div class="paper-controls">
                   <div class="control-group">
                     <span class="control-label">Ukuran kertas</span>
@@ -948,13 +980,7 @@
                 </div>
               </div>
               <div class="actions">
-                <div class="export-wrap">
-                  <button class="btn primary" onclick="toggleExportMenu(event)">Export</button>
-                  <div id="exportMenu" class="export-menu hidden">
-                    <button onclick="exportPDF();closeExportMenu()">Export PDF</button>
-                    <button onclick="exportDOCX();closeExportMenu()">Export DOCX</button>
-                  </div>
-                </div>
+                <button class="btn primary" onclick="exportPDF()">Export PDF</button>
                 <button class="btn" onclick="printDocument()">Print</button>
               </div>
             </div>
@@ -969,58 +995,6 @@
       </div>
     </section>
 
-    <section id="templateView" class="hidden">
-      <div class="hero template-hero">
-        <div>
-          <h1>Template dokumen</h1>
-          <p class="muted">Atur struktur dan gaya Penawaran atau Invoice tanpa mengubah isi transaksi.</p>
-        </div>
-        <button type="button" class="btn" onclick="resetTemplateDraft()">Reset Template</button>
-      </div>
-
-      <div class="template-type-tabs" role="group" aria-label="Jenis template">
-        <button type="button" id="templateTypeQuote" class="template-type-btn active" onclick="switchTemplateType('PENAWARAN')">Penawaran</button>
-        <button type="button" id="templateTypeInvoice" class="template-type-btn" onclick="switchTemplateType('INVOICE')">Invoice</button>
-      </div>
-
-      <div class="template-editor-grid">
-        <section class="panel template-structure-panel">
-          <div class="template-panel-head">
-            <div>
-              <h2>Struktur dokumen</h2>
-              <p class="muted">Drag elemen untuk mengubah urutan. Tombol panah tersedia sebagai alternatif.</p>
-            </div>
-          </div>
-          <div id="templateSectionList" class="template-section-list"></div>
-        </section>
-
-        <section class="panel template-inspector-panel">
-          <div class="template-panel-head">
-            <div>
-              <h2 id="templateInspectorTitle">Pengaturan elemen</h2>
-              <p id="templateInspectorHint" class="muted">Pilih elemen di sebelah kiri.</p>
-            </div>
-          </div>
-          <div id="templateInspector"></div>
-        </section>
-      </div>
-
-      <section class="panel template-signatures-panel">
-        <div class="template-panel-head signature-panel-head">
-          <div>
-            <h2>Tanda tangan</h2>
-            <p class="muted">Setiap blok berisi salam, nama/perusahaan, area TTD, nama penandatangan, dan jabatan.</p>
-          </div>
-          <button type="button" class="btn soft" onclick="addTemplateSignature()">+ Tambah Tanda Tangan</button>
-        </div>
-        <div id="templateSignatures" class="template-signature-list"></div>
-      </section>
-
-      <div class="template-save-footer">
-        <div><strong>Simpan template</strong><span>Template baru dipakai untuk dokumen baru. Dokumen yang sudah disimpan tetap memakai snapshot template-nya.</span></div>
-        <button type="button" class="btn primary" onclick="saveTemplateDraft()">Simpan Template</button>
-      </div>
-    </section>
 
     <section id="settingsView" class="hidden">
       <div class="hero settings-hero">
@@ -1193,7 +1167,7 @@
               <span id="syncBadge" class="sync-badge">Tersambung</span>
             </div>
 
-            <p class="muted">History, pengaturan perusahaan, catatan default, logo, dan TTD tersinkron sebagai data ringan. PDF, DOCX, dan backup tetap dibuat di perangkat.</p>
+            <p class="muted">History, pengaturan perusahaan, catatan default, logo, dan TTD tersinkron sebagai data ringan. PDF dan backup tetap dibuat di perangkat.</p>
 
             <div class="account-sync-box">
               <div>
@@ -1889,6 +1863,27 @@ function setPrintPageStyle(){
 }
 
 function rupiah(v){return 'Rp'+Math.round(Number(v)||0).toLocaleString('id-ID')}
+function docRupiah(v){return 'Rp. '+Math.round(Number(v)||0).toLocaleString('id-ID')}
+function terbilangID(value){
+  const n=Math.floor(Math.abs(Number(value)||0));
+  const words=['','satu','dua','tiga','empat','lima','enam','tujuh','delapan','sembilan','sepuluh','sebelas'];
+  function say(x){
+    x=Math.floor(x);
+    if(x<12)return words[x];
+    if(x<20)return say(x-10)+' belas';
+    if(x<100)return say(Math.floor(x/10))+' puluh'+(x%10?' '+say(x%10):'');
+    if(x<200)return 'seratus'+(x-100?' '+say(x-100):'');
+    if(x<1000)return say(Math.floor(x/100))+' ratus'+(x%100?' '+say(x%100):'');
+    if(x<2000)return 'seribu'+(x-1000?' '+say(x-1000):'');
+    if(x<1000000)return say(Math.floor(x/1000))+' ribu'+(x%1000?' '+say(x%1000):'');
+    if(x<1000000000)return say(Math.floor(x/1000000))+' juta'+(x%1000000?' '+say(x%1000000):'');
+    if(x<1000000000000)return say(Math.floor(x/1000000000))+' miliar'+(x%1000000000?' '+say(x%1000000000):'');
+    if(x<1000000000000000)return say(Math.floor(x/1000000000000))+' triliun'+(x%1000000000000?' '+say(x%1000000000000):'');
+    return String(x);
+  }
+  const text=n?say(n):'nol';
+  return text.charAt(0).toUpperCase()+text.slice(1)+' rupiah';
+}
 function escapeHtml(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function formatDate(v){if(!v)return '-'; return new Date(v+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})}
 function today(){
@@ -2041,16 +2036,10 @@ async function confirmLeaveWizard(){
 async function showView(view){
   const wizardVisible=!document.getElementById('wizardView').classList.contains('hidden');
   if(wizardVisible && view!=='wizard' && !(await confirmLeaveWizard())) return;
-  const templateVisible=!document.getElementById('templateView').classList.contains('hidden');
-  if(templateVisible && view!=='template' && templateDirty){
-    const leave=await appConfirm('Perubahan template belum disimpan. Tetap keluar?',{title:'Keluar tanpa menyimpan?',confirmText:'Tetap Keluar',cancelText:'Kembali'});
-    if(!leave)return;templateDirty=false;
-  }
-  ['docsView','wizardView','templateView','settingsView','backupView','accountView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
-  ['navDocs','navTemplate','navSettings','navBackup','navAccount'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
+  ['docsView','wizardView','settingsView','backupView','accountView'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));
+  ['navDocs','navSettings','navBackup','navAccount'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
   if(view==='docs'){document.getElementById('docsView').classList.remove('hidden');document.getElementById('navDocs').classList.add('active');renderDocs()}
   if(view==='wizard'){document.getElementById('wizardView').classList.remove('hidden')}
-  if(view==='template'){document.getElementById('templateView').classList.remove('hidden');document.getElementById('navTemplate').classList.add('active');loadTemplateEditor()}
   if(view==='settings'){document.getElementById('settingsView').classList.remove('hidden');document.getElementById('navSettings').classList.add('active');loadSettingsForm();updateDisplayModeUI()}
   if(view==='backup'){document.getElementById('backupView').classList.remove('hidden');document.getElementById('navBackup').classList.add('active')}
   if(view==='account'){document.getElementById('accountView').classList.remove('hidden');document.getElementById('navAccount').classList.add('active');updateAccountUI()}
@@ -2515,25 +2504,68 @@ function renderTemplateSignaturesDocument(tpl,style){
 }
 
 function renderPreview(){
-  const d=gatherData(), s=settings, inv=d.type==='INVOICE';
-  const tpl=sanitizeTemplate(d.templateSnapshot||activeTemplateSnapshot||defaultTemplate(d.type),d.type);
-  const rows=d.items.map((it,i)=>`<tr><td style="text-align:center">${i+1}</td><td style="white-space:pre-line">${escapeHtml(it.description||'-')}</td><td style="text-align:center">${it.qty}</td><td style="text-align:center">${escapeHtml(it.unit||'-')}</td><td class="num">${rupiah(it.price)}</td><td class="num">${rupiah((parseQty(it.qty)||0)*(Number(it.price)||0))}</td></tr>`).join('');
-  const logo=s.logo?`<img src="${s.logo}" style="max-width:72px;max-height:72px">`:'LOGO';
-  const contactLine=[s.phone,s.email,s.website].filter(Boolean).map(escapeHtml).join(' · ');
-  const totalAlign=tpl.styles.totals?.align||'right';
-  const totalPosition=totalAlign==='left'?'margin-left:0;margin-right:auto;':totalAlign==='center'?'margin-left:auto;margin-right:auto;':'margin-left:auto;margin-right:0;';
-  const sections={
-    header:`<div class="doc-header template-styled" style="${templateCss(tpl.styles.header)}"><div class="logo-box">${logo}</div><div class="company"><strong>${escapeHtml((s.company||'').toUpperCase())}</strong>${escapeHtml(s.address)}${contactLine?'<br>'+contactLine:''}${s.npwp?'<br>NPWP: '+escapeHtml(s.npwp):''}</div><div class="doc-header-spacer"></div></div>`,
-    title:`<div class="doc-title template-styled" style="${templateCss(tpl.styles.title)}">${inv?'INVOICE':'SURAT PENAWARAN'}</div>`,
-    meta:`<div class="template-styled" style="${templateCss(tpl.styles.meta)}"><div class="doc-number-line" style="font-size:inherit;font-weight:inherit;text-align:inherit">${escapeHtml(d.number)}</div><div class="meta" style="font-size:inherit;margin-bottom:0"><div class="box"><strong>Kepada Yth.</strong><br>${escapeHtml(d.customer)}${d.pic?'<br>Bapak/Ibu: '+escapeHtml(d.pic):''}${d.address?'<br>'+escapeHtml(d.address):''}</div><div class="box" style="text-align:right"><strong>${s.city?escapeHtml(s.city)+', ':''}${formatDate(d.date)}</strong></div></div></div>`,
-    intro:!inv?`<div class="template-styled" style="${templateCss(tpl.styles.intro)}">Dengan hormat,<br>Berikut kami sampaikan penawaran untuk kebutuhan sebagai berikut:</div>`:'',
-    items:`<table class="doc-table template-styled" style="${templateCss(tpl.styles.items)}"><thead><tr><th style="width:5%">No</th><th>Deskripsi</th><th style="width:8%">Qty</th><th style="width:10%">Satuan</th><th style="width:17%">Harga Satuan</th><th style="width:18%">Jumlah</th></tr></thead><tbody>${rows}</tbody></table>`,
-    totals:`<div class="summary template-styled" style="${templateCss(tpl.styles.totals)};${totalPosition}"><div><span>Subtotal</span><strong>${rupiah(d.totals.subtotal)}</strong></div>${d.discount?`<div><span>Diskon</span><span>${rupiah(d.discount)}</span></div>`:''}${d.useTax?`<div><span>PPN 11%</span><span>${rupiah(d.totals.tax)}</span></div>`:''}<div class="grand"><span>TOTAL</span><span>${rupiah(d.totals.grand)}</span></div></div>`,
-    payment:inv?`<div class="notes template-styled" style="${templateCss(tpl.styles.payment)}"><strong>Pembayaran:</strong><br>${escapeHtml(s.bank)} · ${escapeHtml(s.account)}<br>a.n. ${escapeHtml(s.accountName)}</div>`:'',
-    notes:`<div class="notes template-styled" style="${templateCss(tpl.styles.notes)}"><strong>Catatan / Ketentuan:</strong><br>${escapeHtml(d.notes).replace(/\n/g,'<br>')}</div>`,
-    signatures:renderTemplateSignaturesDocument(tpl,tpl.styles.signatures)
-  };
-  document.getElementById('paper').innerHTML=tpl.order.map(k=>sections[k]||'').join('');
+  const d=gatherData(),s=settings,inv=d.type==='INVOICE';
+  const actualItems=Array.isArray(d.items)?d.items:[];
+  const rowCount=Math.max(8,actualItems.length);
+  const rows=Array.from({length:rowCount},(_,i)=>{
+    const it=actualItems[i];
+    if(!it)return `<tr><td>${i+1}</td><td class="desc"></td><td></td><td></td><td class="num"></td><td class="num"></td></tr>`;
+    const qty=(it.qty===0||it.qty)?String(it.qty):'';
+    const price=(it.price===0||it.price)?docRupiah(it.price):'';
+    const amount=(it.qty!==''&&it.price!=='')?docRupiah((parseQty(it.qty)||0)*(Number(it.price)||0)):'';
+    return `<tr><td>${i+1}</td><td class="desc">${escapeHtml(it.description||'')}</td><td>${escapeHtml(qty)}</td><td>${escapeHtml(it.unit||'')}</td><td class="num">${price}</td><td class="num">${amount}</td></tr>`;
+  }).join('');
+
+  const companyLines=[s.address,s.phone,s.email,s.website,s.npwp?('NPWP: '+s.npwp):''].filter(Boolean)
+    .map(x=>`<div class="company-line">${escapeHtml(x)}</div>`).join('');
+  const logo=s.logo?`<img src="${s.logo}" alt="Logo perusahaan">`:'';
+  const recipientPic=d.pic?`Bapak/Ibu ${escapeHtml(d.pic)}`:'Bapak/Ibu';
+  const cityDate=(s.city?escapeHtml(s.city)+', ':'')+formatDate(d.date);
+  const introType=inv?'invoice':'penawaran';
+  const closingType=inv?'invoice':'surat penawaran';
+
+  const adjustmentRows=[];
+  if(d.discount||d.useTax){
+    adjustmentRows.push(`<div><span>Subtotal</span><span>${docRupiah(d.totals.subtotal)}</span></div>`);
+    if(d.discount)adjustmentRows.push(`<div><span>Diskon</span><span>- ${docRupiah(d.discount)}</span></div>`);
+    if(d.useTax)adjustmentRows.push(`<div><span>PPN 11%</span><span>${docRupiah(d.totals.tax)}</span></div>`);
+  }
+  const adjustments=adjustmentRows.length?`<div class="doc-adjustments">${adjustmentRows.join('')}</div>`:'';
+
+  const quoteFoot=!inv?`<tfoot>${d.discount||d.useTax?`<tr><td colspan="5" class="total-label">Grand Total</td><td class="num"><strong>${docRupiah(d.totals.grand)}</strong></td></tr>`:`<tr><td colspan="5" class="total-label">Total</td><td class="num">${docRupiah(d.totals.grand)}</td></tr>`}</tfoot>`:'';
+  const invoiceGrand=inv?`${adjustments}<div class="doc-grand-total"><span class="doc-grand-label">Grand Total</span><span class="doc-grand-amount">${docRupiah(d.totals.grand)}</span></div>`:'';
+  const quoteAdjust=!inv&&adjustmentRows.length?adjustments:'';
+
+  const payment=inv?`<section class="doc-payment"><div class="doc-payment-title">PAYMENT INFORMATION</div>
+    <div class="doc-payment-row"><span class="pay-label">Bank</span><span>:</span><span>${escapeHtml(s.bank||'')}</span></div>
+    <div class="doc-payment-row"><span class="pay-label">Account No.</span><span>:</span><span>${escapeHtml(s.account||'')}</span></div>
+    <div class="doc-payment-row"><span class="pay-label">Account Name</span><span>:</span><span>${escapeHtml(s.accountName||'')}</span></div>
+  </section>`:'';
+
+  const signatureImage=s.signature?`<img src="${s.signature}" class="sig-img" alt="Tanda tangan">`:'';
+  const signature=`<div class="signatures"><div class="sig"><div class="sig-closing">Hormat saya,</div><div class="sig-space">${signatureImage}</div><div class="signer-name">${escapeHtml(s.signer||'')}</div><div class="signer-company">${escapeHtml(s.company||'')}</div></div></div>`;
+
+  document.getElementById('paper').innerHTML=`
+    <header class="doc-header">
+      <div class="logo-box">${logo}</div>
+      <div class="company"><strong>${escapeHtml((s.company||'').toUpperCase())}</strong>${companyLines}</div>
+    </header>
+    <div class="doc-title">${inv?'INVOICE':'PENAWARAN'}</div>
+    <div class="doc-meta-row"><div>${escapeHtml(d.number)}</div><div class="doc-date">${cityDate}</div></div>
+    <div class="doc-recipient"><div>Kepada Yth.</div><div>${recipientPic}</div><div>${escapeHtml(d.customer||'')}</div></div>
+    <div class="doc-intro"><div class="salutation">Dengan hormat,</div><div>Bersama surat ini kami mengajukan ${introType} pekerjaan dengan rincian sebagai berikut:</div></div>
+    <table class="doc-table">
+      <colgroup><col style="width:5.5%"><col style="width:52%"><col style="width:6%"><col style="width:11%"><col style="width:12%"><col style="width:13.5%"></colgroup>
+      <thead><tr><th>No</th><th>Item Pekerjaan</th><th>Vol</th><th>Satuan</th><th>Harga</th><th>Jumlah</th></tr></thead>
+      <tbody>${rows}</tbody>${quoteFoot}
+    </table>
+    ${quoteAdjust}${invoiceGrand}
+    <div class="doc-terbilang"><strong>Terbilang:</strong><em>${escapeHtml(terbilangID(d.totals.grand))}</em></div>
+    ${payment}
+    <section class="doc-notes"><strong>Notes:</strong><div class="doc-notes-body">${escapeHtml(d.notes||'').replace(/\n/g,'<br>')}</div></section>
+    <div class="doc-closing">Demikian ${closingType} ini kami sampaikan, besar harapan kami untuk dapat bekerja sama dengan Bapak/Ibu. Atas perhatian dan kepercayaannya kami ucapkan terima kasih.</div>
+    ${signature}
+  `;
   requestAnimationFrame(()=>fitPreview());
 }
 function getDocs(){try{return JSON.parse(localStorage.getItem(STORE_DOCS)||'[]')}catch(e){return[]}}
@@ -2888,105 +2920,8 @@ window.addEventListener('afterprint',()=>{
   if(root) root.innerHTML='';
 });
 
-/* Minimal DOCX generator, no external library. */
-function crc32(bytes){
-  let table=crc32.table||(crc32.table=(()=>{let t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=((c&1)?0xEDB88320^(c>>>1):c>>>1);t[n]=c>>>0}return t})());
-  let c=0^(-1); for(let i=0;i<bytes.length;i++)c=(c>>>8)^table[(c^bytes[i])&0xFF]; return (c^(-1))>>>0
-}
-function u16(n){return [n&255,(n>>>8)&255]} function u32(n){return [n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255]}
-function zipStore(files){
-  const enc=new TextEncoder(), chunks=[], central=[]; let offset=0;
-  for(const [name,content] of files){
-    const nb=enc.encode(name), data=typeof content==='string'?enc.encode(content):content, crc=crc32(data);
-    const local=new Uint8Array([80,75,3,4,20,0,0,0,0,0,0,0,0,0,...u32(crc),...u32(data.length),...u32(data.length),...u16(nb.length),0,0,...nb]);
-    chunks.push(local,data);
-    const cent=new Uint8Array([80,75,1,2,20,0,20,0,0,0,0,0,0,0,0,0,...u32(crc),...u32(data.length),...u32(data.length),...u16(nb.length),0,0,0,0,0,0,0,0,0,0,0,0,...u32(offset),...nb]);
-    central.push(cent); offset+=local.length+data.length;
-  }
-  const centralSize=central.reduce((s,c)=>s+c.length,0);
-  const end=new Uint8Array([80,75,5,6,0,0,0,0,...u16(files.length),...u16(files.length),...u32(centralSize),...u32(offset),0,0]);
-  return new Blob([...chunks,...central,end],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})
-}
-function xmlEscape(s=''){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function p(text,bold=false,align='left',size=10.5,italic=false,underline=false,spaceAfter=0,spaceBefore=0){
-  const halfPts=Math.round(size*2);
-  const rPr=`<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri"/>${bold?'<w:b/>':''}${italic?'<w:i/>':''}${underline?'<w:u w:val="single"/>':''}<w:sz w:val="${halfPts}"/><w:szCs w:val="${halfPts}"/></w:rPr>`;
-  const parts=String(text??'').split('\n');
-  const runs=parts.map((part,i)=>`<w:r>${rPr}${i?'<w:br/>':''}<w:t xml:space="preserve">${xmlEscape(part)}</w:t></w:r>`).join('');
-  return `<w:p><w:pPr><w:jc w:val="${align}"/><w:spacing w:before="${Math.round(Number(spaceBefore||0)*15)}" w:after="${Math.round(Number(spaceAfter||0)*15)}" w:line="240" w:lineRule="auto"/></w:pPr>${runs}</w:p>`;
-}
-function dataUrlToImage(dataUrl){
-  const m=String(dataUrl||'').match(/^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/i);
-  if(!m)return null;
-  const ext=m[1].toLowerCase()==='jpeg'?'jpg':m[1].toLowerCase();
-  const mime=ext==='jpg'?'image/jpeg':`image/${ext}`;
-  const bin=atob(m[2]);const bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
-  return {ext,mime,bytes};
-}
-function docxImageParagraph(relId,cx,cy,docPrId,name,align='center'){
-  return `<w:p><w:pPr><w:jc w:val="${align}"/></w:pPr><w:r><w:drawing><wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${cx}" cy="${cy}"/><wp:docPr id="${docPrId}" name="${xmlEscape(name)}"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="0" name="${xmlEscape(name)}"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="${relId}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>`;
-}
-function imageCell(relId,cx,cy,docPrId,name,width=null){return `<w:tc><w:tcPr>${width?`<w:tcW w:w="${width}" w:type="dxa"/>`:''}</w:tcPr>${docxImageParagraph(relId,cx,cy,docPrId,name)}</w:tc>`}
-
-function cell(text,bold=false,align='left',width=null,size=9.5){
-  return `<w:tc><w:tcPr>${width?`<w:tcW w:w="${width}" w:type="dxa"/>`:''}</w:tcPr>${p(text,bold,align,size)}</w:tc>`;
-}
-function blankCell(width=null){return `<w:tc><w:tcPr>${width?`<w:tcW w:w="${width}" w:type="dxa"/>`:''}</w:tcPr><w:p/></w:tc>`}
-function docxStyleP(text,st={},defaults={}){
-  return p(text,typeof st.bold==='boolean'?st.bold:!!defaults.bold,st.align||defaults.align||'left',Number(st.fontSize)||defaults.size||10.5,typeof st.italic==='boolean'?st.italic:!!defaults.italic,typeof st.underline==='boolean'?st.underline:!!defaults.underline,Number(st.spaceBottom)||0,Number(st.spaceTop)||0);
-}
-function exportDOCX(){
-  const d=gatherData(), s=settings, inv=d.type==='INVOICE', f=getPaperFormat();
-  const tpl=sanitizeTemplate(d.templateSnapshot||activeTemplateSnapshot||defaultTemplate(d.type),d.type);
-  const logoImg=dataUrlToImage(s.logo), rels=[],media=[];let relIndex=1,docPrId=1;
-  let logoRel=null;
-  if(logoImg){logoRel='rIdImg'+relIndex++;rels.push({id:logoRel,target:`media/logo.${logoImg.ext}`});media.push([`word/media/logo.${logoImg.ext}`,logoImg.bytes])}
-  const signatureRels={};
-  (tpl.signatures||[]).forEach((sig,i)=>{
-    const data=resolveSignatureAsset(sig.assetId),img=dataUrlToImage(data);if(!img)return;
-    const key=sig.assetId||('sig'+i);if(signatureRels[key])return;
-    const rel='rIdImg'+relIndex++,name=`signature_${i+1}.${img.ext}`;signatureRels[key]={rel,img,name};rels.push({id:rel,target:`media/${name}`});media.push([`word/media/${name}`,img.bytes]);
-  });
-  const stItems=tpl.styles.items||styleDefaults('items');
-  const rows=d.items.map((it,i)=>`<w:tr>${cell(String(i+1),false,'center',null,stItems.fontSize)}${cell(it.description||'-',false,'left',null,stItems.fontSize)}${cell(String(it.qty),false,'center',null,stItems.fontSize)}${cell(it.unit||'-',false,'center',null,stItems.fontSize)}${cell(rupiah(it.price),false,'right',null,stItems.fontSize)}${cell(rupiah((parseQty(it.qty)||0)*(Number(it.price)||0)),false,'right',null,stItems.fontSize)}</w:tr>`).join('');
-  const logoCell=logoRel?imageCell(logoRel,900000,900000,docPrId++,'Logo',1800):cell('',false,'left',1800,9);
-  const contact=[s.phone,s.email,s.website].filter(Boolean).join(' · '), sh=tpl.styles.header||styleDefaults('header');
-  const companyCell=`<w:tc><w:tcPr><w:tcW w:w="6400" w:type="dxa"/></w:tcPr>${p((s.company||'').toUpperCase(),true,sh.align||'center',Math.max(12,Number(sh.fontSize||9)*1.7),sh.italic,sh.underline)}${s.address?p(s.address,sh.bold,sh.align||'center',sh.fontSize,sh.italic,sh.underline):''}${contact?p(contact,sh.bold,sh.align||'center',sh.fontSize,sh.italic,sh.underline):''}${s.npwp?p('NPWP: '+s.npwp,sh.bold,sh.align||'center',sh.fontSize,sh.italic,sh.underline):''}</w:tc>`;
-  const headerTable=`<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/><w:tblBorders><w:bottom w:val="single" w:sz="10"/></w:tblBorders></w:tblPr><w:tr>${logoCell}${companyCell}${blankCell(1800)}</w:tr></w:tbl>${p('',false,'left',1,false,false,sh.spaceBottom||0,sh.spaceTop||0)}`;
-  const sm=tpl.styles.meta||styleDefaults('meta'),rightMeta=(s.city?s.city+', ':'')+formatDate(d.date);
-  const metaTable=`${p(d.number,sm.bold,sm.align||'left',sm.fontSize,sm.italic,sm.underline,0,sm.spaceTop||0)}<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr><w:tr>${cell('Kepada Yth.\n'+d.customer+(d.pic?'\nBapak/Ibu: '+d.pic:'')+(d.address?'\n'+d.address:''),sm.bold,'left',5000,sm.fontSize)}${cell(rightMeta,sm.bold,'right',5000,sm.fontSize)}</w:tr></w:tbl>${p('',false,'left',1,false,false,sm.spaceBottom||0)}`;
-  const itemsTable=`${p('',false,'left',1,false,false,0,stItems.spaceTop||0)}<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/><w:tblBorders><w:top w:val="single" w:sz="4"/><w:left w:val="single" w:sz="4"/><w:bottom w:val="single" w:sz="4"/><w:right w:val="single" w:sz="4"/><w:insideH w:val="single" w:sz="4"/><w:insideV w:val="single" w:sz="4"/></w:tblBorders></w:tblPr><w:tr>${cell('No',true,'center',null,stItems.fontSize)}${cell('Deskripsi',true,'center',null,stItems.fontSize)}${cell('Qty',true,'center',null,stItems.fontSize)}${cell('Satuan',true,'center',null,stItems.fontSize)}${cell('Harga Satuan',true,'center',null,stItems.fontSize)}${cell('Jumlah',true,'center',null,stItems.fontSize)}</w:tr>${rows}</w:tbl>${p('',false,'left',1,false,false,stItems.spaceBottom||0)}`;
-  const stTot=tpl.styles.totals||styleDefaults('totals');
-  const totals=p('Subtotal: '+rupiah(d.totals.subtotal),stTot.bold,stTot.align,stTot.fontSize,stTot.italic,stTot.underline,0,stTot.spaceTop)+(d.discount?p('Diskon: '+rupiah(d.discount),stTot.bold,stTot.align,stTot.fontSize,stTot.italic,stTot.underline):'')+(d.useTax?p('PPN 11%: '+rupiah(d.totals.tax),stTot.bold,stTot.align,stTot.fontSize,stTot.italic,stTot.underline):'')+p('TOTAL: '+rupiah(d.totals.grand),true,stTot.align,Math.max(12,stTot.fontSize),stTot.italic,stTot.underline,stTot.spaceBottom||0);
-  const stPay=tpl.styles.payment||styleDefaults('payment');
-  const payment=inv?(p('Pembayaran',true,stPay.align,stPay.fontSize,stPay.italic,stPay.underline,0,stPay.spaceTop)+p([s.bank+' · '+s.account,'a.n. '+s.accountName].join('\n'),stPay.bold,stPay.align,stPay.fontSize,stPay.italic,stPay.underline,stPay.spaceBottom||0)) : '';
-  const stNotes=tpl.styles.notes||styleDefaults('notes');
-  const notes=p('Catatan / Ketentuan',true,stNotes.align,stNotes.fontSize,stNotes.italic,stNotes.underline,0,stNotes.spaceTop)+p(d.notes||'',stNotes.bold,stNotes.align,stNotes.fontSize,stNotes.italic,stNotes.underline,stNotes.spaceBottom||0);
-  const stIntro=tpl.styles.intro||styleDefaults('intro');
-  const intro=!inv?p('Dengan hormat,\nBerikut kami sampaikan penawaran untuk kebutuhan sebagai berikut:',stIntro.bold,stIntro.align,stIntro.fontSize,stIntro.italic,stIntro.underline,stIntro.spaceBottom||0,stIntro.spaceTop||0):'';
-  const stTitle=tpl.styles.title||styleDefaults('title'),title=docxStyleP(inv?'INVOICE':'SURAT PENAWARAN',stTitle,{bold:true,align:'center',size:15});
-  const stSig=tpl.styles.signatures||styleDefaults('signatures');
-  const cellsByPos={left:[],center:[],right:[]};
-  (tpl.signatures||[]).forEach(sig=>{
-    const relInfo=signatureRels[sig.assetId], image=relInfo?docxImageParagraph(relInfo.rel,1400000,700000,docPrId++,`Tanda Tangan ${docPrId}`,stSig.align||'center'):p('\n\n\n',false,'center',stSig.fontSize);
-    const text=p((sig.closing||'')+(sig.organization?'\n'+sig.organization:''),stSig.bold,stSig.align||'center',stSig.fontSize,stSig.italic,stSig.underline)+image+p(sig.signer||'',true,stSig.align||'center',stSig.fontSize,stSig.italic,stSig.underline)+p(sig.role||'',false,stSig.align||'center',stSig.fontSize,stSig.italic,stSig.underline);
-    cellsByPos[sig.position||'right'].push(text);
-  });
-  const sigTable=`${p('',false,'left',1,false,false,0,stSig.spaceTop||0)}<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr><w:tr>${['left','center','right'].map(pos=>`<w:tc><w:tcPr><w:tcW w:w="3333" w:type="dxa"/></w:tcPr>${cellsByPos[pos].join('')}</w:tc>`).join('')}</w:tr></w:tbl>${p('',false,'left',1,false,false,stSig.spaceBottom||0)}`;
-  const sections={header:headerTable,title,meta:metaTable,intro,items:itemsTable,totals,payment,notes,signatures:sigTable};
-  const body=tpl.order.map(k=>sections[k]||'').join('');
-  const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="${f.docxW}" w:h="${f.docxH}"${paperOrientation==='landscape'?' w:orient="landscape"':''}/><w:pgMar w:top="850" w:right="850" w:bottom="850" w:left="850"/></w:sectPr></w:body></w:document>`;
-  const imageExts=[logoImg,...Object.values(signatureRels).map(x=>x.img)].filter(Boolean).map(x=>x.ext).filter((v,i,a)=>a.indexOf(v)===i);
-  const imgTypes=imageExts.map(ext=>`<Default Extension="${ext}" ContentType="${ext==='jpg'?'image/jpeg':`image/${ext}`}"/>`).join('');
-  const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${imgTypes}<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`;
-  const rootRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
-  const docRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${rels.map(r=>`<Relationship Id="${r.id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="${r.target}"/>`).join('')}</Relationships>`;
-  const files=[['[Content_Types].xml',contentTypes],['_rels/.rels',rootRels],['word/document.xml',doc],['word/_rels/document.xml.rels',docRels],...media];
-  const blob=zipStore(files);const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(d.type==='INVOICE'?'Invoice_':'Penawaran_')+(d.number.replace(/\//g,'-'))+'.docx';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)
-}
-
 window.addEventListener('beforeunload',e=>{
-  if(isDirty||templateDirty){
+  if(isDirty){
     e.preventDefault();
     e.returnValue='';
   }
