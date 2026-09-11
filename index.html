@@ -282,12 +282,10 @@
   .doc-table td.desc{white-space:pre-line;text-align:left}
   .doc-table td.num{text-align:right;white-space:nowrap}
   .doc-table tfoot td{font-weight:400;vertical-align:middle}
-  .doc-table tfoot td.total-label{text-align:right;font-weight:700}
-  .doc-adjustments{width:46%;margin-left:auto;margin-top:2mm;font-size:10pt}
-  .doc-adjustments>div{display:flex;justify-content:space-between;gap:6mm;padding:.8mm 0}
-  .doc-grand-total{display:flex;justify-content:flex-end;align-items:stretch;margin-top:0;font-size:12pt;font-weight:700}
-  .doc-grand-total .doc-grand-label{display:flex;align-items:center;padding:0 3mm}
-  .doc-grand-total .doc-grand-amount{display:flex;align-items:center;border:0.35mm solid #111;padding:2.3mm 2.5mm;font-size:10pt;font-weight:700;white-space:nowrap}
+  .doc-table tfoot tr.total-row td.total-label{border:0!important;text-align:right;font-weight:700;font-size:12pt;padding:1.8mm 2.5mm 1.8mm 1mm;height:auto}
+  .doc-table tfoot tr.total-row td.total-amount{border:0.35mm solid #111!important;text-align:right;font-weight:700;font-size:10pt;white-space:nowrap;padding:1.8mm 2.5mm;height:auto}
+  .doc-table tfoot tr.adjustment-row td.total-label{border:0!important;text-align:right;font-weight:400;padding:.8mm 2.5mm .8mm 1mm;height:auto}
+  .doc-table tfoot tr.adjustment-row td.total-amount{border-left:0.35mm solid #111!important;border-right:0.35mm solid #111!important;border-top:0!important;border-bottom:0.35mm solid #111!important;text-align:right;white-space:nowrap;padding:.8mm 2.5mm;height:auto}
   .doc-terbilang{margin-top:3mm;font-size:10pt;line-height:1.22}
   .doc-terbilang strong{display:block;font-weight:700;margin-bottom:1mm}
   .doc-terbilang em{font-style:italic;font-weight:400}
@@ -2505,11 +2503,8 @@ function renderTemplateSignaturesDocument(tpl,style){
 
 function renderPreview(){
   const d=gatherData(),s=settings,inv=d.type==='INVOICE';
-  const actualItems=Array.isArray(d.items)?d.items:[];
-  const rowCount=Math.max(8,actualItems.length);
-  const rows=Array.from({length:rowCount},(_,i)=>{
-    const it=actualItems[i];
-    if(!it)return `<tr><td>${i+1}</td><td class="desc"></td><td></td><td></td><td class="num"></td><td class="num"></td></tr>`;
+  const actualItems=(Array.isArray(d.items)?d.items:[]).filter(it=>String(it?.description||'').trim());
+  const rows=actualItems.map((it,i)=>{
     const qty=(it.qty===0||it.qty)?String(it.qty):'';
     const price=(it.price===0||it.price)?docRupiah(it.price):'';
     const amount=(it.qty!==''&&it.price!=='')?docRupiah((parseQty(it.qty)||0)*(Number(it.price)||0)):'';
@@ -2524,17 +2519,15 @@ function renderPreview(){
   const introType=inv?'invoice':'penawaran';
   const closingType=inv?'invoice':'surat penawaran';
 
-  const adjustmentRows=[];
+  const totalRows=[];
   if(d.discount||d.useTax){
-    adjustmentRows.push(`<div><span>Subtotal</span><span>${docRupiah(d.totals.subtotal)}</span></div>`);
-    if(d.discount)adjustmentRows.push(`<div><span>Diskon</span><span>- ${docRupiah(d.discount)}</span></div>`);
-    if(d.useTax)adjustmentRows.push(`<div><span>PPN 11%</span><span>${docRupiah(d.totals.tax)}</span></div>`);
+    totalRows.push(`<tr class="adjustment-row"><td colspan="5" class="total-label">Subtotal</td><td class="total-amount">${docRupiah(d.totals.subtotal)}</td></tr>`);
+    if(d.discount)totalRows.push(`<tr class="adjustment-row"><td colspan="5" class="total-label">Diskon</td><td class="total-amount">- ${docRupiah(d.discount)}</td></tr>`);
+    if(d.useTax)totalRows.push(`<tr class="adjustment-row"><td colspan="5" class="total-label">PPN 11%</td><td class="total-amount">${docRupiah(d.totals.tax)}</td></tr>`);
   }
-  const adjustments=adjustmentRows.length?`<div class="doc-adjustments">${adjustmentRows.join('')}</div>`:'';
-
-  const quoteFoot=!inv?`<tfoot>${d.discount||d.useTax?`<tr><td colspan="5" class="total-label">Grand Total</td><td class="num"><strong>${docRupiah(d.totals.grand)}</strong></td></tr>`:`<tr><td colspan="5" class="total-label">Total</td><td class="num">${docRupiah(d.totals.grand)}</td></tr>`}</tfoot>`:'';
-  const invoiceGrand=inv?`${adjustments}<div class="doc-grand-total"><span class="doc-grand-label">Grand Total</span><span class="doc-grand-amount">${docRupiah(d.totals.grand)}</span></div>`:'';
-  const quoteAdjust=!inv&&adjustmentRows.length?adjustments:'';
+  const totalLabel=inv?'Grand Total':((d.discount||d.useTax)?'Grand Total':'Total');
+  totalRows.push(`<tr class="total-row"><td colspan="5" class="total-label">${totalLabel}</td><td class="total-amount">${docRupiah(d.totals.grand)}</td></tr>`);
+  const tableFoot=`<tfoot>${totalRows.join('')}</tfoot>`;
 
   const payment=inv?`<section class="doc-payment"><div class="doc-payment-title">PAYMENT INFORMATION</div>
     <div class="doc-payment-row"><span class="pay-label">Bank</span><span>:</span><span>${escapeHtml(s.bank||'')}</span></div>
@@ -2557,9 +2550,8 @@ function renderPreview(){
     <table class="doc-table">
       <colgroup><col style="width:5.5%"><col style="width:52%"><col style="width:6%"><col style="width:11%"><col style="width:12%"><col style="width:13.5%"></colgroup>
       <thead><tr><th>No</th><th>Item Pekerjaan</th><th>Vol</th><th>Satuan</th><th>Harga</th><th>Jumlah</th></tr></thead>
-      <tbody>${rows}</tbody>${quoteFoot}
+      <tbody>${rows}</tbody>${tableFoot}
     </table>
-    ${quoteAdjust}${invoiceGrand}
     <div class="doc-terbilang"><strong>Terbilang:</strong><em>${escapeHtml(terbilangID(d.totals.grand))}</em></div>
     ${payment}
     <section class="doc-notes"><strong>Notes:</strong><div class="doc-notes-body">${escapeHtml(d.notes||'').replace(/\n/g,'<br>')}</div></section>
