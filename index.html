@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- INVOTATION V25: controlled document template editor + multiline item descriptions -->
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
@@ -187,6 +188,12 @@
   }
   .item-cell{min-width:0}.mobile-label{display:none}
   .item-row input{height:40px;padding:0 10px;border-radius:9px;font-size:13px}
+  .item-row textarea.item-description{
+    display:block;width:100%;height:64px;min-height:64px;max-height:180px;padding:10px;
+    border-radius:9px;font-size:13px;line-height:1.45;resize:none;overflow-y:hidden;
+    white-space:pre-wrap;word-break:break-word
+  }
+  .item-row textarea.item-description.has-scroll{overflow-y:auto}
   .subtotal{
     min-height:40px;padding:0 8px;display:flex;align-items:center;justify-content:flex-end;
     font-size:12.5px;font-weight:750;color:var(--text);white-space:nowrap
@@ -722,6 +729,52 @@
     html[data-ui-profile="mobile"] .item-row .del{grid-column:1;justify-self:end}
   }
 
+
+  /* === V25 Controlled Template Editor === */
+  .template-hero{margin-bottom:14px}
+  .template-type-tabs{display:inline-flex;gap:4px;padding:4px;margin-bottom:16px;border:1px solid var(--border);border-radius:12px;background:var(--surface-soft)}
+  .template-type-btn{height:36px;padding:0 16px;border:0;border-radius:9px;background:transparent;color:var(--muted);font-size:13px;font-weight:800}
+  .template-type-btn.active{background:#fff;color:var(--primary);box-shadow:var(--shadow-sm)}
+  .template-editor-grid{display:grid;grid-template-columns:minmax(300px,.9fr) minmax(360px,1.1fr);gap:16px;align-items:start}
+  .template-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px;padding-bottom:13px;border-bottom:1px solid var(--border)}
+  .template-panel-head h2{margin:0 0 4px;font-size:17px}.template-panel-head p{margin:0;font-size:12px;line-height:1.5}
+  .template-section-list{display:flex;flex-direction:column;gap:8px}
+  .template-section-row{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:9px;align-items:center;padding:10px;border:1px solid var(--border);border-radius:11px;background:#fff;transition:.15s}
+  .template-section-row:hover{border-color:#b9c7d8;background:#fbfdff}.template-section-row.active{border-color:#93b4f4;background:var(--primary-soft)}
+  .template-section-row.dragging{opacity:.48}.template-drag{font-size:17px;color:#94a3b8;cursor:grab;text-align:center;line-height:1}.template-drag:active{cursor:grabbing}
+  .template-section-name{min-width:0;border:0;background:transparent;padding:0;text-align:left;color:var(--text);font-size:13px;font-weight:800}
+  .template-section-name small{display:block;margin-top:2px;color:var(--muted);font-size:10.5px;font-weight:600;white-space:normal;line-height:1.3}
+  .template-move-actions{display:flex;gap:4px}.template-move-btn{width:30px;height:30px;padding:0;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text-soft);font-weight:900}.template-move-btn:disabled{opacity:.3;cursor:default}
+  .template-inspector-empty{padding:34px 16px;text-align:center;color:var(--muted);font-size:13px}
+  .template-control-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .template-format-toolbar{display:flex;gap:7px;flex-wrap:wrap;margin:3px 0 16px}.template-format-btn{width:40px;height:38px;border:1px solid var(--border-strong);border-radius:9px;background:#fff;color:var(--text);font-weight:800}.template-format-btn.active{border-color:#93b4f4;background:var(--primary-soft);color:var(--primary)}
+  .template-align-control{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;border:1px solid var(--border);border-radius:10px;background:var(--surface-soft)}
+  .template-align-btn{height:34px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-size:11.5px;font-weight:800}.template-align-btn.active{background:#fff;color:var(--primary);box-shadow:var(--shadow-sm)}
+  .template-signatures-panel{margin-top:16px}.signature-panel-head{align-items:center}.signature-panel-head .btn{flex:0 0 auto}
+  .template-signature-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .template-signature-card{border:1px solid var(--border);border-radius:13px;background:#fbfcfe;padding:14px}.template-signature-card.focused{border-color:#93b4f4;box-shadow:0 0 0 3px rgba(29,78,216,.07)}
+  .template-signature-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.template-signature-card-head strong{font-size:13px}
+  .template-signature-fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}.template-signature-fields .field{margin-bottom:0}.template-signature-fields .full{grid-column:1/-1}
+  .signature-position{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;border:1px solid var(--border);border-radius:10px;background:var(--surface-soft)}
+  .signature-position button{height:34px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-size:11px;font-weight:800}.signature-position button.active{background:#fff;color:var(--primary);box-shadow:var(--shadow-sm)}
+  .template-signature-preview{height:98px;border:1px dashed var(--border-strong);border-radius:10px;background:#fff;display:grid;place-items:center;overflow:hidden;color:var(--muted);font-size:11px}.template-signature-preview img{max-width:94%;max-height:88px;object-fit:contain}
+  .template-save-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:16px;padding:18px;border:1px solid #bfdbfe;border-radius:14px;background:var(--primary-soft)}
+  .template-save-footer>div{display:flex;flex-direction:column;gap:3px}.template-save-footer strong{font-size:13px}.template-save-footer span{font-size:11.5px;color:var(--muted);line-height:1.45}
+  .template-help{font-size:11px;line-height:1.45;color:var(--muted);margin-top:6px}
+  .template-styled{font-size:var(--tpl-font-size);font-weight:var(--tpl-weight);font-style:var(--tpl-style);text-decoration:var(--tpl-decoration);text-align:var(--tpl-align);margin-top:var(--tpl-space-top)!important;margin-bottom:var(--tpl-space-bottom)!important}
+  .doc-header.template-styled .company{font-size:inherit;text-align:inherit}.doc-header.template-styled .company strong{font-size:1.7em;font-weight:inherit;text-decoration:inherit;font-style:inherit}
+  .template-signature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start;page-break-inside:avoid;break-inside:avoid}
+  .template-signature-block{text-align:var(--tpl-align,center);min-width:0}.template-signature-block.pos-left{grid-column:1}.template-signature-block.pos-center{grid-column:2}.template-signature-block.pos-right{grid-column:3}
+  .template-signature-block .sig-space{height:3cm;display:grid;place-items:center}.template-signature-block .sig-img{max-height:2.7cm;max-width:100%}.template-signature-block .signer-name{font-weight:700}.template-signature-block .signer-role{font-weight:400}
+  @media(max-width:850px){.template-editor-grid{grid-template-columns:1fr}.template-signature-list{grid-template-columns:1fr}}
+  html[data-ui-profile="mobile"] .template-type-tabs{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  html[data-ui-profile="mobile"] .template-type-btn{padding:0 8px}
+  html[data-ui-profile="mobile"] .template-editor-grid{grid-template-columns:1fr;gap:12px}.template-structure-panel,.template-inspector-panel{padding:14px}
+  html[data-ui-profile="mobile"] .template-signature-list{grid-template-columns:1fr}.template-signature-fields{grid-template-columns:1fr}.template-signature-fields .full{grid-column:1}
+  html[data-ui-profile="mobile"] .template-save-footer{align-items:stretch;flex-direction:column;padding:14px}.template-save-footer .btn{width:100%}
+  html[data-ui-profile="mobile"] .template-control-grid{grid-template-columns:1fr 1fr}
+  @media(max-width:520px){html[data-ui-profile="mobile"] .brand{display:none}html[data-ui-profile="mobile"] .nav{width:100%;display:grid;grid-template-columns:repeat(5,1fr)}html[data-ui-profile="mobile"] .nav button{padding:0 2px;font-size:10.5px}}
+
   @media print{
     html,body{background:#fff!important;margin:0!important;padding:0!important;width:100%!important;height:auto!important}
     body > .app,body > #toast{display:none!important}
@@ -741,6 +794,7 @@
     <div class="brand"><div class="brand-mark">I</div><span>INVOTATION</span></div>
     <div class="nav">
       <button id="navDocs" class="active" onclick="showView('docs')">Dokumen</button>
+      <button id="navTemplate" onclick="showView('template')">Template</button>
       <button id="navSettings" onclick="showView('settings')">Pengaturan</button>
       <button id="navBackup" onclick="showView('backup')">Backup</button>
       <button id="navAccount" onclick="showView('account')">Sync</button>
@@ -912,6 +966,59 @@
             <div class="wizard-actions no-print"><button class="btn" onclick="goStep(3)">← Edit</button><button class="btn primary" onclick="saveDocument(true)">Simpan & Selesai</button></div>
           </div>
         </section>
+      </div>
+    </section>
+
+    <section id="templateView" class="hidden">
+      <div class="hero template-hero">
+        <div>
+          <h1>Template dokumen</h1>
+          <p class="muted">Atur struktur dan gaya Penawaran atau Invoice tanpa mengubah isi transaksi.</p>
+        </div>
+        <button type="button" class="btn" onclick="resetTemplateDraft()">Reset Template</button>
+      </div>
+
+      <div class="template-type-tabs" role="group" aria-label="Jenis template">
+        <button type="button" id="templateTypeQuote" class="template-type-btn active" onclick="switchTemplateType('PENAWARAN')">Penawaran</button>
+        <button type="button" id="templateTypeInvoice" class="template-type-btn" onclick="switchTemplateType('INVOICE')">Invoice</button>
+      </div>
+
+      <div class="template-editor-grid">
+        <section class="panel template-structure-panel">
+          <div class="template-panel-head">
+            <div>
+              <h2>Struktur dokumen</h2>
+              <p class="muted">Drag elemen untuk mengubah urutan. Tombol panah tersedia sebagai alternatif.</p>
+            </div>
+          </div>
+          <div id="templateSectionList" class="template-section-list"></div>
+        </section>
+
+        <section class="panel template-inspector-panel">
+          <div class="template-panel-head">
+            <div>
+              <h2 id="templateInspectorTitle">Pengaturan elemen</h2>
+              <p id="templateInspectorHint" class="muted">Pilih elemen di sebelah kiri.</p>
+            </div>
+          </div>
+          <div id="templateInspector"></div>
+        </section>
+      </div>
+
+      <section class="panel template-signatures-panel">
+        <div class="template-panel-head signature-panel-head">
+          <div>
+            <h2>Tanda tangan</h2>
+            <p class="muted">Setiap blok berisi salam, nama/perusahaan, area TTD, nama penandatangan, dan jabatan.</p>
+          </div>
+          <button type="button" class="btn soft" onclick="addTemplateSignature()">+ Tambah Tanda Tangan</button>
+        </div>
+        <div id="templateSignatures" class="template-signature-list"></div>
+      </section>
+
+      <div class="template-save-footer">
+        <div><strong>Simpan template</strong><span>Template baru dipakai untuk dokumen baru. Dokumen yang sudah disimpan tetap memakai snapshot template-nya.</span></div>
+        <button type="button" class="btn primary" onclick="saveTemplateDraft()">Simpan Template</button>
       </div>
     </section>
 
@@ -1714,9 +1821,12 @@ let items=[{description:'',qty:'',unit:'',price:''}];
 const UNIT_OPTIONS=['Pcs','Unit','Job','Lot','Set','Paket','m','m²','m³','cm','mm','kg','gram','Liter','ml','Roll','Box','Lembar','Batang','Titik','Hari','Jam'];
 const EMPTY_SETTINGS={
   company:'',city:'',address:'',phone:'',email:'',website:'',npwp:'',bank:'',account:'',
-  accountName:'',signer:'',role:'',logo:'',signature:''
+  accountName:'',signer:'',role:'',logo:'',signature:'',templates:null,signatureAssets:{}
 };
 let settings={...EMPTY_SETTINGS};
+let activeTemplateSnapshot=null;
+let templateEditorType='PENAWARAN', templateDraft=null, templateSelectedSection='title', templateDragSection=null, templateFocusSignatureId=null, templateDirty=false;
+let templateDraftAssets={};
 
 const PAPER_FORMATS = {
   A4:     {label:'A4',     widthPx:794, heightPx:1123, widthMm:210, heightMm:297, docxW:11906, docxH:16838},
@@ -1931,10 +2041,16 @@ async function confirmLeaveWizard(){
 async function showView(view){
   const wizardVisible=!document.getElementById('wizardView').classList.contains('hidden');
   if(wizardVisible && view!=='wizard' && !(await confirmLeaveWizard())) return;
-  ['docsView','wizardView','settingsView','backupView','accountView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
-  ['navDocs','navSettings','navBackup','navAccount'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
+  const templateVisible=!document.getElementById('templateView').classList.contains('hidden');
+  if(templateVisible && view!=='template' && templateDirty){
+    const leave=await appConfirm('Perubahan template belum disimpan. Tetap keluar?',{title:'Keluar tanpa menyimpan?',confirmText:'Tetap Keluar',cancelText:'Kembali'});
+    if(!leave)return;templateDirty=false;
+  }
+  ['docsView','wizardView','templateView','settingsView','backupView','accountView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  ['navDocs','navTemplate','navSettings','navBackup','navAccount'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
   if(view==='docs'){document.getElementById('docsView').classList.remove('hidden');document.getElementById('navDocs').classList.add('active');renderDocs()}
   if(view==='wizard'){document.getElementById('wizardView').classList.remove('hidden')}
+  if(view==='template'){document.getElementById('templateView').classList.remove('hidden');document.getElementById('navTemplate').classList.add('active');loadTemplateEditor()}
   if(view==='settings'){document.getElementById('settingsView').classList.remove('hidden');document.getElementById('navSettings').classList.add('active');loadSettingsForm();updateDisplayModeUI()}
   if(view==='backup'){document.getElementById('backupView').classList.remove('hidden');document.getElementById('navBackup').classList.add('active')}
   if(view==='account'){document.getElementById('accountView').classList.remove('hidden');document.getElementById('navAccount').classList.add('active');updateAccountUI()}
@@ -1943,6 +2059,7 @@ async function showView(view){
 function startNew(type){
   docType=type;
   editingId=null;
+  activeTemplateSnapshot=freezeTemplateForDocument(getActiveTemplate(type));
   items=[{description:'',qty:'',unit:'',price:''}];
   document.getElementById('wizardHeading').textContent='Buat '+(type==='PENAWARAN'?'Penawaran':'Invoice');
   setDocDate(today(),false);
@@ -1989,8 +2106,10 @@ function validateStep2(){
   const rows=document.querySelectorAll('#itemsContainer .item-row');
 
   rows.forEach((row,i)=>{
-    const fields=row.querySelectorAll('input');
-    const desc=fields[0], qty=fields[1], unit=fields[2], price=fields[3];
+    const desc=row.querySelector('.item-description');
+    const qty=row.querySelector('.qty-cell input');
+    const unit=row.querySelector('.unit-cell input');
+    const price=row.querySelector('.price-cell input');
 
     if(!String(items[i].description||'').trim()){invalidate(desc);ok=false}
 
@@ -2107,12 +2226,23 @@ document.addEventListener('click',e=>{
   if(!e.target.closest?.('.unit-field')) closeUnitMenus();
 });
 
+function autoResizeDescription(el){
+  if(!el)return;
+  el.style.height='64px';
+  const target=Math.min(Math.max(el.scrollHeight,64),180);
+  el.style.height=target+'px';
+  el.classList.toggle('has-scroll',el.scrollHeight>180);
+}
+function handleDescriptionInput(el,i){
+  items[i].description=el.value;
+  autoResizeDescription(el);
+}
 function renderItems(){
   const c=document.getElementById('itemsContainer');
   c.innerHTML=items.map((it,i)=>`
     <div class="item-row">
       <div class="item-index">${i+1}</div>
-      <div class="item-cell desc-cell"><span class="mobile-label">Deskripsi</span><input autocomplete="off" value="${escapeHtml(it.description||'')}" placeholder="Barang / pekerjaan" oninput="items[${i}].description=this.value"></div>
+      <div class="item-cell desc-cell"><span class="mobile-label">Deskripsi</span><textarea class="item-description" autocomplete="off" rows="2" placeholder="Barang / pekerjaan" oninput="handleDescriptionInput(this,${i})">${escapeHtml(it.description||'')}</textarea></div>
       <div class="item-cell qty-cell"><span class="mobile-label">Qty</span><input autocomplete="off" type="text" inputmode="decimal" value="${it.qty ?? ''}" placeholder="Qty" oninput="handleQtyInput(this,${i})" /></div>
       <div class="item-cell unit-cell"><span class="mobile-label">Satuan</span><div class="unit-field">
         <input autocomplete="off" value="${escapeHtml(it.unit||'')}" placeholder="Pilih / ketik"
@@ -2125,6 +2255,7 @@ function renderItems(){
       <div class="item-cell subtotal-cell"><span class="mobile-label">Jumlah</span><div class="subtotal">${rupiah((parseQty(it.qty)||0)*(Number(it.price)||0))}</div></div>
       <button class="btn small danger del" aria-label="Hapus item" onclick="removeItem(${i})">×</button>
     </div>`).join('');
+  c.querySelectorAll('.item-description').forEach(autoResizeDescription);
   recalc()
 }
 function addItem(){items.push({description:'',qty:'',unit:'',price:''});renderItems()}
@@ -2165,43 +2296,244 @@ function gatherData(){
     pic:document.getElementById('customerPic').value||'', address:document.getElementById('customerAddress').value||'',
     date:document.getElementById('docDate').value||today(),
     items:JSON.parse(JSON.stringify(items)), discount:totals.discount, useTax:document.getElementById('useTax').checked,
-    notes:document.getElementById('notes').value||'', totals
+    notes:document.getElementById('notes').value||'', totals,
+    templateSnapshot:cloneTemplate(activeTemplateSnapshot||freezeTemplateForDocument(getActiveTemplate(docType)))
   }
 }
+
+const TEMPLATE_SECTIONS={
+  header:{label:'Kop Surat',hint:'Logo dan identitas perusahaan'},
+  title:{label:'Judul Dokumen',hint:'SURAT PENAWARAN / INVOICE'},
+  meta:{label:'Nomor, Customer & Tanggal',hint:'Nomor dokumen dan tujuan'},
+  intro:{label:'Kalimat Pembuka',hint:'Khusus Penawaran'},
+  items:{label:'Tabel Item',hint:'Deskripsi, qty, satuan dan harga'},
+  totals:{label:'Ringkasan Total',hint:'Subtotal, diskon, PPN dan total'},
+  payment:{label:'Pembayaran',hint:'Khusus Invoice'},
+  notes:{label:'Catatan / Ketentuan',hint:'Catatan dokumen'},
+  signatures:{label:'Tanda Tangan',hint:'Blok tanda tangan lengkap'}
+};
+function cloneTemplate(v){try{return JSON.parse(JSON.stringify(v))}catch(e){return null}}
+function styleDefaults(section){
+  const map={
+    header:{fontSize:9,bold:false,italic:false,underline:false,align:'center',spaceTop:0,spaceBottom:18},
+    title:{fontSize:15,bold:true,italic:false,underline:false,align:'center',spaceTop:0,spaceBottom:20},
+    meta:{fontSize:10.5,bold:false,italic:false,underline:false,align:'left',spaceTop:0,spaceBottom:20},
+    intro:{fontSize:10,bold:false,italic:false,underline:false,align:'left',spaceTop:0,spaceBottom:0},
+    items:{fontSize:9.5,bold:false,italic:false,underline:false,align:'left',spaceTop:14,spaceBottom:0},
+    totals:{fontSize:10,bold:false,italic:false,underline:false,align:'right',spaceTop:10,spaceBottom:0},
+    payment:{fontSize:8.5,bold:false,italic:false,underline:false,align:'left',spaceTop:20,spaceBottom:0},
+    notes:{fontSize:8.5,bold:false,italic:true,underline:false,align:'left',spaceTop:20,spaceBottom:0},
+    signatures:{fontSize:10,bold:false,italic:false,underline:false,align:'center',spaceTop:38,spaceBottom:0}
+  };
+  return {...map[section]};
+}
+function defaultTemplate(type){
+  const inv=type==='INVOICE';
+  const order=inv?['header','title','meta','items','totals','payment','notes','signatures']:['header','title','meta','intro','items','totals','notes','signatures'];
+  const styles={};order.forEach(k=>styles[k]=styleDefaults(k));
+  return {version:1,type,order,styles,signatures:[{
+    id:'sig_main',closing:'Hormat Kami,',organization:settings.company||'',signer:settings.signer||'',role:settings.role||'',assetId:'__settings__',position:'right'
+  }]};
+}
+function sanitizeTemplate(raw,type){
+  const base=defaultTemplate(type), src=(raw&&typeof raw==='object')?cloneTemplate(raw):{};
+  const allowed=base.order;
+  const order=[];
+  (Array.isArray(src.order)?src.order:[]).forEach(k=>{if(allowed.includes(k)&&!order.includes(k))order.push(k)});
+  allowed.forEach(k=>{if(!order.includes(k))order.push(k)});
+  const styles={};
+  allowed.forEach(k=>{
+    const b=styleDefaults(k),v=(src.styles&&src.styles[k])||{};
+    styles[k]={
+      fontSize:Math.min(28,Math.max(7,Number(v.fontSize)||b.fontSize)),bold:typeof v.bold==='boolean'?v.bold:b.bold,
+      italic:typeof v.italic==='boolean'?v.italic:b.italic,underline:typeof v.underline==='boolean'?v.underline:b.underline,
+      align:['left','center','right'].includes(v.align)?v.align:b.align,
+      spaceTop:Math.min(80,Math.max(0,Number(v.spaceTop)||0)),spaceBottom:Math.min(80,Math.max(0,Number(v.spaceBottom)||0))
+    };
+  });
+  let signatures=Array.isArray(src.signatures)?src.signatures:base.signatures;
+  signatures=signatures.slice(0,3).map((x,i)=>({
+    id:String(x?.id||('sig_'+Date.now()+'_'+i)),closing:String(x?.closing??'Hormat Kami,'),organization:String(x?.organization??settings.company??''),
+    signer:String(x?.signer??''),role:String(x?.role??''),assetId:String(x?.assetId||''),position:['left','center','right'].includes(x?.position)?x.position:(i===0?'right':i===1?'left':'center')
+  }));
+  if(!signatures.length)signatures=base.signatures;
+  return {version:1,type,order,styles,signatures};
+}
+function getActiveTemplate(type){
+  const stored=settings.templates&&typeof settings.templates==='object'?settings.templates[type]:null;
+  return sanitizeTemplate(stored||defaultTemplate(type),type);
+}
+function makeAssetId(data){
+  let h=2166136261;const str=String(data||'');
+  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
+  return 'sigasset_'+(h>>>0).toString(16)+'_'+str.length;
+}
+function ensureSignatureAsset(dataUrl){
+  if(!dataUrl)return '';
+  const id=makeAssetId(dataUrl);
+  if(!settings.signatureAssets||typeof settings.signatureAssets!=='object')settings.signatureAssets={};
+  if(!settings.signatureAssets[id]){
+    settings.signatureAssets[id]=dataUrl;
+    try{localStorage.setItem(STORE_SETTINGS,JSON.stringify(settings));markSettingsChanged()}catch(e){console.warn('Signature asset storage failed',e)}
+  }
+  return id;
+}
+function resolveSignatureAsset(assetId){
+  if(!assetId)return '';
+  if(assetId==='__settings__')return settings.signature||'';
+  return templateDraftAssets[assetId]||(settings.signatureAssets&&settings.signatureAssets[assetId])||'';
+}
+function freezeTemplateForDocument(tpl){
+  const out=sanitizeTemplate(tpl,tpl?.type||docType);
+  out.signatures=out.signatures.map(sig=>{
+    let assetId=sig.assetId||'';
+    if(assetId==='__settings__')assetId=ensureSignatureAsset(settings.signature||'');
+    return {...sig,assetId};
+  });
+  return out;
+}
+function templateCss(style){
+  const st=style||styleDefaults('notes');
+  return `--tpl-font-size:${Number(st.fontSize)||10}pt;--tpl-weight:${st.bold?700:400};--tpl-style:${st.italic?'italic':'normal'};--tpl-decoration:${st.underline?'underline':'none'};--tpl-align:${st.align||'left'};--tpl-space-top:${Number(st.spaceTop)||0}px;--tpl-space-bottom:${Number(st.spaceBottom)||0}px`;
+}
+function applyInlineTextStyle(style,extra=''){
+  const st=style||{};
+  return `font-size:${Number(st.fontSize)||10}pt;font-weight:${st.bold?700:400};font-style:${st.italic?'italic':'normal'};text-decoration:${st.underline?'underline':'none'};text-align:${st.align||'left'};margin-top:${Number(st.spaceTop)||0}px;margin-bottom:${Number(st.spaceBottom)||0}px;${extra}`;
+}
+function loadTemplateEditor(){
+  templateDraftAssets={};
+  templateDraft=cloneTemplate(getActiveTemplate(templateEditorType));
+  templateDirty=false;
+  if(!templateDraft.order.includes(templateSelectedSection))templateSelectedSection=templateDraft.order[0];
+  renderTemplateEditor();
+}
+async function switchTemplateType(type){
+  if(!['PENAWARAN','INVOICE'].includes(type)||type===templateEditorType)return;
+  if(templateDirty){const ok=await appConfirm('Perubahan template belum disimpan. Ganti jenis template?',{title:'Perubahan belum disimpan',confirmText:'Ganti',cancelText:'Kembali'});if(!ok)return}
+  templateEditorType=type;templateSelectedSection='title';templateFocusSignatureId=null;loadTemplateEditor();
+}
+function renderTemplateEditor(){
+  if(!templateDraft)templateDraft=cloneTemplate(getActiveTemplate(templateEditorType));
+  document.getElementById('templateTypeQuote')?.classList.toggle('active',templateEditorType==='PENAWARAN');
+  document.getElementById('templateTypeInvoice')?.classList.toggle('active',templateEditorType==='INVOICE');
+  const list=document.getElementById('templateSectionList');
+  if(list)list.innerHTML=templateDraft.order.map((key,i)=>{
+    const info=TEMPLATE_SECTIONS[key];
+    return `<div class="template-section-row ${key===templateSelectedSection?'active':''}" draggable="true" data-section="${key}" ondragstart="templateDragStart(event,'${key}')" ondragover="templateDragOver(event)" ondrop="templateDrop(event,'${key}')" ondragend="templateDragEnd(event)">
+      <div class="template-drag" title="Drag untuk pindah">⋮⋮</div>
+      <button type="button" class="template-section-name" onclick="selectTemplateSection('${key}')">${info.label}<small>${info.hint}</small></button>
+      <div class="template-move-actions"><button type="button" class="template-move-btn" ${i===0?'disabled':''} onclick="moveTemplateSection('${key}',-1)" aria-label="Naik">↑</button><button type="button" class="template-move-btn" ${i===templateDraft.order.length-1?'disabled':''} onclick="moveTemplateSection('${key}',1)" aria-label="Turun">↓</button></div>
+    </div>`;
+  }).join('');
+  renderTemplateInspector();renderTemplateSignatures();
+}
+function selectTemplateSection(key){templateSelectedSection=key;renderTemplateEditor()}
+function moveTemplateSection(key,delta){
+  const a=templateDraft.order,i=a.indexOf(key),j=i+delta;if(i<0||j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];templateDirty=true;renderTemplateEditor();
+}
+function templateDragStart(e,key){templateDragSection=key;e.currentTarget.classList.add('dragging');if(e.dataTransfer){e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',key)}}
+function templateDragOver(e){e.preventDefault();if(e.dataTransfer)e.dataTransfer.dropEffect='move'}
+function templateDrop(e,target){e.preventDefault();const source=templateDragSection||e.dataTransfer?.getData('text/plain');if(!source||source===target)return;const a=templateDraft.order,from=a.indexOf(source),to=a.indexOf(target);if(from<0||to<0)return;a.splice(from,1);a.splice(to,0,source);templateDirty=true;renderTemplateEditor()}
+function templateDragEnd(e){e.currentTarget.classList.remove('dragging');templateDragSection=null}
+function renderTemplateInspector(){
+  const key=templateSelectedSection, st=templateDraft?.styles?.[key], info=TEMPLATE_SECTIONS[key];
+  const title=document.getElementById('templateInspectorTitle'),hint=document.getElementById('templateInspectorHint'),box=document.getElementById('templateInspector');
+  if(!box||!st||!info){if(box)box.innerHTML='<div class="template-inspector-empty">Pilih elemen dokumen.</div>';return}
+  if(title)title.textContent=info.label;if(hint)hint.textContent='Format dasar untuk elemen ini.';
+  box.innerHTML=`
+    <div class="template-control-grid">
+      <div class="field"><label>Ukuran font (pt)</label><input type="number" min="7" max="28" step="0.5" value="${st.fontSize}" oninput="updateTemplateStyle('fontSize',this.value)"></div>
+      <div class="field"><label>Alignment</label><div class="template-align-control"><button type="button" class="template-align-btn ${st.align==='left'?'active':''}" onclick="updateTemplateStyle('align','left')">Kiri</button><button type="button" class="template-align-btn ${st.align==='center'?'active':''}" onclick="updateTemplateStyle('align','center')">Tengah</button><button type="button" class="template-align-btn ${st.align==='right'?'active':''}" onclick="updateTemplateStyle('align','right')">Kanan</button></div></div>
+    </div>
+    <label>Format teks</label><div class="template-format-toolbar"><button type="button" class="template-format-btn ${st.bold?'active':''}" onclick="toggleTemplateStyle('bold')">B</button><button type="button" class="template-format-btn ${st.italic?'active':''}" onclick="toggleTemplateStyle('italic')"><em>I</em></button><button type="button" class="template-format-btn ${st.underline?'active':''}" onclick="toggleTemplateStyle('underline')"><u>U</u></button></div>
+    <div class="template-control-grid">
+      <div class="field"><label>Jarak atas (px)</label><input type="number" min="0" max="80" step="1" value="${st.spaceTop}" oninput="updateTemplateStyle('spaceTop',this.value)"></div>
+      <div class="field"><label>Jarak bawah (px)</label><input type="number" min="0" max="80" step="1" value="${st.spaceBottom}" oninput="updateTemplateStyle('spaceBottom',this.value)"></div>
+    </div>
+    <div class="template-help">Perubahan ini mengatur template, bukan isi customer/item. Header tabel, Grand Total, dan nama penandatangan tetap mempertahankan hierarki profesionalnya.</div>`;
+}
+function updateTemplateStyle(prop,value){
+  if(!templateDraft?.styles?.[templateSelectedSection])return;
+  const st=templateDraft.styles[templateSelectedSection];
+  if(['fontSize','spaceTop','spaceBottom'].includes(prop))value=Number(value);
+  st[prop]=value;templateDirty=true;if(prop==='align')renderTemplateInspector();
+}
+function toggleTemplateStyle(prop){const st=templateDraft?.styles?.[templateSelectedSection];if(!st)return;st[prop]=!st[prop];templateDirty=true;renderTemplateInspector()}
+function addTemplateSignature(){
+  if(!templateDraft)return;if(templateDraft.signatures.length>=3){appAlert('Maksimal 3 blok tanda tangan per template agar layout tetap rapi.','Batas tanda tangan');return}
+  const used=templateDraft.signatures.map(x=>x.position),position=['left','center','right'].find(x=>!used.includes(x))||'right';
+  const id='sig_'+Date.now();templateDraft.signatures.push({id,closing:'Hormat Kami,',organization:settings.company||'',signer:'',role:'',assetId:'',position});templateDirty=true;templateFocusSignatureId=id;renderTemplateSignatures();setTimeout(()=>document.querySelector(`[data-signature-id="${id}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}),50)
+}
+function removeTemplateSignature(id){if(templateDraft.signatures.length<=1){appAlert('Template harus punya minimal satu blok tanda tangan.','Tidak bisa dihapus');return}templateDraft.signatures=templateDraft.signatures.filter(x=>x.id!==id);templateDirty=true;renderTemplateSignatures()}
+function updateTemplateSignature(id,prop,value){const sig=templateDraft.signatures.find(x=>x.id===id);if(!sig)return;sig[prop]=value;templateDirty=true;if(prop==='position')renderTemplateSignatures()}
+function renderTemplateSignatures(){
+  const box=document.getElementById('templateSignatures');if(!box||!templateDraft)return;
+  box.innerHTML=templateDraft.signatures.map((sig,i)=>{
+    const img=resolveSignatureAsset(sig.assetId);
+    return `<div class="template-signature-card ${templateFocusSignatureId===sig.id?'focused':''}" data-signature-id="${sig.id}" onclick="templateFocusSignatureId='${sig.id}'">
+      <div class="template-signature-card-head"><strong>Tanda Tangan ${i+1}</strong><button type="button" class="btn small danger" onclick="event.stopPropagation();removeTemplateSignature('${sig.id}')">Hapus</button></div>
+      <div class="template-signature-fields">
+        <div class="field"><label>Salam / label</label><input value="${escapeHtml(sig.closing)}" oninput="updateTemplateSignature('${sig.id}','closing',this.value)"></div>
+        <div class="field"><label>Nama perusahaan / pihak</label><input value="${escapeHtml(sig.organization)}" oninput="updateTemplateSignature('${sig.id}','organization',this.value)"></div>
+        <div class="field"><label>Nama penandatangan</label><input value="${escapeHtml(sig.signer)}" oninput="updateTemplateSignature('${sig.id}','signer',this.value)"></div>
+        <div class="field"><label>Jabatan</label><input value="${escapeHtml(sig.role)}" oninput="updateTemplateSignature('${sig.id}','role',this.value)"></div>
+        <div class="field full"><label>Posisi blok</label><div class="signature-position"><button type="button" class="${sig.position==='left'?'active':''}" onclick="updateTemplateSignature('${sig.id}','position','left')">Kiri</button><button type="button" class="${sig.position==='center'?'active':''}" onclick="updateTemplateSignature('${sig.id}','position','center')">Tengah</button><button type="button" class="${sig.position==='right'?'active':''}" onclick="updateTemplateSignature('${sig.id}','position','right')">Kanan</button></div></div>
+        <div class="field full"><label>Gambar TTD / stempel</label><div class="upload-control"><input type="file" accept="image/png,image/jpeg,image/webp" class="hidden" id="tplSigFile_${sig.id}" onchange="loadTemplateSignature(event,'${sig.id}')"><button type="button" class="btn" onclick="document.getElementById('tplSigFile_${sig.id}').click()">${img?'Ganti TTD':'Pilih TTD'}</button>${img?`<button type="button" class="btn danger" onclick="clearTemplateSignatureImage('${sig.id}')">Hapus Gambar</button>`:''}</div></div>
+        <div class="template-signature-preview full">${img?`<img src="${img}">`:'Area tanda tangan'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+async function loadTemplateSignature(event,id){
+  const file=event.target.files?.[0];if(!file)return;if(file.size>3*1024*1024){await appAlert('Ukuran gambar maksimal 3 MB.','File terlalu besar');event.target.value='';return}
+  const reader=new FileReader();reader.onload=async ev=>{try{const optimized=await optimizeImageData(String(ev.target.result||''),'signature');const assetId=makeAssetId(optimized);templateDraftAssets[assetId]=optimized;const sig=templateDraft.signatures.find(x=>x.id===id);if(sig)sig.assetId=assetId;templateDirty=true;renderTemplateSignatures();showToast('TTD ditambahkan ke template')}catch(err){await appAlert('Gambar TTD tidak dapat diproses.','Gagal memproses')}};reader.readAsDataURL(file)
+}
+function clearTemplateSignatureImage(id){const sig=templateDraft.signatures.find(x=>x.id===id);if(sig){sig.assetId='';templateDirty=true;renderTemplateSignatures()}}
+async function resetTemplateDraft(){
+  const ok=await appConfirm('Template '+(templateEditorType==='INVOICE'?'Invoice':'Penawaran')+' akan kembali ke layout standar INVOTATION.',{title:'Reset template?',confirmText:'Reset',cancelText:'Batal',danger:true});if(!ok)return;
+  templateDraft=defaultTemplate(templateEditorType);templateSelectedSection='title';templateDraftAssets={};templateDirty=true;renderTemplateEditor();
+}
+async function saveTemplateDraft(){
+  if(!templateDraft)return;
+  const next=sanitizeTemplate(templateDraft,templateEditorType);
+  if(!settings.signatureAssets||typeof settings.signatureAssets!=='object')settings.signatureAssets={};
+  Object.assign(settings.signatureAssets,templateDraftAssets);
+  next.signatures=next.signatures.map(sig=>{
+    if(sig.assetId==='__settings__'&&settings.signature)sig.assetId=ensureSignatureAsset(settings.signature);
+    return sig;
+  });
+  if(!settings.templates||typeof settings.templates!=='object')settings.templates={};
+  settings.templates[templateEditorType]=next;
+  try{localStorage.setItem(STORE_SETTINGS,JSON.stringify(settings));markSettingsChanged();templateDraft=cloneTemplate(next);templateDraftAssets={};templateDirty=false;showToast('Template disimpan')}catch(err){console.error(err);await appAlert('Template tidak dapat disimpan. Penyimpanan perangkat mungkin hampir penuh.','Gagal menyimpan')}
+}
+function renderTemplateSignaturesDocument(tpl,style){
+  const signatures=(tpl.signatures||[]).map(sig=>{
+    const image=resolveSignatureAsset(sig.assetId);const org=sig.organization||'';
+    return `<div class="template-signature-block pos-${sig.position||'right'}"><div>${escapeHtml(sig.closing||'')}${org?'<br><strong>'+escapeHtml(org)+'</strong>':''}</div><div class="sig-space">${image?`<img src="${image}" class="sig-img">`:''}</div><div class="line"><span class="signer-name">${escapeHtml(sig.signer||'')}</span><br><span class="signer-role">${escapeHtml(sig.role||'')}</span></div></div>`;
+  }).join('');
+  return `<div class="template-signature-grid template-styled" style="${templateCss(style)}">${signatures}</div>`;
+}
+
 function renderPreview(){
   const d=gatherData(), s=settings, inv=d.type==='INVOICE';
-  const rows=d.items.map((it,i)=>`<tr><td style="text-align:center">${i+1}</td><td>${escapeHtml(it.description||'-')}</td><td style="text-align:center">${it.qty}</td><td style="text-align:center">${escapeHtml(it.unit||'-')}</td><td class="num">${rupiah(it.price)}</td><td class="num">${rupiah((parseQty(it.qty)||0)*(Number(it.price)||0))}</td></tr>`).join('');
+  const tpl=sanitizeTemplate(d.templateSnapshot||activeTemplateSnapshot||defaultTemplate(d.type),d.type);
+  const rows=d.items.map((it,i)=>`<tr><td style="text-align:center">${i+1}</td><td style="white-space:pre-line">${escapeHtml(it.description||'-')}</td><td style="text-align:center">${it.qty}</td><td style="text-align:center">${escapeHtml(it.unit||'-')}</td><td class="num">${rupiah(it.price)}</td><td class="num">${rupiah((parseQty(it.qty)||0)*(Number(it.price)||0))}</td></tr>`).join('');
   const logo=s.logo?`<img src="${s.logo}" style="max-width:72px;max-height:72px">`:'LOGO';
-  const sig=s.signature?`<img src="${s.signature}" class="sig-img">`:'';
   const contactLine=[s.phone,s.email,s.website].filter(Boolean).map(escapeHtml).join(' · ');
-  document.getElementById('paper').innerHTML=`
-    <div class="doc-header">
-      <div class="logo-box">${logo}</div>
-      <div class="company"><strong>${escapeHtml((s.company||'').toUpperCase())}</strong>${escapeHtml(s.address)}${contactLine?'<br>'+contactLine:''}${s.npwp?'<br>NPWP: '+escapeHtml(s.npwp):''}</div>
-      <div class="doc-header-spacer"></div>
-    </div>
-    <div class="doc-title">${inv?'INVOICE':'SURAT PENAWARAN'}</div>
-    <div class="doc-number-line">${escapeHtml(d.number)}</div>
-    <div class="meta">
-      <div class="box"><strong>Kepada Yth.</strong><br>${escapeHtml(d.customer)}${d.pic?'<br>Bapak/Ibu: '+escapeHtml(d.pic):''}${d.address?'<br>'+escapeHtml(d.address):''}</div>
-      <div class="box"><strong>${s.city?escapeHtml(s.city)+', ':''}${formatDate(d.date)}</strong></div>
-    </div>
-    ${!inv?'<div style="font-size:10pt;line-height:1.15">Dengan hormat,<br>Berikut kami sampaikan penawaran untuk kebutuhan sebagai berikut:</div>':''}
-    <table class="doc-table">
-      <thead><tr><th style="width:5%">No</th><th>Deskripsi</th><th style="width:8%">Qty</th><th style="width:10%">Satuan</th><th style="width:17%">Harga Satuan</th><th style="width:18%">Jumlah</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-    <div class="summary">
-      <div><span>Subtotal</span><strong>${rupiah(d.totals.subtotal)}</strong></div>
-      ${d.discount?`<div><span>Diskon</span><span>${rupiah(d.discount)}</span></div>`:''}
-      ${d.useTax?`<div><span>PPN 11%</span><span>${rupiah(d.totals.tax)}</span></div>`:''}
-      <div class="grand"><span>TOTAL</span><span>${rupiah(d.totals.grand)}</span></div>
-    </div>
-    ${inv?`<div class="notes"><strong>Pembayaran:</strong><br>${escapeHtml(s.bank)} · ${escapeHtml(s.account)}<br>a.n. ${escapeHtml(s.accountName)}</div>`:''}
-    <div class="notes"><strong>Catatan / Ketentuan:</strong><br>${escapeHtml(d.notes).replace(/\n/g,'<br>')}</div>
-    <div class="signatures">
-      <div class="sig"><div>Hormat Kami,<br><strong>${escapeHtml(s.company)}</strong></div><div class="sig-space">${sig}</div><div class="line">${escapeHtml(s.signer)}<br><span style="font-weight:400">${escapeHtml(s.role)}</span></div></div>
-    </div>`;
+  const totalAlign=tpl.styles.totals?.align||'right';
+  const totalPosition=totalAlign==='left'?'margin-left:0;margin-right:auto;':totalAlign==='center'?'margin-left:auto;margin-right:auto;':'margin-left:auto;margin-right:0;';
+  const sections={
+    header:`<div class="doc-header template-styled" style="${templateCss(tpl.styles.header)}"><div class="logo-box">${logo}</div><div class="company"><strong>${escapeHtml((s.company||'').toUpperCase())}</strong>${escapeHtml(s.address)}${contactLine?'<br>'+contactLine:''}${s.npwp?'<br>NPWP: '+escapeHtml(s.npwp):''}</div><div class="doc-header-spacer"></div></div>`,
+    title:`<div class="doc-title template-styled" style="${templateCss(tpl.styles.title)}">${inv?'INVOICE':'SURAT PENAWARAN'}</div>`,
+    meta:`<div class="template-styled" style="${templateCss(tpl.styles.meta)}"><div class="doc-number-line" style="font-size:inherit;font-weight:inherit;text-align:inherit">${escapeHtml(d.number)}</div><div class="meta" style="font-size:inherit;margin-bottom:0"><div class="box"><strong>Kepada Yth.</strong><br>${escapeHtml(d.customer)}${d.pic?'<br>Bapak/Ibu: '+escapeHtml(d.pic):''}${d.address?'<br>'+escapeHtml(d.address):''}</div><div class="box" style="text-align:right"><strong>${s.city?escapeHtml(s.city)+', ':''}${formatDate(d.date)}</strong></div></div></div>`,
+    intro:!inv?`<div class="template-styled" style="${templateCss(tpl.styles.intro)}">Dengan hormat,<br>Berikut kami sampaikan penawaran untuk kebutuhan sebagai berikut:</div>`:'',
+    items:`<table class="doc-table template-styled" style="${templateCss(tpl.styles.items)}"><thead><tr><th style="width:5%">No</th><th>Deskripsi</th><th style="width:8%">Qty</th><th style="width:10%">Satuan</th><th style="width:17%">Harga Satuan</th><th style="width:18%">Jumlah</th></tr></thead><tbody>${rows}</tbody></table>`,
+    totals:`<div class="summary template-styled" style="${templateCss(tpl.styles.totals)};${totalPosition}"><div><span>Subtotal</span><strong>${rupiah(d.totals.subtotal)}</strong></div>${d.discount?`<div><span>Diskon</span><span>${rupiah(d.discount)}</span></div>`:''}${d.useTax?`<div><span>PPN 11%</span><span>${rupiah(d.totals.tax)}</span></div>`:''}<div class="grand"><span>TOTAL</span><span>${rupiah(d.totals.grand)}</span></div></div>`,
+    payment:inv?`<div class="notes template-styled" style="${templateCss(tpl.styles.payment)}"><strong>Pembayaran:</strong><br>${escapeHtml(s.bank)} · ${escapeHtml(s.account)}<br>a.n. ${escapeHtml(s.accountName)}</div>`:'',
+    notes:`<div class="notes template-styled" style="${templateCss(tpl.styles.notes)}"><strong>Catatan / Ketentuan:</strong><br>${escapeHtml(d.notes).replace(/\n/g,'<br>')}</div>`,
+    signatures:renderTemplateSignaturesDocument(tpl,tpl.styles.signatures)
+  };
+  document.getElementById('paper').innerHTML=tpl.order.map(k=>sections[k]||'').join('');
   requestAnimationFrame(()=>fitPreview());
 }
 function getDocs(){try{return JSON.parse(localStorage.getItem(STORE_DOCS)||'[]')}catch(e){return[]}}
@@ -2232,7 +2564,7 @@ function renderDocs(){
 }
 function openDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
-  editingId=d.id; docType=d.type; items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:''}]));
+  editingId=d.id; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:''}]));
   document.getElementById('wizardHeading').textContent='Edit '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
   setDocDate(d.date||today(),false);
@@ -2243,7 +2575,7 @@ function openDoc(id){
 }
 function duplicateDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
-  editingId=null; docType=d.type; items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:''}]));
+  editingId=null; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:''}]));
   document.getElementById('wizardHeading').textContent='Duplikat '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
   setDocDate(today(),false);
@@ -2319,7 +2651,7 @@ function importBackup(event){
       saveSyncMeta({settingsUpdatedAt:importTs,notesUpdatedAt:importTs,tombstones:{}});
       localStorage.setItem(STORE_SYNC_FORCE,'1');
 
-      settings={...EMPTY_SETTINGS,...payload.data.settings};
+      settings={...EMPTY_SETTINGS,...payload.data.settings,signatureAssets:(payload.data.settings.signatureAssets&&typeof payload.data.settings.signatureAssets==='object')?payload.data.settings.signatureAssets:{}};
       isDirty=false;
       loadSettingsForm();
       renderDocs();
@@ -2336,7 +2668,7 @@ function importBackup(event){
 
 async function saveSettings(){
   const val=id=>document.getElementById(id)?.value||'';
-  const nextSettings={company:val('sCompany'),city:val('sCity'),address:val('sAddress'),phone:val('sPhone'),email:val('sEmail'),website:val('sWebsite'),npwp:val('sNpwp'),bank:val('sBank'),account:val('sAccount'),accountName:val('sAccountName'),signer:val('sSigner'),role:val('sRole'),logo:document.getElementById('sLogo')?.dataset.imageData||settings.logo||'',signature:document.getElementById('sSignature')?.dataset.imageData||settings.signature||''};
+  const nextSettings={company:val('sCompany'),city:val('sCity'),address:val('sAddress'),phone:val('sPhone'),email:val('sEmail'),website:val('sWebsite'),npwp:val('sNpwp'),bank:val('sBank'),account:val('sAccount'),accountName:val('sAccountName'),signer:val('sSigner'),role:val('sRole'),logo:document.getElementById('sLogo')?.dataset.imageData||settings.logo||'',signature:document.getElementById('sSignature')?.dataset.imageData||settings.signature||'',templates:settings.templates||null,signatureAssets:(settings.signatureAssets&&typeof settings.signatureAssets==='object')?settings.signatureAssets:{}};
   try{
     localStorage.setItem(STORE_SETTINGS,JSON.stringify(nextSettings));
     settings=nextSettings;
@@ -2576,12 +2908,12 @@ function zipStore(files){
   return new Blob([...chunks,...central,end],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})
 }
 function xmlEscape(s=''){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function p(text,bold=false,align='left',size=10.5,italic=false){
+function p(text,bold=false,align='left',size=10.5,italic=false,underline=false,spaceAfter=0,spaceBefore=0){
   const halfPts=Math.round(size*2);
-  const rPr=`<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri"/>${bold?'<w:b/>':''}${italic?'<w:i/>':''}<w:sz w:val="${halfPts}"/><w:szCs w:val="${halfPts}"/></w:rPr>`;
+  const rPr=`<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri"/>${bold?'<w:b/>':''}${italic?'<w:i/>':''}${underline?'<w:u w:val="single"/>':''}<w:sz w:val="${halfPts}"/><w:szCs w:val="${halfPts}"/></w:rPr>`;
   const parts=String(text??'').split('\n');
   const runs=parts.map((part,i)=>`<w:r>${rPr}${i?'<w:br/>':''}<w:t xml:space="preserve">${xmlEscape(part)}</w:t></w:r>`).join('');
-  return `<w:p><w:pPr><w:jc w:val="${align}"/><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr>${runs}</w:p>`;
+  return `<w:p><w:pPr><w:jc w:val="${align}"/><w:spacing w:before="${Math.round(Number(spaceBefore||0)*15)}" w:after="${Math.round(Number(spaceAfter||0)*15)}" w:line="240" w:lineRule="auto"/></w:pPr>${runs}</w:p>`;
 }
 function dataUrlToImage(dataUrl){
   const m=String(dataUrl||'').match(/^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/i);
@@ -2600,64 +2932,61 @@ function cell(text,bold=false,align='left',width=null,size=9.5){
   return `<w:tc><w:tcPr>${width?`<w:tcW w:w="${width}" w:type="dxa"/>`:''}</w:tcPr>${p(text,bold,align,size)}</w:tc>`;
 }
 function blankCell(width=null){return `<w:tc><w:tcPr>${width?`<w:tcW w:w="${width}" w:type="dxa"/>`:''}</w:tcPr><w:p/></w:tc>`}
+function docxStyleP(text,st={},defaults={}){
+  return p(text,typeof st.bold==='boolean'?st.bold:!!defaults.bold,st.align||defaults.align||'left',Number(st.fontSize)||defaults.size||10.5,typeof st.italic==='boolean'?st.italic:!!defaults.italic,typeof st.underline==='boolean'?st.underline:!!defaults.underline,Number(st.spaceBottom)||0,Number(st.spaceTop)||0);
+}
 function exportDOCX(){
   const d=gatherData(), s=settings, inv=d.type==='INVOICE', f=getPaperFormat();
-  const logoImg=dataUrlToImage(s.logo),sigImg=dataUrlToImage(s.signature);
-  const rels=[];const media=[];let relIndex=1;
-  let logoRel=null,sigRel=null;
+  const tpl=sanitizeTemplate(d.templateSnapshot||activeTemplateSnapshot||defaultTemplate(d.type),d.type);
+  const logoImg=dataUrlToImage(s.logo), rels=[],media=[];let relIndex=1,docPrId=1;
+  let logoRel=null;
   if(logoImg){logoRel='rIdImg'+relIndex++;rels.push({id:logoRel,target:`media/logo.${logoImg.ext}`});media.push([`word/media/logo.${logoImg.ext}`,logoImg.bytes])}
-  if(sigImg){sigRel='rIdImg'+relIndex++;rels.push({id:sigRel,target:`media/signature.${sigImg.ext}`});media.push([`word/media/signature.${sigImg.ext}`,sigImg.bytes])}
-
-  const rows=d.items.map((it,i)=>`<w:tr>
-    ${cell(String(i+1),false,'center',null,9.5)}
-    ${cell(it.description||'-',false,'left',null,9.5)}
-    ${cell(String(it.qty),false,'center',null,9.5)}
-    ${cell(it.unit||'-',false,'center',null,9.5)}
-    ${cell(rupiah(it.price),false,'right',null,9.5)}
-    ${cell(rupiah((parseQty(it.qty)||0)*(Number(it.price)||0)),false,'right',null,9.5)}
-  </w:tr>`).join('');
-
-  const logoCell=logoRel?imageCell(logoRel,900000,900000,1,'Logo',1800):cell('',false,'left',1800,9);
-  const contact=[s.phone,s.email,s.website].filter(Boolean).join(' · ');
-  const companyCell=`<w:tc><w:tcPr><w:tcW w:w="6400" w:type="dxa"/></w:tcPr>${p((s.company||'').toUpperCase(),true,'center',16)}${s.address?p(s.address,false,'center',9):''}${contact?p(contact,false,'center',9):''}${s.npwp?p('NPWP: '+s.npwp,false,'center',9):''}</w:tc>`;
-  const headerTable=`<w:tbl>
-    <w:tblPr><w:tblW w:w="10000" w:type="pct"/><w:tblBorders><w:bottom w:val="single" w:sz="10"/></w:tblBorders></w:tblPr>
-    <w:tr>${logoCell}${companyCell}${blankCell(1800)}</w:tr>
-  </w:tbl>`;
-
-  const rightMeta=(s.city?s.city+', ':'')+formatDate(d.date);
-  const numberLine=p(d.number,false,'left',10.5);
-  const metaTable=`<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr><w:tr>
-      ${cell('Kepada Yth.\n'+d.customer+(d.pic?'\nBapak/Ibu: '+d.pic:'')+(d.address?'\n'+d.address:''),false,'left',5000,10.5)}
-      ${cell(rightMeta,false,'right',5000,10.5)}
-    </w:tr></w:tbl>`;
-
-  const itemsTable=`<w:tbl>
-    <w:tblPr><w:tblW w:w="10000" w:type="pct"/><w:tblBorders><w:top w:val="single" w:sz="4"/><w:left w:val="single" w:sz="4"/><w:bottom w:val="single" w:sz="4"/><w:right w:val="single" w:sz="4"/><w:insideH w:val="single" w:sz="4"/><w:insideV w:val="single" w:sz="4"/></w:tblBorders></w:tblPr>
-    <w:tr>${cell('No',true,'center',null,10)}${cell('Deskripsi',true,'center',null,10)}${cell('Qty',true,'center',null,10)}${cell('Satuan',true,'center',null,10)}${cell('Harga Satuan',true,'center',null,10)}${cell('Jumlah',true,'center',null,10)}</w:tr>${rows}
-  </w:tbl>`;
-
-  const totals=[p('Subtotal: '+rupiah(d.totals.subtotal),false,'right',10),d.discount?p('Diskon: '+rupiah(d.discount),false,'right',10):'',d.useTax?p('PPN 11%: '+rupiah(d.totals.tax),false,'right',10):'',p('TOTAL: '+rupiah(d.totals.grand),true,'right',12)].join('');
-  const payment=inv?p('Pembayaran',true,'left',8.5)+p([s.bank+' · '+s.account,'a.n. '+s.accountName].join('\n'),false,'left',8.5):'';
-  const notes=p('Catatan / Ketentuan',true,'left',8.5,true)+String(d.notes||'').split('\n').map(x=>p(x,false,'left',8.5,true)).join('');
-
-  const signerBlock=p(s.signer||'',true,'center',10)+p(s.role||'',false,'center',10);
-  const sigBody=sigRel?docxImageParagraph(sigRel,1400000,700000,2,'Tanda Tangan')+signerBlock:p('\n\n\n',false,'center',10)+signerBlock;
-  const sigTable=`<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr><w:tr>${blankCell(5600)}${cell('Hormat Kami,\n'+(s.company||'').toUpperCase(),false,'center',4400,10)}</w:tr><w:tr>${blankCell(5600)}<w:tc><w:tcPr><w:tcW w:w="4400" w:type="dxa"/></w:tcPr>${sigBody}</w:tc></w:tr></w:tbl>`;
-
-  const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${headerTable}${p(inv?'INVOICE':'SURAT PENAWARAN',true,'center',15)}${numberLine}${metaTable}${!inv?p('Dengan hormat,',false,'left',10)+p('Berikut kami sampaikan penawaran untuk kebutuhan sebagai berikut:',false,'left',10):''}${itemsTable}${totals}${payment}${notes}${sigTable}<w:sectPr><w:pgSz w:w="${f.docxW}" w:h="${f.docxH}"${paperOrientation==='landscape'?' w:orient="landscape"':''}/><w:pgMar w:top="850" w:right="850" w:bottom="850" w:left="850"/></w:sectPr></w:body></w:document>`;
-
-  const imgTypes=[logoImg,sigImg].filter(Boolean).map(x=>x.ext).filter((v,i,a)=>a.indexOf(v)===i).map(ext=>`<Default Extension="${ext}" ContentType="${ext==='jpg'?'image/jpeg':`image/${ext}`}"/>`).join('');
+  const signatureRels={};
+  (tpl.signatures||[]).forEach((sig,i)=>{
+    const data=resolveSignatureAsset(sig.assetId),img=dataUrlToImage(data);if(!img)return;
+    const key=sig.assetId||('sig'+i);if(signatureRels[key])return;
+    const rel='rIdImg'+relIndex++,name=`signature_${i+1}.${img.ext}`;signatureRels[key]={rel,img,name};rels.push({id:rel,target:`media/${name}`});media.push([`word/media/${name}`,img.bytes]);
+  });
+  const stItems=tpl.styles.items||styleDefaults('items');
+  const rows=d.items.map((it,i)=>`<w:tr>${cell(String(i+1),false,'center',null,stItems.fontSize)}${cell(it.description||'-',false,'left',null,stItems.fontSize)}${cell(String(it.qty),false,'center',null,stItems.fontSize)}${cell(it.unit||'-',false,'center',null,stItems.fontSize)}${cell(rupiah(it.price),false,'right',null,stItems.fontSize)}${cell(rupiah((parseQty(it.qty)||0)*(Number(it.price)||0)),false,'right',null,stItems.fontSize)}</w:tr>`).join('');
+  const logoCell=logoRel?imageCell(logoRel,900000,900000,docPrId++,'Logo',1800):cell('',false,'left',1800,9);
+  const contact=[s.phone,s.email,s.website].filter(Boolean).join(' · '), sh=tpl.styles.header||styleDefaults('header');
+  const companyCell=`<w:tc><w:tcPr><w:tcW w:w="6400" w:type="dxa"/></w:tcPr>${p((s.company||'').toUpperCase(),true,sh.align||'center',Math.max(12,Number(sh.fontSize||9)*1.7),sh.italic,sh.underline)}${s.address?p(s.address,sh.bold,sh.align||'center',sh.fontSize,sh.italic,sh.underline):''}${contact?p(contact,sh.bold,sh.align||'center',sh.fontSize,sh.italic,sh.underline):''}${s.npwp?p('NPWP: '+s.npwp,sh.bold,sh.align||'center',sh.fontSize,sh.italic,sh.underline):''}</w:tc>`;
+  const headerTable=`<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/><w:tblBorders><w:bottom w:val="single" w:sz="10"/></w:tblBorders></w:tblPr><w:tr>${logoCell}${companyCell}${blankCell(1800)}</w:tr></w:tbl>${p('',false,'left',1,false,false,sh.spaceBottom||0,sh.spaceTop||0)}`;
+  const sm=tpl.styles.meta||styleDefaults('meta'),rightMeta=(s.city?s.city+', ':'')+formatDate(d.date);
+  const metaTable=`${p(d.number,sm.bold,sm.align||'left',sm.fontSize,sm.italic,sm.underline,0,sm.spaceTop||0)}<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr><w:tr>${cell('Kepada Yth.\n'+d.customer+(d.pic?'\nBapak/Ibu: '+d.pic:'')+(d.address?'\n'+d.address:''),sm.bold,'left',5000,sm.fontSize)}${cell(rightMeta,sm.bold,'right',5000,sm.fontSize)}</w:tr></w:tbl>${p('',false,'left',1,false,false,sm.spaceBottom||0)}`;
+  const itemsTable=`${p('',false,'left',1,false,false,0,stItems.spaceTop||0)}<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/><w:tblBorders><w:top w:val="single" w:sz="4"/><w:left w:val="single" w:sz="4"/><w:bottom w:val="single" w:sz="4"/><w:right w:val="single" w:sz="4"/><w:insideH w:val="single" w:sz="4"/><w:insideV w:val="single" w:sz="4"/></w:tblBorders></w:tblPr><w:tr>${cell('No',true,'center',null,stItems.fontSize)}${cell('Deskripsi',true,'center',null,stItems.fontSize)}${cell('Qty',true,'center',null,stItems.fontSize)}${cell('Satuan',true,'center',null,stItems.fontSize)}${cell('Harga Satuan',true,'center',null,stItems.fontSize)}${cell('Jumlah',true,'center',null,stItems.fontSize)}</w:tr>${rows}</w:tbl>${p('',false,'left',1,false,false,stItems.spaceBottom||0)}`;
+  const stTot=tpl.styles.totals||styleDefaults('totals');
+  const totals=p('Subtotal: '+rupiah(d.totals.subtotal),stTot.bold,stTot.align,stTot.fontSize,stTot.italic,stTot.underline,0,stTot.spaceTop)+(d.discount?p('Diskon: '+rupiah(d.discount),stTot.bold,stTot.align,stTot.fontSize,stTot.italic,stTot.underline):'')+(d.useTax?p('PPN 11%: '+rupiah(d.totals.tax),stTot.bold,stTot.align,stTot.fontSize,stTot.italic,stTot.underline):'')+p('TOTAL: '+rupiah(d.totals.grand),true,stTot.align,Math.max(12,stTot.fontSize),stTot.italic,stTot.underline,stTot.spaceBottom||0);
+  const stPay=tpl.styles.payment||styleDefaults('payment');
+  const payment=inv?(p('Pembayaran',true,stPay.align,stPay.fontSize,stPay.italic,stPay.underline,0,stPay.spaceTop)+p([s.bank+' · '+s.account,'a.n. '+s.accountName].join('\n'),stPay.bold,stPay.align,stPay.fontSize,stPay.italic,stPay.underline,stPay.spaceBottom||0)) : '';
+  const stNotes=tpl.styles.notes||styleDefaults('notes');
+  const notes=p('Catatan / Ketentuan',true,stNotes.align,stNotes.fontSize,stNotes.italic,stNotes.underline,0,stNotes.spaceTop)+p(d.notes||'',stNotes.bold,stNotes.align,stNotes.fontSize,stNotes.italic,stNotes.underline,stNotes.spaceBottom||0);
+  const stIntro=tpl.styles.intro||styleDefaults('intro');
+  const intro=!inv?p('Dengan hormat,\nBerikut kami sampaikan penawaran untuk kebutuhan sebagai berikut:',stIntro.bold,stIntro.align,stIntro.fontSize,stIntro.italic,stIntro.underline,stIntro.spaceBottom||0,stIntro.spaceTop||0):'';
+  const stTitle=tpl.styles.title||styleDefaults('title'),title=docxStyleP(inv?'INVOICE':'SURAT PENAWARAN',stTitle,{bold:true,align:'center',size:15});
+  const stSig=tpl.styles.signatures||styleDefaults('signatures');
+  const cellsByPos={left:[],center:[],right:[]};
+  (tpl.signatures||[]).forEach(sig=>{
+    const relInfo=signatureRels[sig.assetId], image=relInfo?docxImageParagraph(relInfo.rel,1400000,700000,docPrId++,`Tanda Tangan ${docPrId}`,stSig.align||'center'):p('\n\n\n',false,'center',stSig.fontSize);
+    const text=p((sig.closing||'')+(sig.organization?'\n'+sig.organization:''),stSig.bold,stSig.align||'center',stSig.fontSize,stSig.italic,stSig.underline)+image+p(sig.signer||'',true,stSig.align||'center',stSig.fontSize,stSig.italic,stSig.underline)+p(sig.role||'',false,stSig.align||'center',stSig.fontSize,stSig.italic,stSig.underline);
+    cellsByPos[sig.position||'right'].push(text);
+  });
+  const sigTable=`${p('',false,'left',1,false,false,0,stSig.spaceTop||0)}<w:tbl><w:tblPr><w:tblW w:w="10000" w:type="pct"/></w:tblPr><w:tr>${['left','center','right'].map(pos=>`<w:tc><w:tcPr><w:tcW w:w="3333" w:type="dxa"/></w:tcPr>${cellsByPos[pos].join('')}</w:tc>`).join('')}</w:tr></w:tbl>${p('',false,'left',1,false,false,stSig.spaceBottom||0)}`;
+  const sections={header:headerTable,title,meta:metaTable,intro,items:itemsTable,totals,payment,notes,signatures:sigTable};
+  const body=tpl.order.map(k=>sections[k]||'').join('');
+  const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="${f.docxW}" w:h="${f.docxH}"${paperOrientation==='landscape'?' w:orient="landscape"':''}/><w:pgMar w:top="850" w:right="850" w:bottom="850" w:left="850"/></w:sectPr></w:body></w:document>`;
+  const imageExts=[logoImg,...Object.values(signatureRels).map(x=>x.img)].filter(Boolean).map(x=>x.ext).filter((v,i,a)=>a.indexOf(v)===i);
+  const imgTypes=imageExts.map(ext=>`<Default Extension="${ext}" ContentType="${ext==='jpg'?'image/jpeg':`image/${ext}`}"/>`).join('');
   const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${imgTypes}<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`;
   const rootRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
   const docRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${rels.map(r=>`<Relationship Id="${r.id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="${r.target}"/>`).join('')}</Relationships>`;
   const files=[['[Content_Types].xml',contentTypes],['_rels/.rels',rootRels],['word/document.xml',doc],['word/_rels/document.xml.rels',docRels],...media];
-  const blob=zipStore(files);
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(d.type==='INVOICE'?'Invoice_':'Penawaran_')+(d.number.replace(/\//g,'-'))+'.docx';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)
+  const blob=zipStore(files);const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(d.type==='INVOICE'?'Invoice_':'Penawaran_')+(d.number.replace(/\//g,'-'))+'.docx';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)
 }
 
 window.addEventListener('beforeunload',e=>{
-  if(isDirty){
+  if(isDirty||templateDirty){
     e.preventDefault();
     e.returnValue='';
   }
@@ -2702,7 +3031,7 @@ async function optimizeLegacySettingsImagesOnce(){
 (async function init(){
   try{
     const s=JSON.parse(localStorage.getItem(STORE_SETTINGS)||'null');
-    if(s)settings={...EMPTY_SETTINGS,...s};
+    if(s)settings={...EMPTY_SETTINGS,...s,signatureAssets:(s.signatureAssets&&typeof s.signatureAssets==='object')?s.signatureAssets:{}};
   }catch(e){}
   stampExistingDataForSync();
   setDocDate(today(),false);renderItems();renderDocs();syncPaperControlLabels();applyPaperFormat();updateAccountUI();
