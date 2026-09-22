@@ -2570,13 +2570,14 @@ function renderTemplateSignaturesDocument(tpl,style){
 function renderPreview(){
   const d=gatherData(),s=settings,inv=d.type==='INVOICE';
   const actualItems=(Array.isArray(d.items)?d.items:[]).filter(it=>String(it?.description||'').trim());
-  const showUnitPrice=inv || d.showUnitPrice!==false;
+  const showUnitPrice=inv || actualItems.some(it=>it.showUnitPrice!==false);
   const rows=actualItems.map((it,i)=>{
     const qty=(it.qty===0||it.qty)?String(it.qty):'';
     const price=(it.price===0||it.price)?docRupiah(it.price):'';
     const amount=docRupiah(itemTotalValue(it));
+    const itemPriceVisible=inv || it.showUnitPrice!==false;
     return showUnitPrice
-      ? `<tr><td>${i+1}</td><td class="desc">${escapeHtml(it.description||'')}</td><td>${escapeHtml(qty)}</td><td>${escapeHtml(it.unit||'')}</td><td class="num">${price}</td><td class="num">${amount}</td></tr>`
+      ? `<tr><td>${i+1}</td><td class="desc">${escapeHtml(it.description||'')}</td><td>${escapeHtml(qty)}</td><td>${escapeHtml(it.unit||'')}</td><td class="num">${itemPriceVisible?price:''}</td><td class="num">${amount}</td></tr>`
       : `<tr><td>${i+1}</td><td class="desc">${escapeHtml(it.description||'')}</td><td>${escapeHtml(qty)}</td><td>${escapeHtml(it.unit||'')}</td><td class="num">${amount}</td></tr>`;
   }).join('');
 
@@ -2662,26 +2663,24 @@ function renderDocs(){
 }
 function openDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
-  editingId=d.id; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:'',totalOverride:'',showUnitPrice:true}]));
+  editingId=d.id; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:'',totalOverride:'',showUnitPrice:true}])).map(it=>({...it,showUnitPrice:typeof it.showUnitPrice==='boolean'?it.showUnitPrice:(d.type==='PENAWARAN'?d.showUnitPrice!==false:true)}));
   document.getElementById('wizardHeading').textContent='Edit '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
   setDocDate(d.date||today(),false);
   document.getElementById('discount').value=d.discount||0; document.getElementById('useTax').checked=!!d.useTax; document.getElementById('notes').value=d.notes||'';
-  const showUnitPrice=document.getElementById('showUnitPrice');if(showUnitPrice)showUnitPrice.checked=d.type!=='PENAWARAN' || d.showUnitPrice!==false;
   document.getElementById('saveNoteAsDefault').checked=false;
-  updateNotesUI();updateQuotePriceUI();
+  updateNotesUI();
   renderItems(); isDirty=false; showView('wizard'); goStep(4)
 }
 function duplicateDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
-  editingId=null; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:'',totalOverride:'',showUnitPrice:true}]));
+  editingId=null; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:'',totalOverride:'',showUnitPrice:true}])).map(it=>({...it,showUnitPrice:typeof it.showUnitPrice==='boolean'?it.showUnitPrice:(d.type==='PENAWARAN'?d.showUnitPrice!==false:true)}));
   document.getElementById('wizardHeading').textContent='Duplikat '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
   setDocDate(today(),false);
   document.getElementById('discount').value=d.discount||0; document.getElementById('useTax').checked=!!d.useTax; document.getElementById('notes').value=d.notes||'';
-  const showUnitPrice=document.getElementById('showUnitPrice');if(showUnitPrice)showUnitPrice.checked=d.type!=='PENAWARAN' || d.showUnitPrice!==false;
   document.getElementById('saveNoteAsDefault').checked=false;
-  updateNotesUI();updateQuotePriceUI();
+  updateNotesUI();
   renderItems(); isDirty=false; showView('wizard'); goStep(1)
 }
 async function deleteDoc(id){if(!(await appConfirm('Dokumen yang dihapus tidak bisa dikembalikan kecuali melalui backup.',{title:'Hapus dokumen?',confirmText:'Hapus',cancelText:'Batal',danger:true})))return;localStorage.setItem(STORE_DOCS,JSON.stringify(getDocs().filter(d=>d.id!==id)));markDocumentDeleted(id);renderDocs();showToast('Dokumen dihapus')}
