@@ -4,6 +4,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#1d4ed8" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="INVOTATION" />
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="apple-touch-icon" href="./icons/icon-192.png" />
 <title>INVOTATION — Penawaran & Invoice</title>
 <script src="./cloud-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -913,8 +920,17 @@
             <h2>Barang / pekerjaan</h2>
             <div id="step2Alert" class="form-alert">Lengkapi semua kolom item. Qty boleh desimal, misalnya 1.2.</div>
             <p class="muted">Tambah item sesuai kebutuhan. Jumlah dan total dihitung dari data yang kamu isi.</p>
+            <div id="quotePriceOptions" class="quote-price-options hidden">
+              <div class="switch-row">
+                <div>
+                  <strong>Tampilkan harga satuan di dokumen</strong>
+                  <div class="muted" style="font-size:12px;margin-top:3px">Matikan jika Penawaran cukup menampilkan Total Item.</div>
+                </div>
+                <input autocomplete="off" class="switch" id="showUnitPrice" type="checkbox" onchange="handleShowUnitPriceChange()">
+              </div>
+            </div>
             <div class="item-row item-head">
-              <div>No</div><div>Deskripsi</div><div>Qty</div><div>Satuan</div><div>Harga</div><div>Jumlah</div><div></div>
+              <div>No</div><div>Deskripsi</div><div>Qty</div><div>Satuan</div><div>Harga</div><div>Total Item</div><div></div>
             </div>
             <div id="itemsContainer"></div>
 <button class="btn soft" onclick="addItem()">+ Tambah item</button>
@@ -1792,7 +1808,7 @@ window.addEventListener('resize',()=>{
     fitPreview();
   });
 });
-let items=[{description:'',qty:'',unit:'',price:''}];
+let items=[{description:'',qty:'',unit:'',price:'',totalOverride:''}];
 const UNIT_OPTIONS=['Pcs','Unit','Job','Lot','Set','Paket','m','m²','m³','cm','mm','kg','gram','Liter','ml','Roll','Box','Lembar','Batang','Titik','Hari','Jam'];
 const EMPTY_SETTINGS={
   company:'',city:'',address:'',phone:'',email:'',website:'',npwp:'',bank:'',account:'',
@@ -1920,6 +1936,37 @@ function updateNotesUI(){
   const hint=document.getElementById('notesTypeHint');
   if(label) label.textContent=`Simpan catatan ini untuk ${isPenawaran?'Penawaran':'Invoice'} berikutnya`;
   if(hint) hint.textContent=`Catatan ${isPenawaran?'Penawaran':'Invoice'} tersimpan terpisah dan tidak akan muncul pada ${isPenawaran?'Invoice':'Penawaran'}.`;
+}
+function isQuoteUnitPriceShown(){
+  const el=document.getElementById('showUnitPrice');
+  return docType!=='PENAWARAN' ? true : !!el?.checked;
+}
+function updateQuotePriceUI(){
+  const box=document.getElementById('quotePriceOptions');
+  if(box) box.classList.toggle('hidden',docType!=='PENAWARAN');
+}
+function handleShowUnitPriceChange(){
+  markDirty();
+  recalc();
+}
+function itemTotalValue(it){
+  const manual=it?.totalOverride;
+  if(manual!=='' && manual!==null && typeof manual!=='undefined'){
+    const n=Number(manual);
+    if(Number.isFinite(n) && n>=0) return n;
+  }
+  return (parseQty(it?.qty)||0)*(Number(it?.price)||0);
+}
+function handleItemTotalInput(el,i){
+  const digits=String(el.value||'').replace(/\D/g,'');
+  if(!digits){
+    items[i].totalOverride='';
+    el.value=formatPlainNumber((parseQty(items[i].qty)||0)*(Number(items[i].price)||0));
+  }else{
+    items[i].totalOverride=Number(digits);
+    el.value=Number(digits).toLocaleString('id-ID');
+  }
+  recalc();
 }
 function addDays(dateStr,days){let d=new Date(dateStr+'T00:00:00');d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
 
@@ -2050,8 +2097,11 @@ function startNew(type){
   docType=type;
   editingId=null;
   activeTemplateSnapshot=freezeTemplateForDocument(getActiveTemplate(type));
-  items=[{description:'',qty:'',unit:'',price:''}];
+  items=[{description:'',qty:'',unit:'',price:'',totalOverride:''}];
   document.getElementById('wizardHeading').textContent='Buat '+(type==='PENAWARAN'?'Penawaran':'Invoice');
+  const showUnitPrice=document.getElementById('showUnitPrice');
+  if(showUnitPrice) showUnitPrice.checked=type!=='PENAWARAN';
+  updateQuotePriceUI();
   setDocDate(today(),false);
   // Dokumen baru selalu dimulai bersih; history hanya tampil di beranda dan tidak dipanggil kembali.
   ['customerName','customerPic','customerAddress'].forEach(id=>document.getElementById(id).value='');
@@ -2110,7 +2160,11 @@ function validateStep2(){
 
     const rawPrice=items[i].price;
     const p=Number(rawPrice);
-    if(rawPrice==='' || !Number.isFinite(p) || p<0){invalidate(price);ok=false}
+    const manualTotal=items[i].totalOverride;
+    const mt=(manualTotal===''||manualTotal===null||typeof manualTotal==='undefined')?null:Number(manualTotal);
+    const directTotalOk=docType==='PENAWARAN' && !isQuoteUnitPriceShown() && mt!==null && Number.isFinite(mt) && mt>=0;
+    if(!directTotalOk && (rawPrice==='' || !Number.isFinite(p) || p<0)){invalidate(price);ok=false}
+    if(mt!==null && (!Number.isFinite(mt) || mt<0)){ok=false}
   });
 
   document.getElementById('step2Alert')?.classList.toggle('show',!ok);
@@ -2242,16 +2296,18 @@ function renderItems(){
         <div id="unitMenu${i}" class="unit-menu hidden"></div>
       </div></div>
       <div class="item-cell price-cell"><span class="mobile-label">Harga</span><input class="price" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(it.price)}" placeholder="0" oninput="handlePriceInput(this,${i})" /></div>
-      <div class="item-cell subtotal-cell"><span class="mobile-label">Jumlah</span><div class="subtotal">${rupiah((parseQty(it.qty)||0)*(Number(it.price)||0))}</div></div>
+      <div class="item-cell subtotal-cell"><span class="mobile-label">Total Item</span>${docType==='PENAWARAN'
+        ? `<input class="item-total" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(itemTotalValue(it))}" placeholder="0" oninput="handleItemTotalInput(this,${i})" />`
+        : `<div class="subtotal">${rupiah(itemTotalValue(it))}</div>`}</div>
       <button class="btn small danger del" aria-label="Hapus item" onclick="removeItem(${i})">×</button>
     </div>`).join('');
   c.querySelectorAll('.item-description').forEach(autoResizeDescription);
   recalc()
 }
-function addItem(){items.push({description:'',qty:'',unit:'',price:''});renderItems()}
-function removeItem(i){if(items.length===1){items[0]={description:'',qty:'',unit:'',price:''}}else{items.splice(i,1)}renderItems()}
+function addItem(){items.push({description:'',qty:'',unit:'',price:'',totalOverride:''});renderItems()}
+function removeItem(i){if(items.length===1){items[0]={description:'',qty:'',unit:'',price:'',totalOverride:''}}else{items.splice(i,1)}renderItems()}
 function calcTotals(){
-  const subtotal=items.reduce((s,it)=>s+(parseQty(it.qty)||0)*(Number(it.price)||0),0);
+  const subtotal=items.reduce((s,it)=>s+itemTotalValue(it),0);
   const discount=Math.max(0,Number(document.getElementById('discount').value)||0);
   const taxable=Math.max(0,subtotal-discount);
   const tax=document.getElementById('useTax').checked?taxable*0.11:0;
@@ -2266,7 +2322,13 @@ function recalc(){
   if(currentStep===2) renderItemsSubtotalsOnly()
 }
 function renderItemsSubtotalsOnly(){
-  document.querySelectorAll('#itemsContainer .subtotal').forEach((el,i)=>{el.textContent=rupiah((parseQty(items[i].qty)||0)*(Number(items[i].price)||0))})
+  document.querySelectorAll('#itemsContainer .subtotal').forEach((el,i)=>{el.textContent=rupiah(itemTotalValue(items[i]))});
+  document.querySelectorAll('#itemsContainer .item-total').forEach((el,i)=>{
+    const it=items[i];
+    if(it && (it.totalOverride==='' || it.totalOverride===null || typeof it.totalOverride==='undefined')){
+      el.value=formatPlainNumber(itemTotalValue(it));
+    }
+  });
 }
 function romanMonth(month){return ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'][Math.max(1,Math.min(12,month))-1]}
 function nextNumber(){
@@ -2286,6 +2348,7 @@ function gatherData(){
     pic:document.getElementById('customerPic').value||'', address:document.getElementById('customerAddress').value||'',
     date:document.getElementById('docDate').value||today(),
     items:JSON.parse(JSON.stringify(items)), discount:totals.discount, useTax:document.getElementById('useTax').checked,
+    showUnitPrice:docType==='PENAWARAN'?isQuoteUnitPriceShown():true,
     notes:document.getElementById('notes').value||'', totals,
     templateSnapshot:cloneTemplate(activeTemplateSnapshot||freezeTemplateForDocument(getActiveTemplate(docType)))
   }
@@ -2507,11 +2570,14 @@ function renderTemplateSignaturesDocument(tpl,style){
 function renderPreview(){
   const d=gatherData(),s=settings,inv=d.type==='INVOICE';
   const actualItems=(Array.isArray(d.items)?d.items:[]).filter(it=>String(it?.description||'').trim());
+  const showUnitPrice=inv || d.showUnitPrice!==false;
   const rows=actualItems.map((it,i)=>{
     const qty=(it.qty===0||it.qty)?String(it.qty):'';
     const price=(it.price===0||it.price)?docRupiah(it.price):'';
-    const amount=(it.qty!==''&&it.price!=='')?docRupiah((parseQty(it.qty)||0)*(Number(it.price)||0)):'';
-    return `<tr><td>${i+1}</td><td class="desc">${escapeHtml(it.description||'')}</td><td>${escapeHtml(qty)}</td><td>${escapeHtml(it.unit||'')}</td><td class="num">${price}</td><td class="num">${amount}</td></tr>`;
+    const amount=docRupiah(itemTotalValue(it));
+    return showUnitPrice
+      ? `<tr><td>${i+1}</td><td class="desc">${escapeHtml(it.description||'')}</td><td>${escapeHtml(qty)}</td><td>${escapeHtml(it.unit||'')}</td><td class="num">${price}</td><td class="num">${amount}</td></tr>`
+      : `<tr><td>${i+1}</td><td class="desc">${escapeHtml(it.description||'')}</td><td>${escapeHtml(qty)}</td><td>${escapeHtml(it.unit||'')}</td><td class="num">${amount}</td></tr>`;
   }).join('');
 
   const companyLines=[s.address,s.phone,s.email,s.website,s.npwp?('NPWP: '+s.npwp):''].filter(Boolean)
@@ -2523,13 +2589,14 @@ function renderPreview(){
   const closingType=inv?'invoice':'surat penawaran';
 
   const totalRows=[];
+  const labelSpan=showUnitPrice?5:4;
   if(d.discount||d.useTax){
-    totalRows.push(`<tr class="adjustment-row"><td colspan="5" class="total-label">Subtotal</td><td class="total-amount">${docRupiah(d.totals.subtotal)}</td></tr>`);
-    if(d.discount)totalRows.push(`<tr class="adjustment-row"><td colspan="5" class="total-label">Diskon</td><td class="total-amount">- ${docRupiah(d.discount)}</td></tr>`);
-    if(d.useTax)totalRows.push(`<tr class="adjustment-row"><td colspan="5" class="total-label">PPN 11%</td><td class="total-amount">${docRupiah(d.totals.tax)}</td></tr>`);
+    totalRows.push(`<tr class="adjustment-row"><td colspan="${labelSpan}" class="total-label">Subtotal</td><td class="total-amount">${docRupiah(d.totals.subtotal)}</td></tr>`);
+    if(d.discount)totalRows.push(`<tr class="adjustment-row"><td colspan="${labelSpan}" class="total-label">Diskon</td><td class="total-amount">- ${docRupiah(d.discount)}</td></tr>`);
+    if(d.useTax)totalRows.push(`<tr class="adjustment-row"><td colspan="${labelSpan}" class="total-label">PPN 11%</td><td class="total-amount">${docRupiah(d.totals.tax)}</td></tr>`);
   }
   const totalLabel=inv?'Grand Total':((d.discount||d.useTax)?'Grand Total':'Total');
-  totalRows.push(`<tr class="total-row"><td colspan="5" class="total-label">${totalLabel}</td><td class="total-amount">${docRupiah(d.totals.grand)}</td></tr>`);
+  totalRows.push(`<tr class="total-row"><td colspan="${labelSpan}" class="total-label">${totalLabel}</td><td class="total-amount">${docRupiah(d.totals.grand)}</td></tr>`);
   const tableFoot=`<tfoot>${totalRows.join('')}</tfoot>`;
 
   const payment=inv?`<section class="doc-payment"><div class="doc-payment-title">PAYMENT INFORMATION</div>
@@ -2552,9 +2619,11 @@ function renderPreview(){
     <div class="doc-meta-row"><div>${escapeHtml(d.number)}</div><div class="doc-date">${cityDate}</div></div>
     <div class="doc-recipient"><div>Kepada Yth.</div><div>${recipientPic}</div><div>${escapeHtml(d.customer||'')}</div></div>
     <div class="doc-intro"><div class="salutation">Dengan hormat,</div><div>Bersama surat ini kami mengajukan ${introType} pekerjaan dengan rincian sebagai berikut:</div></div>
-    <table class="doc-table">
-      <colgroup><col style="width:5.5%"><col style="width:52%"><col style="width:6%"><col style="width:11%"><col style="width:12%"><col style="width:13.5%"></colgroup>
-      <thead><tr><th>No</th><th>Item Pekerjaan</th><th>Vol</th><th>Satuan</th><th>Harga</th><th>Jumlah</th></tr></thead>
+    <table class="doc-table ${showUnitPrice?'':'no-unit-price'}">
+      ${showUnitPrice
+        ? '<colgroup><col style="width:5.5%"><col style="width:52%"><col style="width:6%"><col style="width:11%"><col style="width:12%"><col style="width:13.5%"></colgroup>'
+        : '<colgroup><col style="width:6%"><col style="width:57%"><col style="width:7%"><col style="width:12%"><col style="width:18%"></colgroup>'}
+      <thead><tr><th>No</th><th>Item Pekerjaan</th><th>Vol</th><th>Satuan</th>${showUnitPrice?'<th>Harga</th>':''}<th>Jumlah</th></tr></thead>
       <tbody>${rows}</tbody>${tableFoot}
     </table>
     <div class="doc-terbilang"><strong>Terbilang:</strong><em>${escapeHtml(terbilangID(d.totals.grand))}</em></div>
@@ -2593,24 +2662,26 @@ function renderDocs(){
 }
 function openDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
-  editingId=d.id; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:''}]));
+  editingId=d.id; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:'',totalOverride:''}]));
   document.getElementById('wizardHeading').textContent='Edit '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
   setDocDate(d.date||today(),false);
   document.getElementById('discount').value=d.discount||0; document.getElementById('useTax').checked=!!d.useTax; document.getElementById('notes').value=d.notes||'';
+  const showUnitPrice=document.getElementById('showUnitPrice');if(showUnitPrice)showUnitPrice.checked=d.type!=='PENAWARAN' || d.showUnitPrice!==false;
   document.getElementById('saveNoteAsDefault').checked=false;
-  updateNotesUI();
+  updateNotesUI();updateQuotePriceUI();
   renderItems(); isDirty=false; showView('wizard'); goStep(4)
 }
 function duplicateDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
-  editingId=null; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:''}]));
+  editingId=null; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:'',totalOverride:''}]));
   document.getElementById('wizardHeading').textContent='Duplikat '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
   setDocDate(today(),false);
   document.getElementById('discount').value=d.discount||0; document.getElementById('useTax').checked=!!d.useTax; document.getElementById('notes').value=d.notes||'';
+  const showUnitPrice=document.getElementById('showUnitPrice');if(showUnitPrice)showUnitPrice.checked=d.type!=='PENAWARAN' || d.showUnitPrice!==false;
   document.getElementById('saveNoteAsDefault').checked=false;
-  updateNotesUI();
+  updateNotesUI();updateQuotePriceUI();
   renderItems(); isDirty=false; showView('wizard'); goStep(1)
 }
 async function deleteDoc(id){if(!(await appConfirm('Dokumen yang dihapus tidak bisa dikembalikan kecuali melalui backup.',{title:'Hapus dokumen?',confirmText:'Hapus',cancelText:'Batal',danger:true})))return;localStorage.setItem(STORE_DOCS,JSON.stringify(getDocs().filter(d=>d.id!==id)));markDocumentDeleted(id);renderDocs();showToast('Dokumen dihapus')}
@@ -2969,6 +3040,9 @@ async function optimizeLegacySettingsImagesOnce(){
   setDocDate(today(),false);renderItems();renderDocs();syncPaperControlLabels();applyPaperFormat();updateAccountUI();
   await optimizeLegacySettingsImagesOnce();
   initCloud();
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(err=>console.warn('Service worker registration failed',err)),{once:true});
+  }
 })();
 applyDisplayMode();
 </script>
