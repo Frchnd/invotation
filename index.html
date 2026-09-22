@@ -1801,7 +1801,7 @@ window.addEventListener('resize',()=>{
     fitPreview();
   });
 });
-let items=[{description:'',qty:'',unit:'',price:'',totalOverride:''}];
+let items=[{description:'',qty:'',unit:'',price:'',totalOverride:'',showUnitPrice:true}];
 const UNIT_OPTIONS=['Pcs','Unit','Job','Lot','Set','Paket','m','m²','m³','cm','mm','kg','gram','Liter','ml','Roll','Box','Lembar','Batang','Titik','Hari','Jam'];
 const EMPTY_SETTINGS={
   company:'',city:'',address:'',phone:'',email:'',website:'',npwp:'',bank:'',account:'',
@@ -2097,11 +2097,8 @@ function startNew(type){
   docType=type;
   editingId=null;
   activeTemplateSnapshot=freezeTemplateForDocument(getActiveTemplate(type));
-  items=[{description:'',qty:'',unit:'',price:'',totalOverride:''}];
+  items=[{description:'',qty:'',unit:'',price:'',totalOverride:'',showUnitPrice:true}];
   document.getElementById('wizardHeading').textContent='Buat '+(type==='PENAWARAN'?'Penawaran':'Invoice');
-  const showUnitPrice=document.getElementById('showUnitPrice');
-  if(showUnitPrice) showUnitPrice.checked=type!=='PENAWARAN';
-  updateQuotePriceUI();
   setDocDate(today(),false);
   // Dokumen baru selalu dimulai bersih; history hanya tampil di beranda dan tidak dipanggil kembali.
   ['customerName','customerPic','customerAddress'].forEach(id=>document.getElementById(id).value='');
@@ -2297,7 +2294,9 @@ function renderItems(){
           oninput="handleUnitInput(this,${i})" />
         <div id="unitMenu${i}" class="unit-menu hidden"></div>
       </div></div>
-      <div class="item-cell price-cell"><span class="mobile-label">Harga</span><input class="price" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(it.price)}" placeholder="0" oninput="handlePriceInput(this,${i})" /></div>
+      <div class="item-cell price-cell"><span class="mobile-label">Harga</span><div class="price-input-row">${docType==='PENAWARAN'?
+        `<input class="price-visibility-check" type="checkbox" ${it.showUnitPrice!==false?'checked':''} aria-label="Tampilkan harga satuan item ${i+1} di dokumen" title="Tampilkan harga satuan" onchange="handleItemUnitPriceVisibility(${i},this.checked)">`
+        :''}<input class="price" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(it.price)}" placeholder="0" oninput="handlePriceInput(this,${i})" /></div></div>
       <div class="item-cell subtotal-cell"><span class="mobile-label">Total Item</span>${docType==='PENAWARAN'
         ? `<input class="item-total" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(itemTotalValue(it))}" placeholder="0" oninput="handleItemTotalInput(this,${i})" />`
         : `<div class="subtotal">${rupiah(itemTotalValue(it))}</div>`}</div>
@@ -2306,8 +2305,8 @@ function renderItems(){
   c.querySelectorAll('.item-description').forEach(autoResizeDescription);
   recalc()
 }
-function addItem(){items.push({description:'',qty:'',unit:'',price:'',totalOverride:''});renderItems()}
-function removeItem(i){if(items.length===1){items[0]={description:'',qty:'',unit:'',price:'',totalOverride:''}}else{items.splice(i,1)}renderItems()}
+function addItem(){items.push({description:'',qty:'',unit:'',price:'',totalOverride:'',showUnitPrice:true});renderItems()}
+function removeItem(i){if(items.length===1){items[0]={description:'',qty:'',unit:'',price:'',totalOverride:'',showUnitPrice:true}}else{items.splice(i,1)}renderItems()}
 function calcTotals(){
   const subtotal=items.reduce((s,it)=>s+itemTotalValue(it),0);
   const discount=Math.max(0,Number(document.getElementById('discount').value)||0);
@@ -2350,7 +2349,6 @@ function gatherData(){
     pic:document.getElementById('customerPic').value||'', address:document.getElementById('customerAddress').value||'',
     date:document.getElementById('docDate').value||today(),
     items:JSON.parse(JSON.stringify(items)), discount:totals.discount, useTax:document.getElementById('useTax').checked,
-    showUnitPrice:docType==='PENAWARAN'?isQuoteUnitPriceShown():true,
     notes:document.getElementById('notes').value||'', totals,
     templateSnapshot:cloneTemplate(activeTemplateSnapshot||freezeTemplateForDocument(getActiveTemplate(docType)))
   }
@@ -2664,7 +2662,7 @@ function renderDocs(){
 }
 function openDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
-  editingId=d.id; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:'',totalOverride:''}]));
+  editingId=d.id; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:'',totalOverride:'',showUnitPrice:true}]));
   document.getElementById('wizardHeading').textContent='Edit '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
   setDocDate(d.date||today(),false);
@@ -2676,7 +2674,7 @@ function openDoc(id){
 }
 function duplicateDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
-  editingId=null; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:'',totalOverride:''}]));
+  editingId=null; docType=d.type; activeTemplateSnapshot=cloneTemplate(d.templateSnapshot||freezeTemplateForDocument(defaultTemplate(d.type))); items=JSON.parse(JSON.stringify((d.items&&d.items.length)?d.items:[{description:'',qty:'',unit:'',price:'',totalOverride:'',showUnitPrice:true}]));
   document.getElementById('wizardHeading').textContent='Duplikat '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
   setDocDate(today(),false);
