@@ -9,9 +9,19 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="INVOTATION" />
-<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="manifest" href="./manifest.webmanifest?v=34" />
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png" />
 <link rel="apple-touch-icon" href="./icons/icon-192.png" />
 <title>INVOTATION — Penawaran & Invoice</title>
+<script>
+(function(){
+  if(!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('/service-worker.js',{scope:'/'})
+    .then(reg=>reg.update())
+    .catch(err=>console.warn('Service worker registration failed',err));
+})();
+</script>
 <script src="./cloud-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
@@ -3052,9 +3062,6 @@ async function optimizeLegacySettingsImagesOnce(){
   setDocDate(today(),false);renderItems();renderDocs();syncPaperControlLabels();applyPaperFormat();updateAccountUI();
   await optimizeLegacySettingsImagesOnce();
   initCloud();
-  if('serviceWorker' in navigator){
-    window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(err=>console.warn('Service worker registration failed',err)),{once:true});
-  }
 })();
 applyDisplayMode();
 </script>
