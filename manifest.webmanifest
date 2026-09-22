@@ -2,12 +2,14 @@
   "name": "INVOTATION — Penawaran & Invoice",
   "short_name": "INVOTATION",
   "description": "Penawaran & Invoice personal dengan QR device sync tanpa login.",
-  "start_url": "./",
-  "scope": "./",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#f5f7fb",
   "theme_color": "#1d4ed8",
   "orientation": "any",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "./icons/icon-192.png",
