@@ -1946,6 +1946,16 @@ function itemTotalValue(it){
   }
   return (parseQty(it?.qty)||0)*(Number(it?.price)||0);
 }
+function syncPriceFromTotal(i){
+  const it=items[i];if(!it)return;
+  const q=parseQty(it.qty), total=Number(it.totalOverride);
+  if(q!==null && q>0 && it.totalOverride!=='' && Number.isFinite(total)){
+    it.price=total/q;
+    const row=document.querySelectorAll('#itemsContainer .item-row')[i];
+    const priceInput=row?.querySelector('.price-cell input.price');
+    if(priceInput)priceInput.value=formatPlainNumber(it.price);
+  }
+}
 function handleItemTotalInput(el,i){
   const digits=String(el.value||'').replace(/\D/g,'');
   if(!digits){
@@ -1954,6 +1964,7 @@ function handleItemTotalInput(el,i){
   }else{
     items[i].totalOverride=Number(digits);
     el.value=Number(digits).toLocaleString('id-ID');
+    syncPriceFromTotal(i);
   }
   recalc();
 }
@@ -2151,7 +2162,7 @@ function validateStep2(){
     const p=Number(rawPrice);
     const manualTotal=items[i].totalOverride;
     const mt=(manualTotal===''||manualTotal===null||typeof manualTotal==='undefined')?null:Number(manualTotal);
-    const directTotalOk=docType==='PENAWARAN' && !isQuoteUnitPriceShown() && mt!==null && Number.isFinite(mt) && mt>=0;
+    const directTotalOk=docType==='PENAWARAN' && mt!==null && Number.isFinite(mt) && mt>=0;
     if(!directTotalOk && (rawPrice==='' || !Number.isFinite(p) || p<0)){invalidate(price);ok=false}
     if(mt!==null && (!Number.isFinite(mt) || mt<0)){ok=false}
   });
@@ -2203,6 +2214,7 @@ function handleQtyInput(el,i){
   }
   el.value=v;
   items[i].qty=v;
+  if(items[i].totalOverride!=='' && items[i].totalOverride!==null && typeof items[i].totalOverride!=='undefined')syncPriceFromTotal(i);
   recalc();
 }
 // Harga tetap 100% diisi manual oleh user.
@@ -2216,6 +2228,7 @@ function handlePriceInput(el,i){
     items[i].price=Number(digits);
     el.value=Number(digits).toLocaleString('id-ID');
   }
+  items[i].totalOverride='';
   recalc();
 }
 function renderUnitMenu(i,filter=''){
