@@ -112,6 +112,10 @@
   .btn.primary:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
   .btn.soft{background:var(--primary-soft);border-color:#dbeafe;color:var(--primary);box-shadow:none}
   .btn.soft:hover{background:#dbeafe}
+  .btn.primary-outline{color:var(--primary);background:#fff;border-color:#93c5fd;box-shadow:none}
+  .btn.primary-outline:hover{background:var(--primary-soft);border-color:#60a5fa}
+  .btn.success-outline{color:var(--success);background:#fff;border-color:#86efac;box-shadow:none}
+  .btn.success-outline:hover{background:#f0fdf4;border-color:#4ade80}
   .btn.danger{color:var(--danger);background:#fff;border-color:#fecaca;box-shadow:none}
   .btn.danger:hover{background:var(--danger-soft);border-color:#fca5a5}
   .btn.small{min-height:32px;padding:6px 10px;border-radius:9px;font-size:12px}
@@ -1018,7 +1022,7 @@
                 </div>
               </div>
               <div class="actions">
-                <button class="btn primary" onclick="exportPDF()">Export PDF</button>
+                <button class="btn primary-outline" onclick="goStep(1)">Edit</button>
                 <button class="btn" onclick="printDocument()">Print</button>
               </div>
             </div>
@@ -1027,7 +1031,7 @@
                 <div class="paper" id="paper"></div>
               </div>
             </div>
-            <div class="wizard-actions no-print"><button class="btn" onclick="goStep(3)">← Edit</button><button class="btn primary" onclick="saveDocument(true)">Simpan & Selesai</button></div>
+            <div class="wizard-actions no-print"><span></span><button class="btn primary" onclick="saveDocument(true)">Simpan & Selesai</button></div>
           </div>
         </section>
       </div>
@@ -2680,8 +2684,8 @@ function renderDocs(){
   let docs=getDocs().filter(d=>[d.number,d.customer,d.type].join(' ').toLowerCase().includes(q));
   const el=document.getElementById('docsTable');
   if(!docs.length){el.innerHTML=q?'<div class="empty"><strong>Dokumen tidak ditemukan.</strong><br><span>Coba kata pencarian lain.</span></div>':'<div class="empty"><strong>Belum ada dokumen.</strong><br><span>Buat Penawaran atau Invoice pertama dari tombol di atas.</span></div>';return}
-  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>No. Dokumen</th><th>Jenis</th><th>Customer</th><th>Tanggal</th><th>Total</th><th>Aksi</th></tr></thead><tbody>
-    ${docs.map(d=>`<tr><td data-label="No. Dokumen"><strong>${escapeHtml(d.number)}</strong></td><td data-label="Jenis"><span class="badge ${d.type==='INVOICE'?'invoice':'quote'}">${d.type}</span></td><td data-label="Customer">${escapeHtml(d.customer)}</td><td data-label="Tanggal">${formatDate(d.date)}</td><td data-label="Total">${rupiah(d.totals?.grand||0)}</td><td data-label="Aksi"><div class="actions"><button class="btn small" onclick="openDoc('${d.id}')">Buka</button><button class="btn small" onclick="duplicateDoc('${d.id}')">Duplikat</button><button class="btn small danger" onclick="deleteDoc('${d.id}')">Hapus</button></div></td></tr>`).join('')}
+  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>No. Dokumen</th><th>Jenis</th><th>Customer</th><th>Tanggal</th><th>Total</th><th></th></tr></thead><tbody>
+    ${docs.map(d=>`<tr><td data-label="No. Dokumen"><strong>${escapeHtml(d.number)}</strong></td><td data-label="Jenis"><span class="badge ${d.type==='INVOICE'?'invoice':'quote'}">${d.type}</span></td><td data-label="Customer">${escapeHtml(d.customer)}</td><td data-label="Tanggal">${formatDate(d.date)}</td><td data-label="Total">${rupiah(d.totals?.grand||0)}</td><td data-label=""><div class="actions"><button class="btn small success-outline" onclick="openDoc('${d.id}')">Buka</button><button class="btn small primary-outline" onclick="editDoc('${d.id}')">Edit</button><button class="btn small danger" onclick="deleteDoc('${d.id}')">Hapus</button></div></td></tr>`).join('')}
   </tbody></table></div>`
 }
 function openDoc(id){
@@ -2694,6 +2698,10 @@ function openDoc(id){
   document.getElementById('saveNoteAsDefault').checked=false;
   updateNotesUI();
   renderItems(); isDirty=false; showView('wizard'); goStep(4)
+}
+function editDoc(id){
+  openDoc(id);
+  goStep(1);
 }
 function duplicateDoc(id){
   const d=getDocs().find(x=>x.id===id); if(!d)return;
