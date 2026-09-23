@@ -153,7 +153,9 @@
   .wizard-shell{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px}
   .steps{position:sticky;top:92px;height:max-content;padding:12px}
   .step-list{display:flex;flex-direction:column;gap:3px}
-  .step-row{display:flex;gap:11px;align-items:flex-start;padding:11px 10px;border-radius:11px;border:1px solid transparent;transition:.15s}
+  .step-row{display:flex;gap:11px;align-items:flex-start;padding:11px 10px;border-radius:11px;border:1px solid transparent;transition:.15s;cursor:pointer;user-select:none}
+  .step-row:hover{background:var(--surface-hover);border-color:var(--border)}
+  .step-row:focus-visible{outline:3px solid rgba(29,78,216,.16);outline-offset:2px}
   .step-row.active{background:var(--primary-soft);border-color:#dbeafe}
   .step-num{
     flex:0 0 auto;width:28px;height:28px;border-radius:9px;border:1px solid var(--border-strong);
@@ -912,10 +914,10 @@
       <div class="wizard-shell">
         <aside class="steps panel">
           <div class="step-list">
-            <div class="step-row active" data-step="1"><div class="step-num">1</div><div><div class="step-title">Data tujuan</div><div class="step-note">Customer & tanggal</div></div></div>
-            <div class="step-row" data-step="2"><div class="step-num">2</div><div><div class="step-title">Item</div><div class="step-note">Barang / pekerjaan</div></div></div>
-            <div class="step-row" data-step="3"><div class="step-num">3</div><div><div class="step-title">Harga & catatan</div><div class="step-note">Diskon, PPN & catatan</div></div></div>
-            <div class="step-row" data-step="4"><div class="step-num">4</div><div><div class="step-title">Preview</div><div class="step-note">Cek, print & simpan</div></div></div>
+            <div class="step-row active" data-step="1" role="button" tabindex="0" onclick="jumpToStep(1)" onkeydown="handleStepKey(event,1)"><div class="step-num">1</div><div><div class="step-title">Data tujuan</div><div class="step-note">Customer & tanggal</div></div></div>
+            <div class="step-row" data-step="2" role="button" tabindex="0" onclick="jumpToStep(2)" onkeydown="handleStepKey(event,2)"><div class="step-num">2</div><div><div class="step-title">Item</div><div class="step-note">Barang / pekerjaan</div></div></div>
+            <div class="step-row" data-step="3" role="button" tabindex="0" onclick="jumpToStep(3)" onkeydown="handleStepKey(event,3)"><div class="step-num">3</div><div><div class="step-title">Harga & catatan</div><div class="step-note">Diskon, PPN & catatan</div></div></div>
+            <div class="step-row" data-step="4" role="button" tabindex="0" onclick="jumpToStep(4)" onkeydown="handleStepKey(event,4)"><div class="step-num">4</div><div><div class="step-title">Preview</div><div class="step-note">Cek, print & simpan</div></div></div>
           </div>
         </aside>
 
@@ -2217,7 +2219,7 @@ function validateStep2(){
     const p=Number(rawPrice);
     const manualTotal=items[i].totalOverride;
     const mt=(manualTotal===''||manualTotal===null||typeof manualTotal==='undefined')?null:Number(manualTotal);
-    const directTotalOk=docType==='PENAWARAN' && mt!==null && Number.isFinite(mt) && mt>=0;
+    const directTotalOk=mt!==null && Number.isFinite(mt) && mt>=0;
     if(!directTotalOk && (rawPrice==='' || !Number.isFinite(p) || p<0)){invalidate(price);ok=false}
     if(mt!==null && (!Number.isFinite(mt) || mt<0)){ok=false}
   });
@@ -2240,6 +2242,22 @@ function validateStep3(){
 function nextFromStep1(){ if(validateStep1()) goStep(2) }
 function nextFromStep2(){ if(validateStep2()) goStep(3) }
 function nextFromStep3(){ if(validateStep3()) goStep(4) }
+
+function jumpToStep(n){
+  n=Number(n);
+  if(![1,2,3,4].includes(n) || n===currentStep) return;
+  if(n<currentStep){ goStep(n); return; }
+  if(n>=2 && !validateStep1()){ goStep(1); return; }
+  if(n>=3 && !validateStep2()){ goStep(2); return; }
+  if(n>=4 && !validateStep3()){ goStep(3); return; }
+  goStep(n);
+}
+function handleStepKey(event,n){
+  if(event.key==='Enter' || event.key===' '){
+    event.preventDefault();
+    jumpToStep(n);
+  }
+}
 
 function goStep(n){
   currentStep=n;
@@ -2355,9 +2373,7 @@ function renderItems(){
       <div class="item-cell price-cell"><div class="price-input-row"><div class="price-label-row"><span class="mobile-label">Harga</span>${docType==='PENAWARAN'?
         `<input class="price-visibility-check" type="checkbox" ${it.showUnitPrice!==false?'checked':''} aria-label="Tampilkan harga satuan item ${i+1} di dokumen" title="Tampilkan harga satuan" onchange="handleItemUnitPriceVisibility(${i},this.checked)">`
         :''}</div><input class="price" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(it.price)}" placeholder="0" oninput="handlePriceInput(this,${i})" /></div></div>
-      <div class="item-cell subtotal-cell"><span class="mobile-label">Total Item</span>${docType==='PENAWARAN'
-        ? `<input class="item-total" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(itemTotalValue(it))}" placeholder="0" oninput="handleItemTotalInput(this,${i})" />`
-        : `<div class="subtotal">${rupiah(itemTotalValue(it))}</div>`}</div>
+      <div class="item-cell subtotal-cell"><span class="mobile-label">Total Item</span><input class="item-total" type="text" inputmode="numeric" autocomplete="off" value="${formatPlainNumber(itemTotalValue(it))}" placeholder="0" oninput="handleItemTotalInput(this,${i})" /></div>
       <button class="btn small danger del" aria-label="Hapus item" onclick="removeItem(${i})">×</button>
     </div>`).join('');
   c.querySelectorAll('.item-description').forEach(autoResizeDescription);
