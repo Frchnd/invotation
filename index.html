@@ -292,6 +292,9 @@
   .export-wrap{position:relative}.export-menu{right:0;top:calc(100% + 8px);width:max-content;min-width:180px;max-width:min(260px,calc(100vw - 24px));max-height:min(280px,calc(100vh - 32px))}.export-menu button{min-height:40px}
 
   .preview-wrap{background:#e8edf4;padding:24px;border-radius:15px;overflow:auto;border:1px solid #dde4ed}
+  .zoom-control{display:flex;align-items:center;gap:6px}
+  .zoom-control .btn{min-width:36px;padding-left:10px;padding-right:10px}
+  .zoom-value{min-width:48px;text-align:center;font-size:12px;font-weight:800;color:var(--text-soft)}
 
   .paper{
     width:794px;min-height:1123px;margin:0 auto;background:#fff;padding:12mm 32mm 18mm;color:#111;
@@ -883,8 +886,8 @@
           <p class="muted">Buat dokumen resmi tanpa perlu mengatur Word atau PDF secara manual.</p>
         </div>
         <div class="actions">
-          <button class="btn primary" onclick="startNew('PENAWARAN')">+ Buat Penawaran</button>
-          <button class="btn" onclick="startNew('INVOICE')">+ Buat Invoice</button>
+          <button class="btn primary" onclick="startNew('PENAWARAN')">Buat Penawaran</button>
+          <button class="btn" onclick="startNew('INVOICE')">Buat Invoice</button>
         </div>
       </div>
 
@@ -903,7 +906,7 @@
           <h1 id="wizardHeading">Buat Penawaran</h1>
           <p class="muted">Isi data biasa. Layout dokumen akan disusun otomatis.</p>
         </div>
-        <button class="btn" onclick="showView('docs')">← Kembali</button>
+        <button class="btn" onclick="showView('docs')">Kembali</button>
       </div>
 
       <div class="wizard-shell">
@@ -947,7 +950,7 @@
                 </div>
               </div>
             </div>
-            <div class="wizard-actions"><span></span><button class="btn primary" onclick="nextFromStep1()">Lanjut →</button></div>
+            <div class="wizard-actions"><span></span><button class="btn primary" onclick="nextFromStep1()">Lanjut</button></div>
           </div>
 
           <div id="step2" class="form-card hidden">
@@ -958,8 +961,8 @@
               <div>No</div><div>Deskripsi</div><div>Qty</div><div>Satuan</div><div></div><div>Total Item</div><div></div>
             </div>
             <div id="itemsContainer"></div>
-<button class="btn soft" onclick="addItem()">+ Tambah item</button>
-            <div class="wizard-actions"><button class="btn" onclick="goStep(1)">← Kembali</button><button class="btn primary" onclick="nextFromStep2()">Lanjut →</button></div>
+<button class="btn soft" onclick="addItem()">Tambah item</button>
+            <div class="wizard-actions"><button class="btn" onclick="goStep(1)">Kembali</button><button class="btn primary" onclick="nextFromStep2()">Lanjut</button></div>
           </div>
 
           <div id="step3" class="form-card hidden">
@@ -986,7 +989,7 @@
                 <span id="saveNoteLabel">Simpan catatan ini untuk dokumen berikutnya</span>
               </label>
             </div>
-            <div class="wizard-actions"><button class="btn" onclick="goStep(2)">← Kembali</button><button class="btn primary" onclick="nextFromStep3()">Lihat Preview →</button></div>
+            <div class="wizard-actions"><button class="btn" onclick="goStep(2)">Kembali</button><button class="btn primary" onclick="nextFromStep3()">Lihat Preview</button></div>
           </div>
 
           <div id="step4" class="form-card hidden">
@@ -1022,8 +1025,15 @@
                 </div>
               </div>
               <div class="actions">
+                <div class="zoom-control" aria-label="Zoom preview">
+                  <button type="button" class="btn small" aria-label="Perkecil preview" title="Perkecil" onclick="changePreviewZoom(-0.1)">−</button>
+                  <span id="previewZoomValue" class="zoom-value">100%</span>
+                  <button type="button" class="btn small" aria-label="Perbesar preview" title="Perbesar" onclick="changePreviewZoom(0.1)">+</button>
+                  <button type="button" class="btn small" onclick="resetPreviewZoom()">Reset</button>
+                </div>
                 <button class="btn primary-outline" onclick="goStep(1)">Edit</button>
                 <button class="btn" onclick="printDocument()">Print</button>
+                <button class="btn primary" onclick="saveDocument(false)">Simpan</button>
               </div>
             </div>
             <div id="printArea" class="preview-wrap">
@@ -1031,7 +1041,7 @@
                 <div class="paper" id="paper"></div>
               </div>
             </div>
-            <div class="wizard-actions no-print"><span></span><button class="btn primary" onclick="saveDocument(true)">Simpan & Selesai</button></div>
+
           </div>
         </section>
       </div>
@@ -1851,6 +1861,7 @@ const PAPER_FORMATS = {
   LEGAL:  {label:'Legal',  widthPx:816, heightPx:1344, widthMm:216, heightMm:356, docxW:12240, docxH:20160}
 };
 let paperSize='A4', paperOrientation='portrait';
+let previewZoom=1;
 
 function getPaperFormat(){
   const base=PAPER_FORMATS[paperSize]||PAPER_FORMATS.A4;
@@ -1880,11 +1891,15 @@ function fitPreview(){
   const profile=document.documentElement.dataset.uiProfile||resolveUIProfile();
   const horizontalPadding=profile==='desktop'?48:20;
   const available=Math.max(240,wrap.clientWidth-horizontalPadding);
-  const scale=profile==='desktop'?1:Math.min(1,available/f.widthPx);
+  const baseScale=Math.min(1,available/f.widthPx);
+  const scale=Math.max(.35,Math.min(2,baseScale*previewZoom));
 
   paper.style.transform=`scale(${scale})`;
   paper.style.transformOrigin='top left';
   paper.style.margin='0';
+
+  const zoomValue=document.getElementById('previewZoomValue');
+  if(zoomValue) zoomValue.textContent=Math.round(previewZoom*100)+'%';
 
   const updateStage=()=>{
     const actualHeight=Math.max(paper.offsetHeight,f.heightPx);
@@ -1893,6 +1908,14 @@ function fitPreview(){
   };
   updateStage();
   requestAnimationFrame(updateStage);
+}
+function changePreviewZoom(delta){
+  previewZoom=Math.max(.5,Math.min(2,Math.round((previewZoom+delta)*10)/10));
+  fitPreview();
+}
+function resetPreviewZoom(){
+  previewZoom=1;
+  fitPreview();
 }
 function setPrintPageStyle(){
   let style=document.getElementById('dynamicPrintPage');
@@ -2218,7 +2241,7 @@ function nextFromStep3(){ if(validateStep3()) goStep(4) }
 function goStep(n){
   currentStep=n;
   [1,2,3,4].forEach(i=>{document.getElementById('step'+i).classList.toggle('hidden',i!==n);document.querySelector('.step-row[data-step="'+i+'"]').classList.toggle('active',i===n)})
-  if(n===4){ renderPreview(); applyPaperFormat(); }
+  if(n===4){ previewZoom=1; renderPreview(); applyPaperFormat(); }
   if(n===3) recalc();
   window.scrollTo({top:0,behavior:'smooth'})
 }
