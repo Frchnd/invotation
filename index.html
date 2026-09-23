@@ -1022,15 +1022,18 @@
                       </div>
                     </div>
                   </div>
+                  <div class="control-group">
+                    <span class="control-label">Zoom</span>
+                    <div class="zoom-control" aria-label="Zoom preview">
+                      <button type="button" class="btn small" aria-label="Perkecil preview" title="Perkecil" onclick="changePreviewZoom(-0.1)">−</button>
+                      <span id="previewZoomValue" class="zoom-value">100%</span>
+                      <button type="button" class="btn small" aria-label="Perbesar preview" title="Perbesar" onclick="changePreviewZoom(0.1)">+</button>
+                      <button type="button" class="btn small" onclick="resetPreviewZoom()">Reset</button>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="actions">
-                <div class="zoom-control" aria-label="Zoom preview">
-                  <button type="button" class="btn small" aria-label="Perkecil preview" title="Perkecil" onclick="changePreviewZoom(-0.1)">−</button>
-                  <span id="previewZoomValue" class="zoom-value">100%</span>
-                  <button type="button" class="btn small" aria-label="Perbesar preview" title="Perbesar" onclick="changePreviewZoom(0.1)">+</button>
-                  <button type="button" class="btn small" onclick="resetPreviewZoom()">Reset</button>
-                </div>
                 <button class="btn primary-outline" onclick="goStep(1)">Edit</button>
                 <button class="btn" onclick="printDocument()">Print</button>
                 <button class="btn primary" onclick="saveDocument(false)">Simpan</button>
