@@ -333,6 +333,8 @@
   .doc-table tfoot tr.total-row td.total-amount{border:0.35mm solid #111!important;text-align:right!important;font-weight:700;font-size:10pt;white-space:nowrap;padding:1.8mm 2.5mm;height:auto}
   .doc-table tfoot tr.adjustment-row td.total-label{border-top:0.35mm solid #111!important;border-left:0!important;border-right:0!important;border-bottom:0!important;text-align:right;font-weight:400;padding:.8mm 2.5mm .8mm 1mm;height:auto}
   .doc-table tfoot tr.adjustment-row td.total-amount{border-left:0.35mm solid #111!important;border-right:0.35mm solid #111!important;border-top:0.35mm solid #111!important;border-bottom:0.35mm solid #111!important;text-align:right!important;white-space:nowrap;padding:.8mm 2.5mm;height:auto}
+  .doc-table tfoot tr.balance-row td.total-label{border-top:0.35mm solid #111!important;border-left:0!important;border-right:0!important;border-bottom:0!important;text-align:right;font-weight:700;font-size:11pt;padding:1.2mm 2.5mm 1.2mm 1mm;height:auto}
+  .doc-table tfoot tr.balance-row td.total-amount{border:0.35mm solid #111!important;text-align:right!important;font-weight:700;font-size:10pt;white-space:nowrap;padding:1.2mm 2.5mm;height:auto}
   .doc-terbilang{margin-top:3mm;font-size:10pt;line-height:1.22}
   .doc-terbilang strong{display:block;font-weight:700;margin-bottom:1mm}
   .doc-terbilang em{font-style:italic;font-weight:400}
@@ -974,12 +976,22 @@
               <div>
                 <div class="field"><label>Diskon (Rp)</label><input autocomplete="off" id="discount" type="number" min="0" value="0" oninput="recalc()"></div>
                 <div class="switch-row"><div><strong>Gunakan PPN 11%</strong><div class="muted" style="font-size:12px">Bisa dimatikan untuk dokumen non-PPN.</div></div><input autocomplete="off" class="switch" id="useTax" type="checkbox" onchange="recalc()"></div>
+                <div id="dpSection" class="hidden">
+                  <div class="switch-row"><div><strong>Ada pembayaran DP</strong></div><input autocomplete="off" class="switch" id="useDp" type="checkbox" onchange="updateDpUI();recalc()"></div>
+                  <div id="dpAmountWrap" class="field hidden" style="margin-top:14px">
+                    <label>Pembayaran DP (Rp)</label>
+                    <input autocomplete="off" id="dpAmount" type="text" inputmode="numeric" placeholder="0" oninput="handleDpInput(this)">
+                    <div class="field-error">Masukkan nominal DP yang valid.</div>
+                  </div>
+                </div>
               </div>
               <div class="total-box">
                 <div class="total-line"><span>Subtotal</span><strong id="subtotalText">Rp0</strong></div>
                 <div class="total-line"><span>Diskon</span><span id="discountText">Rp0</span></div>
                 <div class="total-line"><span>PPN</span><span id="taxText">Rp0</span></div>
                 <div class="total-line grand"><span>TOTAL</span><span id="grandText">Rp0</span></div>
+                <div id="dpSummary" class="total-line hidden"><span>Pembayaran DP</span><span id="dpText">Rp0</span></div>
+                <div id="balanceSummary" class="total-line grand hidden"><span>SISA PEMBAYARAN</span><span id="balanceText">Rp0</span></div>
               </div>
             </div>
             <div class="field" style="margin-top:18px">
@@ -1990,6 +2002,26 @@ function updateNotesUI(){
   if(label) label.textContent=`Simpan catatan ini untuk ${isPenawaran?'Penawaran':'Invoice'} berikutnya`;
   if(hint) hint.textContent=`Catatan ${isPenawaran?'Penawaran':'Invoice'} tersimpan terpisah dan tidak akan muncul pada ${isPenawaran?'Invoice':'Penawaran'}.`;
 }
+function parseMoneyInput(value){
+  const digits=String(value??'').replace(/\D/g,'');
+  return digits?Number(digits):0;
+}
+function handleDpInput(el){
+  const digits=String(el.value||'').replace(/\D/g,'');
+  el.value=digits?Number(digits).toLocaleString('id-ID'):'';
+  recalc();
+}
+function updateDpUI(){
+  const section=document.getElementById('dpSection');
+  const useDp=document.getElementById('useDp');
+  const amountWrap=document.getElementById('dpAmountWrap');
+  const isInvoice=docType==='INVOICE';
+  if(section)section.classList.toggle('hidden',!isInvoice);
+  const active=isInvoice && !!useDp?.checked;
+  if(amountWrap)amountWrap.classList.toggle('hidden',!active);
+  document.getElementById('dpSummary')?.classList.toggle('hidden',!active);
+  document.getElementById('balanceSummary')?.classList.toggle('hidden',!active);
+}
 function itemShowsUnitPrice(it){
   return docType!=='PENAWARAN' ? true : it?.showUnitPrice!==false;
 }
@@ -2163,6 +2195,7 @@ function startNew(type){
   // Dokumen baru selalu dimulai bersih; history hanya tampil di beranda dan tidak dipanggil kembali.
   ['customerName','customerPic','customerAddress'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('discount').value=0; document.getElementById('useTax').checked=false;
+  document.getElementById('useDp').checked=false; document.getElementById('dpAmount').value=''; updateDpUI();
   document.getElementById('notes').value=starterNote(type);
   document.getElementById('saveNoteAsDefault').checked=true;
   updateNotesUI();
@@ -2236,6 +2269,18 @@ function validateStep3(){
     invalidate(discount);
     ok=false;
   }
+  if(docType==='INVOICE' && document.getElementById('useDp')?.checked){
+    const dpInput=document.getElementById('dpAmount');
+    const dp=parseMoneyInput(dpInput?.value||'');
+    const grand=calcTotals().grand;
+    if(!Number.isFinite(dp) || dp<=0){
+      invalidate(dpInput,'Nominal DP harus lebih dari Rp0.');
+      ok=false;
+    }else if(dp>grand){
+      invalidate(dpInput,'Nominal DP tidak boleh melebihi Grand Total.');
+      ok=false;
+    }
+  }
   document.getElementById('step3Alert')?.classList.toggle('show',!ok);
   return ok;
 }
@@ -2263,7 +2308,7 @@ function goStep(n){
   currentStep=n;
   [1,2,3,4].forEach(i=>{document.getElementById('step'+i).classList.toggle('hidden',i!==n);document.querySelector('.step-row[data-step="'+i+'"]').classList.toggle('active',i===n)})
   if(n===4){ previewZoom=1; renderPreview(); applyPaperFormat(); }
-  if(n===3) recalc();
+  if(n===3){ updateDpUI(); recalc(); }
   window.scrollTo({top:0,behavior:'smooth'})
 }
 
@@ -2386,14 +2431,21 @@ function calcTotals(){
   const discount=Math.max(0,Number(document.getElementById('discount').value)||0);
   const taxable=Math.max(0,subtotal-discount);
   const tax=document.getElementById('useTax').checked?taxable*0.11:0;
-  return {subtotal,discount,tax,grand:taxable+tax}
+  const grand=taxable+tax;
+  const useDp=docType==='INVOICE' && !!document.getElementById('useDp')?.checked;
+  const dp=useDp?Math.max(0,parseMoneyInput(document.getElementById('dpAmount')?.value||'')):0;
+  const balance=Math.max(0,grand-dp);
+  return {subtotal,discount,tax,grand,dp,balance}
 }
 function recalc(){
   const t=calcTotals();
+  updateDpUI();
   document.getElementById('subtotalText').textContent=rupiah(t.subtotal);
   document.getElementById('discountText').textContent=rupiah(t.discount);
   document.getElementById('taxText').textContent=rupiah(t.tax);
   document.getElementById('grandText').textContent=rupiah(t.grand);
+  const dpText=document.getElementById('dpText');if(dpText)dpText.textContent='- '+rupiah(t.dp);
+  const balanceText=document.getElementById('balanceText');if(balanceText)balanceText.textContent=rupiah(t.balance);
   if(currentStep===2) renderItemsSubtotalsOnly()
 }
 function renderItemsSubtotalsOnly(){
@@ -2423,6 +2475,7 @@ function gatherData(){
     pic:document.getElementById('customerPic').value||'', address:document.getElementById('customerAddress').value||'',
     date:document.getElementById('docDate').value||today(),
     items:JSON.parse(JSON.stringify(items)), discount:totals.discount, useTax:document.getElementById('useTax').checked,
+    useDp:docType==='INVOICE' && !!document.getElementById('useDp')?.checked, dpAmount:totals.dp,
     notes:document.getElementById('notes').value||'', totals,
     templateSnapshot:cloneTemplate(activeTemplateSnapshot||freezeTemplateForDocument(getActiveTemplate(docType)))
   }
@@ -2669,6 +2722,10 @@ function renderPreview(){
   }
   const totalLabel=inv?'Grand Total':((d.discount||d.useTax)?'Grand Total':'Total');
   totalRows.push(`<tr class="total-row"><td colspan="${labelSpan}" class="total-label">${totalLabel}</td><td class="total-amount">${docRupiah(d.totals.grand)}</td></tr>`);
+  if(inv && d.useDp && Number(d.totals?.dp)>0){
+    totalRows.push(`<tr class="adjustment-row"><td colspan="${labelSpan}" class="total-label">Pembayaran DP</td><td class="total-amount">- ${docRupiah(d.totals.dp)}</td></tr>`);
+    totalRows.push(`<tr class="balance-row"><td colspan="${labelSpan}" class="total-label">Sisa Pembayaran</td><td class="total-amount">${docRupiah(d.totals.balance)}</td></tr>`);
+  }
   const tableFoot=`<tfoot>${totalRows.join('')}</tfoot>`;
 
   const payment=inv?`<section class="doc-payment"><div class="doc-payment-title">PAYMENT INFORMATION</div>
@@ -2736,9 +2793,12 @@ function openDoc(id){
   document.getElementById('wizardHeading').textContent='Edit '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
   setDocDate(d.date||today(),false);
-  document.getElementById('discount').value=d.discount||0; document.getElementById('useTax').checked=!!d.useTax; document.getElementById('notes').value=d.notes||'';
+  document.getElementById('discount').value=d.discount||0; document.getElementById('useTax').checked=!!d.useTax;
+  document.getElementById('useDp').checked=d.type==='INVOICE' && !!d.useDp;
+  document.getElementById('dpAmount').value=(d.type==='INVOICE' && d.useDp && Number(d.dpAmount||d.totals?.dp)>0)?formatPlainNumber(d.dpAmount||d.totals?.dp):'';
+  document.getElementById('notes').value=d.notes||'';
   document.getElementById('saveNoteAsDefault').checked=false;
-  updateNotesUI();
+  updateNotesUI();updateDpUI();
   renderItems(); isDirty=false; showView('wizard'); goStep(4)
 }
 function editDoc(id){
@@ -2751,9 +2811,12 @@ function duplicateDoc(id){
   document.getElementById('wizardHeading').textContent='Duplikat '+(docType==='PENAWARAN'?'Penawaran':'Invoice');
   document.getElementById('customerName').value=d.customer||''; document.getElementById('customerPic').value=d.pic||''; document.getElementById('customerAddress').value=d.address||'';
   setDocDate(today(),false);
-  document.getElementById('discount').value=d.discount||0; document.getElementById('useTax').checked=!!d.useTax; document.getElementById('notes').value=d.notes||'';
+  document.getElementById('discount').value=d.discount||0; document.getElementById('useTax').checked=!!d.useTax;
+  document.getElementById('useDp').checked=d.type==='INVOICE' && !!d.useDp;
+  document.getElementById('dpAmount').value=(d.type==='INVOICE' && d.useDp && Number(d.dpAmount||d.totals?.dp)>0)?formatPlainNumber(d.dpAmount||d.totals?.dp):'';
+  document.getElementById('notes').value=d.notes||'';
   document.getElementById('saveNoteAsDefault').checked=false;
-  updateNotesUI();
+  updateNotesUI();updateDpUI();
   renderItems(); isDirty=false; showView('wizard'); goStep(1)
 }
 async function deleteDoc(id){if(!(await appConfirm('Dokumen yang dihapus tidak bisa dikembalikan kecuali melalui backup.',{title:'Hapus dokumen?',confirmText:'Hapus',cancelText:'Batal',danger:true})))return;localStorage.setItem(STORE_DOCS,JSON.stringify(getDocs().filter(d=>d.id!==id)));markDocumentDeleted(id);renderDocs();showToast('Dokumen dihapus')}
