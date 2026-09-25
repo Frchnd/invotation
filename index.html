@@ -872,27 +872,31 @@
   html[data-ui-profile="mobile"] .template-control-grid{grid-template-columns:1fr 1fr}
   @media(max-width:520px){html[data-ui-profile="mobile"] .brand{display:none}html[data-ui-profile="mobile"] .nav{width:100%;display:grid;grid-template-columns:repeat(4,1fr)}html[data-ui-profile="mobile"] .nav button{padding:0 2px;font-size:10.5px}}
 
+  #printRoot.print-measure{
+    display:block!important;position:fixed!important;left:-200vw!important;top:0!important;
+    visibility:hidden!important;pointer-events:none!important
+  }
+  #printRoot .print-page{
+    box-sizing:border-box!important;background:#fff!important;box-shadow:none!important;
+    margin:0!important;padding:12mm 32mm 18mm!important;transform:none!important;
+    overflow:hidden!important;font-family:Arial,Helvetica,sans-serif;color:#111
+  }
+  #printRoot .print-page-body{min-height:0}
+  #printRoot .print-page .doc-header{position:static!important;margin-bottom:7mm!important}
+  #printRoot .print-page .doc-table{page-break-inside:auto!important;break-inside:auto!important}
+  #printRoot .print-page .doc-table tr{break-inside:avoid!important;page-break-inside:avoid!important}
+  #printRoot .print-page .doc-table td,#printRoot .print-page .doc-table th{break-inside:avoid!important;page-break-inside:avoid!important}
+  #printRoot .print-page .doc-terbilang,#printRoot .print-page .doc-payment,#printRoot .print-page .doc-notes,#printRoot .print-page .doc-closing-signature,#printRoot .print-page .signatures{
+    break-inside:avoid!important;page-break-inside:avoid!important
+  }
   @media print{
     html,body{background:#fff!important;margin:0!important;padding:0!important;width:100%!important;height:auto!important}
     body > .app,body > #toast{display:none!important}
     #printRoot{display:block!important;margin:0!important;padding:0!important;background:#fff!important;width:100%!important}
-    #printRoot .paper{
-      display:block!important;box-shadow:none!important;margin:0!important;padding:0!important;transform:none!important;
-      height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;break-after:auto!important;page-break-after:auto!important
+    #printRoot .print-page{
+      display:block!important;break-after:page!important;page-break-after:always!important
     }
-    #printRoot .doc-header{
-      position:fixed!important;top:-39mm!important;left:0!important;right:0!important;z-index:5!important;
-      margin:0!important;padding:0 0 5mm!important;background:#fff!important;
-      border-bottom:1.2mm double #111!important
-    }
-    #printRoot .doc-table{page-break-inside:auto!important;break-inside:auto!important}
-    #printRoot .doc-table thead{display:table-header-group!important}
-    #printRoot .doc-table tfoot{display:table-row-group!important}
-    #printRoot .doc-table tr{break-inside:avoid!important;page-break-inside:avoid!important}
-    #printRoot .doc-table td,#printRoot .doc-table th{break-inside:avoid!important;page-break-inside:avoid!important}
-    #printRoot .doc-terbilang,#printRoot .doc-payment,#printRoot .doc-notes,#printRoot .doc-closing-signature,#printRoot .signatures{
-      break-inside:avoid!important;page-break-inside:avoid!important
-    }
+    #printRoot .print-page:last-child{break-after:auto!important;page-break-after:auto!important}
   }
 </style>
 </head>
@@ -1965,10 +1969,10 @@ function setPrintPageStyle(){
   if(!style){style=document.createElement('style');style.id='dynamicPrintPage';document.head.appendChild(style)}
   const f=getPaperFormat();
   style.textContent=`@media print{
-    @page{size:${f.widthMm}mm ${f.heightMm}mm;margin:46mm 32mm 18mm 32mm}
-    #printRoot .paper{
-      width:auto!important;min-height:0!important;height:auto!important;
-      padding:0!important;margin:0!important;box-sizing:border-box!important
+    @page{size:${f.widthMm}mm ${f.heightMm}mm;margin:0}
+    #printRoot .print-page{
+      width:${f.widthMm}mm!important;height:${f.heightMm}mm!important;
+      padding:12mm 32mm 18mm!important;box-sizing:border-box!important
     }
   }`;
 }
@@ -3071,6 +3075,56 @@ async function loadImageFile(e,type){
   reader.readAsDataURL(file);
 }
 
+function createPrintPage(root,source,f){
+  const page=document.createElement('section');
+  page.className='paper print-page';
+  page.style.width=f.widthMm+'mm';
+  page.style.height=f.heightMm+'mm';
+  page.style.minHeight=f.heightMm+'mm';
+
+  const header=source.querySelector('.doc-header')?.cloneNode(true);
+  if(header)page.appendChild(header);
+
+  const body=document.createElement('div');
+  body.className='print-page-body';
+  page.appendChild(body);
+  root.appendChild(page);
+  return {page,body};
+}
+function printPageFits(page){
+  return page.scrollHeight<=page.clientHeight+2;
+}
+function createPrintItemTable(source,{withHead=true,withBody=true}={}){
+  const src=source.querySelector('.doc-table');
+  const table=document.createElement('table');
+  table.className=src?.className||'doc-table';
+
+  const colgroup=src?.querySelector('colgroup')?.cloneNode(true);
+  if(colgroup)table.appendChild(colgroup);
+
+  if(withHead){
+    const thead=src?.querySelector('thead')?.cloneNode(true);
+    if(thead)table.appendChild(thead);
+  }
+
+  let tbody=null;
+  if(withBody){
+    tbody=document.createElement('tbody');
+    table.appendChild(tbody);
+  }
+  return {table,tbody};
+}
+function appendPrintBlock(state,node,root,source,f){
+  if(!node)return state;
+  const clone=node.cloneNode(true);
+  state.body.appendChild(clone);
+  if(printPageFits(state.page))return state;
+
+  clone.remove();
+  state=createPrintPage(root,source,f);
+  state.body.appendChild(clone);
+  return state;
+}
 function preparePrint(){
   renderPreview();
   applyPaperFormat();
@@ -3078,19 +3132,54 @@ function preparePrint(){
 
   const source=document.getElementById('paper');
   const root=document.getElementById('printRoot');
+  const f=getPaperFormat();
   root.innerHTML='';
+  root.classList.add('print-measure');
 
-  const clone=source.cloneNode(true);
-  clone.removeAttribute('id');
-  clone.classList.add('print-paper');
-  clone.style.width='';
-  clone.style.minHeight='';
-  clone.style.height='auto';
-  clone.style.margin='0';
-  clone.style.boxShadow='none';
-  clone.style.transform='none';
+  let state=createPrintPage(root,source,f);
 
-  root.appendChild(clone);
+  ['.doc-title','.doc-meta-row','.doc-recipient','.doc-intro'].forEach(sel=>{
+    const node=source.querySelector(sel);
+    if(node)state.body.appendChild(node.cloneNode(true));
+  });
+
+  const srcTable=source.querySelector('.doc-table');
+  const srcRows=[...(srcTable?.querySelectorAll('tbody tr')||[])];
+  let currentTable=createPrintItemTable(source,{withHead:true,withBody:true});
+  state.body.appendChild(currentTable.table);
+
+  srcRows.forEach(row=>{
+    const clone=row.cloneNode(true);
+    currentTable.tbody.appendChild(clone);
+
+    if(!printPageFits(state.page)){
+      clone.remove();
+      state=createPrintPage(root,source,f);
+      currentTable=createPrintItemTable(source,{withHead:true,withBody:true});
+      state.body.appendChild(currentTable.table);
+      currentTable.tbody.appendChild(clone);
+    }
+  });
+
+  const srcFoot=srcTable?.querySelector('tfoot');
+  if(srcFoot){
+    const foot=srcFoot.cloneNode(true);
+    currentTable.table.appendChild(foot);
+
+    if(!printPageFits(state.page)){
+      foot.remove();
+      state=createPrintPage(root,source,f);
+      const summaryTable=createPrintItemTable(source,{withHead:false,withBody:false});
+      summaryTable.table.appendChild(foot);
+      state.body.appendChild(summaryTable.table);
+    }
+  }
+
+  ['.doc-terbilang','.doc-payment','.doc-notes','.doc-closing-signature'].forEach(sel=>{
+    state=appendPrintBlock(state,source.querySelector(sel),root,source,f);
+  });
+
+  root.classList.remove('print-measure');
 }
 function toggleExportMenu(e){
   if(e) e.stopPropagation();
